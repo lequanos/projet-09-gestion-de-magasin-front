@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+    retail-store-spa:
+      build: .
+      container_name: retail-store-spa
+      ports:
+        - '8080:8080'
+      volumes: 
+      - .:/usr/src/app
