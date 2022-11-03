@@ -1,14 +1,26 @@
+import { Typography } from '@mui/material';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import './Home.scss';
 import logo from '../../assets/logo.svg';
-import RSInputText from '../../components/RSInputText';
+import RSInput from '../../components/RSInput';
 import RSForm from '../../components/RSForm';
-import { Typography, Divider } from '@mui/material';
-import { useState } from 'react';
+import RSDivider from '../../components/RSDivider';
 import RSButton from '../../components/RSButton';
+import { AuthService } from '../../services/auth/AuthService';
 
 function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { t } = useTranslation('translation');
+
+  const authService = new AuthService();
+
+  const handleLogin = async (): Promise<void> => {
+    const response = await authService.login({ email, password });
+    console.log(response);
+  };
 
   return (
     <div className="home">
@@ -18,38 +30,22 @@ function Home() {
       <div className="home--login">
         <RSForm className="home--login-form">
           <Typography align="center" className="home--login-title">
-            Se connecter
+            {t('home.Login')}
           </Typography>
-          <RSInputText
-            label="Email"
+          <RSInput
+            label={t('home.Email')}
             type="email"
             value={email}
             setValue={setEmail}
           />
-          <RSInputText
-            label="Password"
+          <RSInput
+            label={t('home.Password')}
             type="password"
             value={password}
             setValue={setPassword}
           />
-          <RSButton>Se connecter</RSButton>
-          <Divider
-            sx={{
-              margin: '2rem 0',
-              borderColor: 'primary.main',
-              fontFamily: 'Roboto',
-              color: 'primary.main',
-              borderWidth: 1,
-              '&.MuiDivider-root::before': {
-                borderColor: 'primary.main',
-              },
-              '&.MuiDivider-root::after': {
-                borderColor: 'primary.main',
-              },
-            }}
-          >
-            OU
-          </Divider>
+          <RSButton onClick={handleLogin}>{t('home.Login')}</RSButton>
+          <RSDivider>{t('home.Or').toUpperCase()}</RSDivider>
         </RSForm>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 
-type CommonRSInputTextProps = {
+type CommonRSInputProps = {
   className?: string;
   defaultValue?: any;
   error?: boolean;
@@ -13,7 +13,7 @@ type CommonRSInputTextProps = {
   variant?: 'standard' | 'filled' | 'outlined' | undefined;
 };
 
-type ConditionalRSInputTextProps =
+type ConditionalRSInputProps =
   | {
       value: string;
       setValue: Dispatch<SetStateAction<string>>;
@@ -25,9 +25,9 @@ type ConditionalRSInputTextProps =
       type?: 'number';
     };
 
-type RSInputTextProps = CommonRSInputTextProps & ConditionalRSInputTextProps;
+type RSInputProps = CommonRSInputProps & ConditionalRSInputProps;
 
-function RSInputText({
+function RSInput({
   className,
   defaultValue,
   error = false,
@@ -40,7 +40,7 @@ function RSInputText({
   variant = 'standard',
   setValue,
   type = 'text',
-}: RSInputTextProps) {
+}: RSInputProps) {
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -68,4 +68,4 @@ function RSInputText({
   );
 }
 
-export default RSInputText;
+export default RSInput;
