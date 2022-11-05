@@ -12,12 +12,17 @@ function RSDivider({ children }: RSDividerProps) {
         borderColor: 'primary.main',
         fontFamily: 'Roboto',
         color: 'primary.main',
+        fontWeight: 'bold',
         borderWidth: 1,
         '&.MuiDivider-root::before': {
           borderColor: 'primary.main',
+          borderWidth: 2,
+          transform: 'translateY(calc(50% - 2px))',
         },
         '&.MuiDivider-root::after': {
           borderColor: 'primary.main',
+          borderWidth: 2,
+          transform: 'translateY(calc(50% - 2px))',
         },
       }}
     >

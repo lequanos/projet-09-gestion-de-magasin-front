@@ -3,7 +3,8 @@
   "parserOptions": {
     "project": "tsconfig.json",
     "tsconfigRootDir" : ".", 
-    "sourceType": "module"
+    "sourceType": "module",
+    "include": ["vite.config.ts"]
   },
   "plugins": ["@typescript-eslint/eslint-plugin"],
   "extends": [

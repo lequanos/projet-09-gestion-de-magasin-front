@@ -1,0 +1,17 @@
+{
+  "Home": {
+    "Login": "Login",
+    "Or": "Or",
+    "Email": "Email Address",
+    "Password": "Password"
+  },
+  "Error": {
+    "Error_Title": "Error",
+    "Warning_Title": "Warning",
+    "Badrequest_Label": "Wrong data",
+    "Unauthorized_Label": "Please login",
+    "Forbidden_Label": "Insufficient permissions",
+    "Notfound_Label": "Resource not found",
+    "General_Label": "An error has occurred"
+  }
+}

@@ -1,39 +1,40 @@
 import { LoginDto } from '../../models/auth';
 import { ApiService } from '../api/ApiService';
-import CRUD from '../api/interfaces/crud.interface';
+import { AuthRequest } from '../api/interfaces/authRequest.interface';
 import { IErrorResponse } from '../api/interfaces/error.interface';
+import { ISuccessResponse } from '../api/interfaces/success.interface';
 import { LoginResponse } from './interfaces/loginResponse.interface';
 
 export class AuthService extends ApiService {
-  private readonly crud: CRUD;
-
-  constructor(url?: string) {
-    super(url);
-    this.crud = this.createEntity('auth');
+  public crud: AuthRequest;
+  constructor(accessToken?: string) {
+    super('auth', accessToken);
+    this.crud = this.createAuthEntity();
   }
 
-  async login(loginDto: LoginDto) {
-    const response = this.crud.post<LoginDto, LoginResponse>({
-      complementURL: 'login',
-      query: {
-        body: {
-          email: loginDto.email,
-          password: loginDto.password,
+  private createAuthEntity(): AuthRequest {
+    const baseCrud = super.createEntity('auth') as AuthRequest;
+
+    baseCrud.login = async (
+      loginDto: LoginDto,
+    ): Promise<
+      | ISuccessResponse<LoginResponse>
+      | IErrorResponse<LoginResponse>
+      | undefined
+    > => {
+      const response = baseCrud.post<LoginDto, LoginResponse>({
+        complementURL: 'login',
+        query: {
+          body: {
+            email: loginDto.email,
+            password: loginDto.password,
+          },
         },
-      },
-    });
+      });
 
-    let datas: LoginResponse | IErrorResponse<LoginResponse> | undefined;
+      return await response;
+    };
 
-    await response.then((res) => {
-      const { ok } = res;
-      if (ok) {
-        datas = res.data;
-      } else {
-        datas = res as IErrorResponse<LoginResponse>;
-      }
-    });
-
-    return datas;
+    return baseCrud;
   }
 }

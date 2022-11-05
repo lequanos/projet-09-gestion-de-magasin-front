@@ -1,6 +1,6 @@
 @import '../../styles/variables';
 
-.home {
+#root .home {
   display: flex;
   &--app {
     background: linear-gradient(22.5deg, $primary-color, $primary-color-gradient);
@@ -28,7 +28,8 @@
     &-form {
       display: flex;
       flex-direction: column;
-      width: 50%;
+      width: 75%;
+      min-width: 250px;
     }
 
     &-title {
@@ -38,6 +39,10 @@
 
     &-divider {
       margin: 2rem 0;
+    }
+
+    &-input {
+      min-width: 250px;
     }
   }
 }

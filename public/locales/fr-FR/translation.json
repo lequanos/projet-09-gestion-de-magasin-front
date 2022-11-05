@@ -1,0 +1,17 @@
+{
+  "Home": {
+    "Login": "Se connecter",
+    "Or": "Ou",
+    "Email": "Adresse Email",
+    "Password": "Mot de passe"
+  },
+  "Error": {
+    "Error_Title": "Erreur",
+    "Warning_Title": "Avertissement",
+    "Badrequest_Label": "Données incorrectes",
+    "Unauthorized_Label": "Veuillez vous authentifier",
+    "Forbidden_Label": "Autorisations insuffisantes",
+    "Notfound_Label": "Ressource non trouvée",
+    "General_Label": "Une erreur est survenue"
+  }
+}
