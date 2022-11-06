@@ -4,16 +4,17 @@ type RSDividerProps = {
   children: string | string[];
 };
 
-function RSDivider({ children }: RSDividerProps) {
+export function RSDivider({ children }: RSDividerProps) {
   return (
     <Divider
       sx={{
-        margin: '2rem 0',
+        margin: '3rem 0',
         borderColor: 'primary.main',
         fontFamily: 'Roboto',
         color: 'primary.main',
         fontWeight: 'bold',
         borderWidth: 1,
+        width: '75%',
         '&.MuiDivider-root::before': {
           borderColor: 'primary.main',
           borderWidth: 2,
@@ -30,5 +31,3 @@ function RSDivider({ children }: RSDividerProps) {
     </Divider>
   );
 }
-
-export default RSDivider;

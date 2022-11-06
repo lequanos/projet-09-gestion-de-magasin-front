@@ -1,4 +1,4 @@
-import type { IApiResponse } from './apiResponse.interface';
+import type { IApiResponse } from '.';
 
 export interface ISuccessResponse<T> extends IApiResponse<T> {
   /**

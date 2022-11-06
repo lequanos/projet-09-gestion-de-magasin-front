@@ -6,46 +6,66 @@ import {
 } from '@tanstack/react-query';
 
 import { LoginDto } from '../models/auth';
+import { MailDto } from '../models/mail';
+import { ISuccessResponse, IErrorResponse } from '../services/api/interfaces';
 import {
   CreateType,
   DeleteType,
   PutType,
 } from '../services/api/interfaces/crud.interface';
 import { AuthService } from '../services/auth/AuthService';
+import { MailService } from '../services/mail/MailService';
 
 const serviceDictionary = {
-  auth: (url?: string) => new AuthService(url),
+  auth: (accessToken?: string) => new AuthService(accessToken),
+  mail: () => new MailService(),
 };
 
 export type EntityList = keyof typeof serviceDictionary;
 
-const getService = (entity: EntityList, url?: string) => {
-  return serviceDictionary[entity](url);
+const getService = (entity: EntityList, accessToken?: string) => {
+  return serviceDictionary[entity](accessToken);
 };
 
-export const useGetAllQuery = (entity: EntityList, url?: string) => {
-  const service = getService(entity, url);
+export const useGetAllQuery = (entity: EntityList, accessToken?: string) => {
+  const service = getService(entity, accessToken);
   return useInfiniteQuery({
     queryKey: [`${entity}s`],
     queryFn: () => service.crud.getAll,
   });
 };
 
-export const useGetOneQuery = (entity: EntityList, url?: string) => {
-  const service = getService(entity, url);
+export const useGetOneQuery = (entity: EntityList, accessToken?: string) => {
+  const service = getService(entity, accessToken);
   return useQuery({
     queryKey: [entity],
     queryFn: () => service.crud.getOne,
   });
 };
 
+export const useGetSubscriptionMail = (
+  mailDto: MailDto,
+  enabled: boolean,
+  onSuccess: (
+    response: ISuccessResponse<string> | IErrorResponse<string | undefined>,
+  ) => void,
+) => {
+  const service = new MailService();
+  return useQuery({
+    queryKey: [enabled],
+    queryFn: () => service.crud.askSubscription(mailDto),
+    enabled,
+    onSuccess,
+  });
+};
+
 export const useCreateMutation = <T>(
   payload: CreateType<T>,
   entity: EntityList,
-  url?: string,
+  accessToken?: string,
 ) => {
   const queryClient = useQueryClient();
-  const service = getService(entity, url);
+  const service = getService(entity, accessToken);
   return useMutation({
     mutationFn: () => service.crud.create(payload),
     onSuccess: () => {
@@ -57,10 +77,10 @@ export const useCreateMutation = <T>(
 export const useUpdateMutation = <T>(
   payload: PutType<T>,
   entity: EntityList,
-  url?: string,
+  accessToken?: string,
 ) => {
   const queryClient = useQueryClient();
-  const service = getService(entity, url);
+  const service = getService(entity, accessToken);
   return useMutation({
     mutationFn: () => service.crud.update(payload),
     onSuccess: () => {
@@ -72,10 +92,10 @@ export const useUpdateMutation = <T>(
 export const useUpdatePartialMutation = <T>(
   payload: PutType<T>,
   entity: EntityList,
-  url?: string,
+  accessToken?: string,
 ) => {
   const queryClient = useQueryClient();
-  const service = getService(entity, url);
+  const service = getService(entity, accessToken);
   return useMutation({
     mutationFn: () => service.crud.updatePartial(payload),
     onSuccess: () => {
@@ -87,10 +107,10 @@ export const useUpdatePartialMutation = <T>(
 export const useDeleteMutation = <T>(
   payload: DeleteType<T>,
   entity: EntityList,
-  url?: string,
+  accessToken?: string,
 ) => {
   const queryClient = useQueryClient();
-  const service = getService(entity, url);
+  const service = getService(entity, accessToken);
   return useMutation({
     mutationFn: () => service.crud.delete(payload),
     onSuccess: () => {

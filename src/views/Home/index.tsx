@@ -1,53 +1,114 @@
-import { Alert, AlertTitle, Snackbar, Typography } from '@mui/material';
-import { SyntheticEvent, useState } from 'react';
+import { Collapse, Typography } from '@mui/material';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import './Home.scss';
 import logo from '../../assets/logo.svg';
-import RSInput from '../../components/RSInput';
-import RSForm from '../../components/RSForm';
-import RSDivider from '../../components/RSDivider';
-import RSButton from '../../components/RSButton';
-import { useLoginMutation } from '../../hooks/useService';
+import {
+  RSInput,
+  RSForm,
+  RSDivider,
+  RSButton,
+  RSToast,
+} from '../../components/RS';
 import { IErrorResponse } from '../../services/api/interfaces/error.interface';
 import { LoginResponse } from '../../services/auth/interfaces/loginResponse.interface';
+import { ISuccessResponse } from '../../services/api/interfaces/success.interface';
+import {
+  useLocalStorage,
+  useToast,
+  useLoginMutation,
+  useGetSubscriptionMail,
+} from '../../hooks';
 
 function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [open, setOpen] = useState(false);
-  const [severity, setSeverity] = useState<
-    'error' | 'warning' | 'info' | 'success'
-  >('info');
-  const [errorTitle, setErrorTitle] = useState('Error_Title');
-  const [errorMessage, setErrorMessage] = useState('General_Label');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [enableMailQuery, setEnableMailQuery] = useState(false);
+  const [formState, setFormState] = useState<'login' | 'becomeCustomer'>(
+    'login',
+  );
+  const [toastValues, setToastValues] = useToast(
+    'Error.Error_Title',
+    'Error.General_Label',
+    'info',
+  );
+  const [, setAccessToken] = useLocalStorage('access_token', '');
+  const [, setRefreshToken] = useLocalStorage('refresh_token', '');
+
   const { t } = useTranslation('translation');
   const loginMutation = useLoginMutation({ email, password });
+  useGetSubscriptionMail(
+    {
+      firstname,
+      lastname,
+      email,
+    },
+    enableMailQuery,
+    (
+      response: ISuccessResponse<string> | IErrorResponse<string | undefined>,
+    ): void => {
+      const { ok } = response;
+      console.log(response);
+      setEnableMailQuery(false);
+      if (!ok) {
+        const mailError = response as IErrorResponse<string>;
+        setToastValues({
+          title: mailError.formatted.title,
+          message: mailError.formatted.errorDefault,
+          severity: mailError.formatted.type,
+        });
+        return;
+      }
+      setToastValues({
+        title: 'Home.Success_Mail_Title',
+        message: 'Home.Success_Mail',
+        severity: 'success',
+      });
+    },
+  );
+  const navigate = useNavigate();
 
   const handleLogin = (): void => {
-    loginMutation.mutate(undefined, {
-      onSuccess: (response) => {
-        const { ok } = response;
-        if (!ok) {
-          const loginError = response as IErrorResponse<LoginResponse>;
-          setSeverity(loginError.formatted.type);
-          setErrorMessage(loginError.formatted.errorDefault);
-          setErrorTitle(loginError.formatted.title);
-          setOpen(true);
-        }
-      },
-    });
+    if (formState === 'login') {
+      loginMutation.mutate(undefined, {
+        onSuccess: (response) => {
+          const { ok } = response;
+          console.log(response);
+          if (!ok) {
+            const loginError = response as IErrorResponse<LoginResponse>;
+            setToastValues({
+              title: loginError.formatted.title,
+              message: loginError.formatted.errorDefault,
+              severity: loginError.formatted.type,
+            });
+            return;
+          }
+          const loginResponse = response as ISuccessResponse<LoginResponse>;
+          setAccessToken(loginResponse.data.access_token);
+          setRefreshToken(loginResponse.data.refresh_token);
+          setToastValues({
+            title: 'Home.Success_Login_Title',
+            message: 'Home.Success_Login',
+            severity: 'success',
+          });
+          navigate('/dashboard');
+        },
+      });
+    } else {
+      setEnableMailQuery(true);
+    }
   };
 
-  const handleCloseSnackbar = (
-    event?: SyntheticEvent | Event,
-    reason?: string,
-  ) => {
-    if (reason === 'clickaway') {
-      return;
+  const handleFormToggle = (): void => {
+    if (formState === 'login') {
+      setFormState('becomeCustomer');
+    } else {
+      setFormState('login');
     }
-
-    setOpen(false);
   };
 
   return (
@@ -67,27 +128,47 @@ function Home() {
             setValue={setEmail}
             className="home--login-input"
           />
-          <RSInput
-            label={t('Home.Password')}
-            type="password"
-            value={password}
-            setValue={setPassword}
-            className="home--login-input"
-          />
-          <RSButton onClick={handleLogin}>{t('Home.Login')}</RSButton>
+          <Collapse in={formState === 'login'} sx={{ width: '100%' }}>
+            <RSInput
+              label={t('Home.Password')}
+              type="password"
+              value={password}
+              setValue={setPassword}
+              className="home--login-input"
+            />
+          </Collapse>
+          <Collapse in={formState === 'becomeCustomer'}>
+            <RSInput
+              label={t('Home.FirstName')}
+              value={firstname}
+              setValue={setFirstname}
+              className="home--login-input"
+            />
+            <RSInput
+              label={t('Home.LastName')}
+              value={lastname}
+              setValue={setLastname}
+              className="home--login-input"
+            />
+          </Collapse>
+          <RSButton onClick={handleLogin} className="home--login-btn">
+            {formState === 'login'
+              ? t('Home.AccessAccount')
+              : t('Home.AskDetails')}
+          </RSButton>
           <RSDivider>{t('Home.Or').toUpperCase()}</RSDivider>
+          <RSButton
+            onClick={handleFormToggle}
+            className="home--login-customer"
+            variant="outlined"
+          >
+            {formState === 'login'
+              ? t('Home.BecomeCustomer')
+              : t('Home.SignIn')}
+          </RSButton>
         </RSForm>
       </div>
-      <Snackbar
-        open={open}
-        autoHideDuration={1500}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={severity}>
-          <AlertTitle>{t(`Error.${errorTitle}`)}</AlertTitle>
-          {t(`Error.${errorMessage}`)}
-        </Alert>
-      </Snackbar>
+      <RSToast toastValues={toastValues} setToastValues={setToastValues} />
     </div>
   );
 }

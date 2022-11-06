@@ -1,9 +1,19 @@
 {
   "Home": {
     "Login": "Login",
+    "AccessAccount": "Access account",
+    "SignIn": "Sign In",
+    "AskDetails": "Subscription request",
     "Or": "Or",
     "Email": "Email Address",
-    "Password": "Password"
+    "Password": "Password",
+    "FirstName": "FirstName",
+    "LastName": "LastName",
+    "BecomeCustomer": "Become a customer",
+    "Success_Login": "Logged in successfully",
+    "Success_Login_Title": "Success",
+    "Success_Mail": "Your request has been sent successfully",
+    "Success_Mail_Title": "Email sent"
   },
   "Error": {
     "Error_Title": "Error",

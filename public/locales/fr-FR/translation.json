@@ -1,9 +1,19 @@
 {
   "Home": {
-    "Login": "Se connecter",
+    "Login": "Connexion",
+    "AccessAccount": "Accéder",
+    "SignIn": "Se connecter",
+    "AskDetails": "Faire ma demande d'inscription",
     "Or": "Ou",
     "Email": "Adresse Email",
-    "Password": "Mot de passe"
+    "Password": "Mot de passe",
+    "FirstName": "Prénom",
+    "LastName": "Nom",
+    "BecomeCustomer": "Devenir client",
+    "Success_Login": "Connexion réussie",
+    "Success_Login_Title": "Réussite",
+    "Success_Mail": "Votre demande a bien été envoyée",
+    "Success_Mail_Title": "Email envoyé"
   },
   "Error": {
     "Error_Title": "Erreur",

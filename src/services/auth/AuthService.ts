@@ -1,9 +1,8 @@
 import { LoginDto } from '../../models/auth';
 import { ApiService } from '../api/ApiService';
-import { AuthRequest } from '../api/interfaces/authRequest.interface';
-import { IErrorResponse } from '../api/interfaces/error.interface';
-import { ISuccessResponse } from '../api/interfaces/success.interface';
+import { AuthRequest } from './interfaces/authRequest.interface';
 import { LoginResponse } from './interfaces/loginResponse.interface';
+import { IErrorResponse, ISuccessResponse } from '../api/interfaces';
 
 export class AuthService extends ApiService {
   public crud: AuthRequest;
@@ -19,10 +18,9 @@ export class AuthService extends ApiService {
       loginDto: LoginDto,
     ): Promise<
       | ISuccessResponse<LoginResponse>
-      | IErrorResponse<LoginResponse>
-      | undefined
+      | IErrorResponse<LoginResponse | undefined>
     > => {
-      const response = baseCrud.post<LoginDto, LoginResponse>({
+      const response = await baseCrud.post<LoginDto, LoginResponse>({
         complementURL: 'login',
         query: {
           body: {
@@ -32,7 +30,7 @@ export class AuthService extends ApiService {
         },
       });
 
-      return await response;
+      return response;
     };
 
     return baseCrud;

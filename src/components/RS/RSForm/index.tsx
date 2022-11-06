@@ -6,12 +6,10 @@ type RSFormProps = {
   onSubmit?: () => void;
 };
 
-function RSForm({ children, className, onSubmit }: RSFormProps) {
+export function RSForm({ children, className, onSubmit }: RSFormProps) {
   return (
     <Box component="form" className={className} onSubmit={onSubmit}>
       {children}
     </Box>
   );
 }
-
-export default RSForm;

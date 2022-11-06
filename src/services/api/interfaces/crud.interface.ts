@@ -1,7 +1,4 @@
-import type { IBody } from './body.interface';
-import type { IErrorResponse } from './error.interface';
-import type { IParam } from './param.interface';
-import type { ISuccessResponse } from './success.interface';
+import type { IBody, ISuccessResponse, IErrorResponse, IParam } from '.';
 
 export interface DeleteType<T> {
   id?: string;
@@ -26,7 +23,7 @@ export type PostType<T> = {
   complementURL?: string;
 };
 
-export default interface CRUD {
+export interface CRUD {
   getAll<T, U>(
     query?: IParam<U>,
   ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
@@ -49,4 +46,7 @@ export default interface CRUD {
   post<T, U>(
     p: PostType<T>,
   ): Promise<ISuccessResponse<U> | IErrorResponse<U | undefined>>;
+  get<T>(
+    g: GetType<T>,
+  ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
 }

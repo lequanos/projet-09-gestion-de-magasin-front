@@ -1,24 +1,24 @@
-import type { IApiResponse } from './apiResponse.interface';
+import type { IApiResponse } from '.';
 
 export type FormattedError = {
-  title: 'Error_Title' | 'Warning_Title';
+  title: 'Error.Error_Title' | 'Error.Warning_Title';
   type: 'error' | 'warning';
   errorDefault:
-    | 'Badrequest_Label'
-    | 'Unauthorized_Label'
-    | 'Forbidden_Label'
-    | 'Notfound_Label'
-    | 'General_Label';
+    | 'Error.Badrequest_Label'
+    | 'Error.Unauthorized_Label'
+    | 'Error.Forbidden_Label'
+    | 'Error.Notfound_Label'
+    | 'Error.General_Label';
 };
 
 export type ErrorsType = {
   ERROR: {
     type: 'error';
-    title: 'Error_Title';
+    title: 'Error.Error_Title';
   };
   WARNING: {
     type: 'warning';
-    title: 'Warning_Title';
+    title: 'Error.Warning_Title';
   };
 };
 

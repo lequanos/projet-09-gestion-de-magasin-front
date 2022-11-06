@@ -4,21 +4,22 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
-import { IBody } from './interfaces/body.interface';
-import CRUD, {
+
+import {
   CreateType,
   DeleteType,
   PostType,
   PutType,
-} from './interfaces/crud.interface';
-import {
+  CRUD,
+  IBody,
   ErrorsType,
   FormattedError,
   IErrorResponse,
-} from './interfaces/error.interface';
-import { IHeader } from './interfaces/header.interface';
-import { IParam } from './interfaces/param.interface';
-import { ISuccessResponse } from './interfaces/success.interface';
+  IHeader,
+  IParam,
+  ISuccessResponse,
+  GetType,
+} from './interfaces';
 
 export abstract class ApiService {
   private readonly apiUrl?: string;
@@ -28,11 +29,11 @@ export abstract class ApiService {
   private readonly ERRORS_TYPE: ErrorsType = {
     ERROR: {
       type: 'error',
-      title: 'Error_Title',
+      title: 'Error.Error_Title',
     },
     WARNING: {
       type: 'warning',
-      title: 'Warning_Title',
+      title: 'Error.Warning_Title',
     },
   };
 
@@ -122,6 +123,16 @@ export abstract class ApiService {
           (res: AxiosResponse<U>) => this.formatResponse(res),
           (error: AxiosError<U | undefined>) => this.formatError(error),
         ),
+      get: <T>(get: GetType<T>) =>
+        this.getRequest(
+          get.complementURL
+            ? `${resourceURL}/${get.complementURL}`
+            : `${resourceURL}`,
+          get.query,
+        ).then(
+          (res: AxiosResponse<T>) => this.formatResponse(res),
+          (error: AxiosError<T | undefined>) => this.formatError(error),
+        ),
     };
   }
 
@@ -137,7 +148,7 @@ export abstract class ApiService {
     let returnedError: FormattedError = {
       title: this.ERRORS_TYPE.ERROR.title,
       type: this.ERRORS_TYPE.ERROR.type,
-      errorDefault: 'General_Label',
+      errorDefault: 'Error.General_Label',
     };
     if (response) {
       status = response.status;
@@ -147,14 +158,14 @@ export abstract class ApiService {
         case 400: {
           returnedError = {
             ...returnedError,
-            errorDefault: 'Badrequest_Label',
+            errorDefault: 'Error.Badrequest_Label',
           };
           break;
         }
         case 401: {
           returnedError = {
             ...returnedError,
-            errorDefault: 'Unauthorized_Label',
+            errorDefault: 'Error.Unauthorized_Label',
           };
           break;
         }
@@ -162,7 +173,7 @@ export abstract class ApiService {
           returnedError = {
             ...returnedError,
             title: this.ERRORS_TYPE.WARNING.title,
-            errorDefault: 'Forbidden_Label',
+            errorDefault: 'Error.Forbidden_Label',
             type: this.ERRORS_TYPE.WARNING.type,
           };
           break;
@@ -171,7 +182,7 @@ export abstract class ApiService {
           returnedError = {
             ...returnedError,
             title: this.ERRORS_TYPE.WARNING.title,
-            errorDefault: 'Notfound_Label',
+            errorDefault: 'Error.Notfound_Label',
             type: this.ERRORS_TYPE.WARNING.type,
           };
           break;
@@ -179,13 +190,13 @@ export abstract class ApiService {
         default:
           returnedError = {
             ...returnedError,
-            errorDefault: 'General_Label',
+            errorDefault: 'Error.General_Label',
           };
       }
     } else {
       returnedError = {
         ...returnedError,
-        errorDefault: 'General_Label',
+        errorDefault: 'Error.General_Label',
       };
     }
     return { ok: false, status, data, formatted: returnedError };

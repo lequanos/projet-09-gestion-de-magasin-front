@@ -3,6 +3,7 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 
 type CommonRSInputProps = {
   className?: string;
+  component?: string;
   defaultValue?: any;
   error?: boolean;
   helperText?: string;
@@ -27,7 +28,7 @@ type ConditionalRSInputProps =
 
 type RSInputProps = CommonRSInputProps & ConditionalRSInputProps;
 
-function RSInput({
+export function RSInput({
   className,
   defaultValue,
   error = false,
@@ -37,7 +38,7 @@ function RSInput({
   label,
   required = false,
   value,
-  variant = 'standard',
+  variant = 'filled',
   setValue,
   type = 'text',
 }: RSInputProps) {
@@ -67,5 +68,3 @@ function RSInput({
     />
   );
 }
-
-export default RSInput;
