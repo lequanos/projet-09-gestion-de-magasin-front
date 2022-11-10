@@ -1,70 +1,86 @@
 import { TextField } from '@mui/material';
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import {
+  Control,
+  Controller,
+  FieldErrorsImpl,
+  RegisterOptions,
+} from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { rulesValidationDictionary } from '../../../helpers/rulesValidationDictionary';
+import { capitalize } from '../../../helpers/utils';
 
-type CommonRSInputProps = {
+type RSInputProps = {
   className?: string;
-  component?: string;
-  defaultValue?: any;
-  error?: boolean;
+  control?: Control<
+    {
+      [x: string]: any;
+    },
+    any
+  >;
+  errors: Partial<
+    FieldErrorsImpl<{
+      [x: string]: any;
+    }>
+  >;
   helperText?: string;
   id?: string;
   inputProps?: { [key: string]: any };
   label: string;
-  required?: boolean;
+  name: string;
+  rules?: Exclude<
+    RegisterOptions,
+    'valueAsNumber' | 'valueAsDate' | 'setValueAs'
+  >;
   variant?: 'standard' | 'filled' | 'outlined' | undefined;
+  type?: 'text' | 'email' | 'password' | 'number';
 };
-
-type ConditionalRSInputProps =
-  | {
-      value: string;
-      setValue: Dispatch<SetStateAction<string>>;
-      type?: 'text' | 'email' | 'password';
-    }
-  | {
-      value: number;
-      setValue: Dispatch<SetStateAction<number>>;
-      type?: 'number';
-    };
-
-type RSInputProps = CommonRSInputProps & ConditionalRSInputProps;
 
 export function RSInput({
   className,
-  defaultValue,
-  error = false,
+  control,
+  errors,
   helperText,
   id,
   inputProps,
   label,
-  required = false,
-  value,
+  name,
+  rules,
   variant = 'filled',
-  setValue,
   type = 'text',
 }: RSInputProps) {
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setValue(e.target.value as SetStateAction<string> & SetStateAction<number>);
+  // Hooks
+  const { t } = useTranslation('translation');
+
+  const getHelperText = () => {
+    const message = errors[name]?.message;
+
+    if (!message || !errors[name]) {
+      return helperText;
+    }
+    return t(message as string, { name: t(`Common.${capitalize(name)}`) });
   };
 
   return (
-    <TextField
-      className={className}
-      defaultValue={defaultValue}
-      error={error}
-      helperText={helperText}
-      id={id}
-      InputProps={inputProps}
-      label={label}
-      onChange={handleChange}
-      required={required}
-      type={type}
-      value={value}
-      variant={variant}
-      sx={{
-        marginTop: '1rem',
-      }}
+    <Controller
+      name={name}
+      control={control}
+      rules={rules || rulesValidationDictionary[name]}
+      render={({ field }) => (
+        <TextField
+          className={className}
+          error={!!errors[name]}
+          helperText={getHelperText()}
+          id={id}
+          InputProps={inputProps}
+          label={label}
+          type={type}
+          variant={variant}
+          sx={{
+            marginTop: '1rem',
+          }}
+          {...field}
+        />
+      )}
     />
   );
 }

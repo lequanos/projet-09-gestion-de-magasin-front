@@ -1,9 +1,10 @@
 import { Box } from '@mui/material';
+import { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
 
 type RSFormProps = {
   children: JSX.Element | JSX.Element[];
   className: string;
-  onSubmit?: () => void;
+  onSubmit: ReturnType<UseFormHandleSubmit<FieldValues>>;
 };
 
 export function RSForm({ children, className, onSubmit }: RSFormProps) {

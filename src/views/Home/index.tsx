@@ -20,26 +20,37 @@ import {
   useToast,
   useLoginMutation,
   useGetSubscriptionMail,
+  useUserContext,
 } from '../../hooks';
+import { useForm } from 'react-hook-form';
 
 function Home() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [enableMailQuery, setEnableMailQuery] = useState(false);
-  const [formState, setFormState] = useState<'login' | 'becomeCustomer'>(
-    'login',
-  );
+  // Hooks
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm();
   const [toastValues, setToastValues] = useToast(
     'Error.Error_Title',
     'Error.General_Label',
     'info',
   );
-  const [, setAccessToken] = useLocalStorage('access_token', '');
-  const [, setRefreshToken] = useLocalStorage('refresh_token', '');
-
+  const [, setAccessToken] = useLocalStorage('access_token');
+  const [, setRefreshToken] = useLocalStorage('refresh_token');
+  const { user, setUser } = useUserContext();
   const { t } = useTranslation('translation');
+
+  // States
+  const [enableMailQuery, setEnableMailQuery] = useState(false);
+  const [formStatus, setFormStatus] = useState<'login' | 'becomeCustomer'>(
+    'login',
+  );
+  const { firstname, lastname, email, password } = watch();
+
+  // Query Hooks
   const loginMutation = useLoginMutation({ email, password });
   useGetSubscriptionMail(
     {
@@ -52,7 +63,6 @@ function Home() {
       response: ISuccessResponse<string> | IErrorResponse<string | undefined>,
     ): void => {
       const { ok } = response;
-      console.log(response);
       setEnableMailQuery(false);
       if (!ok) {
         const mailError = response as IErrorResponse<string>;
@@ -72,12 +82,12 @@ function Home() {
   );
   const navigate = useNavigate();
 
+  // Methods
   const handleLogin = (): void => {
-    if (formState === 'login') {
+    if (formStatus === 'login') {
       loginMutation.mutate(undefined, {
         onSuccess: (response) => {
           const { ok } = response;
-          console.log(response);
           if (!ok) {
             const loginError = response as IErrorResponse<LoginResponse>;
             setToastValues({
@@ -90,12 +100,19 @@ function Home() {
           const loginResponse = response as ISuccessResponse<LoginResponse>;
           setAccessToken(loginResponse.data.access_token);
           setRefreshToken(loginResponse.data.refresh_token);
+          setUser({
+            ...user,
+            ...loginResponse.data,
+            logged: true,
+            password: '',
+          });
           setToastValues({
             title: 'Home.Success_Login_Title',
             message: 'Home.Success_Login',
             severity: 'success',
           });
           navigate('/dashboard');
+          resetForm();
         },
       });
     } else {
@@ -104,11 +121,18 @@ function Home() {
   };
 
   const handleFormToggle = (): void => {
-    if (formState === 'login') {
-      setFormState('becomeCustomer');
+    if (formStatus === 'login') {
+      setFormStatus('becomeCustomer');
     } else {
-      setFormState('login');
+      setFormStatus('login');
     }
+  };
+
+  const resetForm = () => {
+    setValue('firstname', '');
+    setValue('lastname', '');
+    setValue('email', '');
+    setValue('password', '');
   };
 
   return (
@@ -117,42 +141,70 @@ function Home() {
         <img src={logo} className="home--app-picture" />
       </div>
       <div className="home--login">
-        <RSForm className="home--login-form">
+        <RSForm
+          className="home--login-form"
+          onSubmit={handleSubmit(handleLogin)}
+        >
           <Typography align="center" className="home--login-title">
             {t('Home.Login')}
           </Typography>
           <RSInput
             label={t('Home.Email')}
             type="email"
-            value={email}
-            setValue={setEmail}
+            name="email"
             className="home--login-input"
+            control={control}
+            errors={errors}
           />
-          <Collapse in={formState === 'login'} sx={{ width: '100%' }}>
+          <Collapse in={formStatus === 'login'} sx={{ width: '100%' }}>
             <RSInput
               label={t('Home.Password')}
               type="password"
-              value={password}
-              setValue={setPassword}
+              name="password"
               className="home--login-input"
+              control={control}
+              errors={errors}
+              rules={
+                formStatus === 'becomeCustomer'
+                  ? {
+                      required: false,
+                    }
+                  : undefined
+              }
             />
           </Collapse>
-          <Collapse in={formState === 'becomeCustomer'}>
+          <Collapse in={formStatus === 'becomeCustomer'}>
             <RSInput
               label={t('Home.FirstName')}
-              value={firstname}
-              setValue={setFirstname}
+              name="firstname"
               className="home--login-input"
+              control={control}
+              errors={errors}
+              rules={
+                formStatus === 'login'
+                  ? {
+                      required: false,
+                    }
+                  : undefined
+              }
             />
             <RSInput
               label={t('Home.LastName')}
-              value={lastname}
-              setValue={setLastname}
+              name="lastname"
               className="home--login-input"
+              control={control}
+              errors={errors}
+              rules={
+                formStatus === 'login'
+                  ? {
+                      required: false,
+                    }
+                  : undefined
+              }
             />
           </Collapse>
-          <RSButton onClick={handleLogin} className="home--login-btn">
-            {formState === 'login'
+          <RSButton className="home--login-btn" type="submit">
+            {formStatus === 'login'
               ? t('Home.AccessAccount')
               : t('Home.AskDetails')}
           </RSButton>
@@ -162,7 +214,7 @@ function Home() {
             className="home--login-customer"
             variant="outlined"
           >
-            {formState === 'login'
+            {formStatus === 'login'
               ? t('Home.BecomeCustomer')
               : t('Home.SignIn')}
           </RSButton>

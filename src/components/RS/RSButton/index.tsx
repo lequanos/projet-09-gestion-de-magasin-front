@@ -6,6 +6,7 @@ type RSButtonProps = {
   className?: string;
   children: string | string[] | DefaultTFuncReturn;
   onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset' | undefined;
 };
 
 export function RSButton({
@@ -13,6 +14,7 @@ export function RSButton({
   className,
   children,
   onClick,
+  type = 'button',
 }: RSButtonProps) {
   return (
     <Button
@@ -28,11 +30,9 @@ export function RSButton({
       }}
       onClick={onClick}
       className={className}
+      type={type}
     >
       {children}
     </Button>
   );
 }
-// main: '#4578AD',
-// dark: '#345A83',
-// light: '#7CA2CB',

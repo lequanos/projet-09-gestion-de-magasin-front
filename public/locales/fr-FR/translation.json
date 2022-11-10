@@ -1,4 +1,10 @@
 {
+  "Common": {
+    "Email": "Email",
+    "Password": "Mot de passe",
+    "Firstname": "Prénom",
+    "Lastname": "Nom"
+  },
   "Home": {
     "Login": "Connexion",
     "AccessAccount": "Accéder",
@@ -22,6 +28,8 @@
     "Unauthorized_Label": "Veuillez vous authentifier",
     "Forbidden_Label": "Autorisations insuffisantes",
     "Notfound_Label": "Ressource non trouvée",
-    "General_Label": "Une erreur est survenue"
+    "General_Label": "Une erreur est survenue",
+    "Required_Input": "{{name}} requis",
+    "Format_Email": "Format d'email incorrect"
   }
 }

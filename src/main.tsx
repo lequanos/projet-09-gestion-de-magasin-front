@@ -8,6 +8,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
 import './index.scss';
 import './i18n';
+import { ContextProvider as UserContextProvider } from './hooks';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -33,11 +34,13 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <RouterProvider router={router} />
-      </ThemeProvider>
-      <ReactQueryDevtools initialIsOpen={true} />
-    </QueryClientProvider>
+    <UserContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <RouterProvider router={router} />
+        </ThemeProvider>
+        <ReactQueryDevtools initialIsOpen={true} />
+      </QueryClientProvider>
+    </UserContextProvider>
   </React.StrictMode>,
 );
