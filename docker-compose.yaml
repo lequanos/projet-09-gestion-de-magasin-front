@@ -3,6 +3,8 @@ services:
     retail-store-spa:
       build: .
       container_name: retail-store-spa
+      env_file:
+        - .env.local
       ports:
         - '8080:8080'
       volumes: 

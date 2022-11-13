@@ -1,0 +1,38 @@
+{
+  "Common": {
+    "Email": "Email",
+    "Password": "Password",
+    "Firstname": "Firstname",
+    "Lastname": "Lastname"
+  },
+  "Home": {
+    "Login": "Login",
+    "AccessAccount": "Access account",
+    "SignIn": "Sign In",
+    "AskDetails": "Subscription request",
+    "Or": "Or",
+    "Email": "Email Address",
+    "Password": "Password",
+    "FirstName": "FirstName",
+    "LastName": "LastName",
+    "BecomeCustomer": "Become a customer",
+    "Success_Login": "Logged in successfully",
+    "Success_Login_Title": "Success",
+    "Success_Mail": "Your request has been sent successfully",
+    "Success_Mail_Title": "Email sent"
+  },
+  "Header": {
+    "Logout": "Logout"
+  },
+  "Error": {
+    "Error_Title": "Error",
+    "Warning_Title": "Warning",
+    "Badrequest_Label": "Wrong data",
+    "Unauthorized_Label": "Please login",
+    "Forbidden_Label": "Insufficient permissions",
+    "Notfound_Label": "Resource not found",
+    "General_Label": "An error has occurred",
+    "Required_Input": "{{name}} required",
+    "Format_Email": "Wrong email format"
+  }
+}

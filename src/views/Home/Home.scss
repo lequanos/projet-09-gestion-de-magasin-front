@@ -1,0 +1,68 @@
+@import '../../styles/variables';
+
+#root .home {
+  display: flex;
+  
+  &--app {
+    background: linear-gradient(22.5deg, $primary-color, $primary-color-light);
+    height: 100vh;
+    width: 70vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 80px 11px rgba(0,0,0,0.38) inset;
+
+    &-picture {
+      width: 40%;
+    }
+  }
+
+  &--login {
+    height: 100vh;
+    width: 30vw;
+    box-shadow: 0px 0px 80px 11px rgba(0,0,0,0.38);
+    border-left: 1px solid $dark-grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    &-form {
+      display: flex;
+      flex-direction: column;
+      width: 75%;
+      min-width: 250px;
+      align-items: center;
+    }
+
+    &-title {
+      font-size: 1rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: $primary-color;
+    }
+
+    &-divider {
+      margin: 2rem 0;
+    }
+
+    &-input {
+      min-width: 250px;
+      width: 100%;
+    }
+
+    &-btn {
+      width: 100%;
+    }
+
+    &-customer {
+      margin: 0;
+      width: 100%;
+      background-image: none;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+  }
+}
