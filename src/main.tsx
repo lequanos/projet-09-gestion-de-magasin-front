@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { RouterProvider } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { router } from './router';
 import './index.scss';
 import './i18n';
 import { ContextProvider as UserContextProvider } from './hooks';
@@ -14,6 +13,9 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import Home from './views/Home';
+import Layout from './components/Layout';
+import Dashboard from './views/Dashboard';
 
 const theme = createTheme({
   palette: {
@@ -37,7 +39,14 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <UserContextProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <RouterProvider router={router} />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route element={<Layout />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
         </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={true} />
       </QueryClientProvider>

@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, SxProps, Theme } from '@mui/material';
 import { DefaultTFuncReturn } from 'i18next';
 
 type RSButtonProps = {
@@ -16,18 +16,26 @@ export function RSButton({
   onClick,
   type = 'button',
 }: RSButtonProps) {
+  const sx: SxProps<Theme> & {
+    backgroundImage: string;
+    '&:hover': { backgroundImage: string; color: string };
+  } = {
+    marginTop: '2.5rem',
+    borderRadius: 0,
+  };
+
+  if (variant === 'contained') {
+    sx.backgroundImage = 'linear-gradient(to bottom left, #7CA2CB, #4578AD)';
+    sx['&:hover'] = {
+      backgroundImage: 'linear-gradient(to bottom left, #4578AD, #345A83)',
+      color: 'secondary.main',
+    };
+  }
+
   return (
     <Button
       variant={variant}
-      sx={{
-        marginTop: '2.5rem',
-        borderRadius: 0,
-        backgroundImage: 'linear-gradient(to bottom left, #7CA2CB, #4578AD)',
-        '&:hover': {
-          backgroundImage: 'linear-gradient(to bottom left, #4578AD, #345A83)',
-          color: 'secondary.main',
-        },
-      }}
+      sx={sx}
       onClick={onClick}
       className={className}
       type={type}

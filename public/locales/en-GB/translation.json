@@ -21,6 +21,9 @@
     "Success_Mail": "Your request has been sent successfully",
     "Success_Mail_Title": "Email sent"
   },
+  "Header": {
+    "Logout": "Logout"
+  },
   "Error": {
     "Error_Title": "Error",
     "Warning_Title": "Warning",

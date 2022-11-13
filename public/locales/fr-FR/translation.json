@@ -21,6 +21,9 @@
     "Success_Mail": "Votre demande a bien été envoyée",
     "Success_Mail_Title": "Email envoyé"
   },
+  "Header": {
+    "Logout": "Se déconnecter"
+  },
   "Error": {
     "Error_Title": "Erreur",
     "Warning_Title": "Avertissement",

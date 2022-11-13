@@ -2,6 +2,7 @@ import { Collapse, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 import './Home.scss';
 import logo from '../../assets/logo.svg';
@@ -42,6 +43,7 @@ function Home() {
   const [, setRefreshToken] = useLocalStorage('refresh_token');
   const { user, setUser } = useUserContext();
   const { t } = useTranslation('translation');
+  const navigate = useNavigate();
 
   // States
   const [enableMailQuery, setEnableMailQuery] = useState(false);
@@ -80,7 +82,6 @@ function Home() {
       });
     },
   );
-  const navigate = useNavigate();
 
   // Methods
   const handleLogin = (): void => {
@@ -103,6 +104,7 @@ function Home() {
           setUser({
             ...user,
             ...loginResponse.data,
+            ...jwtDecode(loginResponse.data.access_token),
             logged: true,
             password: '',
           });

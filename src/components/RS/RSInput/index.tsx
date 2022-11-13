@@ -1,4 +1,6 @@
-import { TextField } from '@mui/material';
+import { VisibilityOff, Visibility } from '@mui/icons-material';
+import { IconButton, InputAdornment, TextField } from '@mui/material';
+import { useState } from 'react';
 import {
   Control,
   Controller,
@@ -50,6 +52,7 @@ export function RSInput({
 }: RSInputProps) {
   // Hooks
   const { t } = useTranslation('translation');
+  const [show, setShow] = useState(false);
 
   const getHelperText = () => {
     const message = errors[name]?.message;
@@ -58,6 +61,40 @@ export function RSInput({
       return helperText;
     }
     return t(message as string, { name: t(`Common.${capitalize(name)}`) });
+  };
+
+  const handleClickShowPassword = () => {
+    setShow(!show);
+  };
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.preventDefault();
+  };
+
+  const getInputProps = () => {
+    let inputPropsToReturn = inputProps || {};
+
+    if (type === 'password') {
+      inputPropsToReturn = {
+        ...inputProps,
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+              edge="end"
+            >
+              {show ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        ),
+      };
+    }
+
+    return inputPropsToReturn;
   };
 
   return (
@@ -71,9 +108,9 @@ export function RSInput({
           error={!!errors[name]}
           helperText={getHelperText()}
           id={id}
-          InputProps={inputProps}
+          InputProps={getInputProps()}
           label={label}
-          type={type}
+          type={show && type === 'password' ? 'text' : type}
           variant={variant}
           sx={{
             marginTop: '1rem',

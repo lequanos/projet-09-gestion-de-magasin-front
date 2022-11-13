@@ -1,0 +1,5 @@
+@import '../../styles/variables';
+
+#root .header {
+  background: linear-gradient(22.5deg, $primary-color, $primary-color-light);
+}
