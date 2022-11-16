@@ -5,6 +5,25 @@
     "Firstname": "Prénom",
     "Lastname": "Nom"
   },
+  "Dashboard": {
+    "Modal": {
+      "SelectStore": "Veuillez sélectionner un magasin"
+    }
+  },
+  "Error": {
+    "Error_Title": "Erreur",
+    "Warning_Title": "Avertissement",
+    "Badrequest_Label": "Données incorrectes",
+    "Unauthorized_Label": "Veuillez vous authentifier",
+    "Forbidden_Label": "Autorisations insuffisantes",
+    "Notfound_Label": "Ressource non trouvée",
+    "General_Label": "Une erreur est survenue",
+    "Required_Input": "{{name}} requis",
+    "Format_Email": "Format d'email incorrect"
+  },
+  "Header": {
+    "Logout": "Se déconnecter"
+  },
   "Home": {
     "Login": "Connexion",
     "AccessAccount": "Accéder",
@@ -20,20 +39,6 @@
     "Success_Login_Title": "Réussite",
     "Success_Mail": "Votre demande a bien été envoyée",
     "Success_Mail_Title": "Email envoyé"
-  },
-  "Header": {
-    "Logout": "Se déconnecter"
-  },
-  "Error": {
-    "Error_Title": "Erreur",
-    "Warning_Title": "Avertissement",
-    "Badrequest_Label": "Données incorrectes",
-    "Unauthorized_Label": "Veuillez vous authentifier",
-    "Forbidden_Label": "Autorisations insuffisantes",
-    "Notfound_Label": "Ressource non trouvée",
-    "General_Label": "Une erreur est survenue",
-    "Required_Input": "{{name}} requis",
-    "Format_Email": "Format d'email incorrect"
   },
   "Routes": {
     "Dashboard": "Tableau de bord",

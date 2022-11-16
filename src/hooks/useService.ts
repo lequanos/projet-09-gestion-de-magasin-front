@@ -15,10 +15,12 @@ import {
 } from '../services/api/interfaces/crud.interface';
 import { AuthService } from '../services/auth/AuthService';
 import { MailService } from '../services/mail/MailService';
+import { StoreService } from '../services/store/StoreService';
 
 const serviceDictionary = {
   auth: (accessToken?: string) => new AuthService(accessToken),
   mail: () => new MailService(),
+  store: (accessToken?: string) => new StoreService(accessToken),
 };
 
 export type EntityList = keyof typeof serviceDictionary;
@@ -27,11 +29,25 @@ const getService = (entity: EntityList, accessToken?: string) => {
   return serviceDictionary[entity](accessToken);
 };
 
-export const useGetAllQuery = (entity: EntityList, accessToken?: string) => {
+export const useGetAllQuery = <T>(
+  entity: EntityList,
+  accessToken?: string,
+  onSuccess?:
+    | ((
+        data: InfiniteData<ISuccessResponse<T> | IErrorResponse<T | undefined>>,
+      ) => void)
+    | undefined,
+  enabled = true,
+) => {
   const service = getService(entity, accessToken);
-  return useInfiniteQuery({
+  return useInfiniteQuery<
+    ISuccessResponse<T> | IErrorResponse<T | undefined>,
+    unknown
+  >({
     queryKey: [`${entity}s`],
-    queryFn: () => service.crud.getAll,
+    queryFn: () => service.crud.getAll(),
+    enabled,
+    onSuccess,
   });
 };
 

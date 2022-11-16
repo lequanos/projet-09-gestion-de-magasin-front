@@ -1,0 +1,11 @@
+@import '../../styles/variables';
+
+.dashboard {
+  &--modal {
+    & .MuiDialog-paper {
+      height: 40%;
+      width: 50%;
+      padding: $gutter;
+    }
+  }
+}
