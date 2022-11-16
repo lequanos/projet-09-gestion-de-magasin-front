@@ -34,5 +34,10 @@
     "General_Label": "An error has occurred",
     "Required_Input": "{{name}} required",
     "Format_Email": "Wrong email format"
+  },
+  "Routes": {
+    "Dashboard": "Dashboard",
+    "Products": "Products",
+    "Suppliers": "Suppliers"
   }
 }

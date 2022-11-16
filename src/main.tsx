@@ -16,6 +16,8 @@ import '@fontsource/roboto/700.css';
 import Home from './views/Home';
 import Layout from './components/Layout';
 import Dashboard from './views/Dashboard';
+import Product from './views/Product';
+import Supplier from './views/Supplier';
 
 const theme = createTheme({
   palette: {
@@ -44,6 +46,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
               <Route path="/" element={<Home />} />
               <Route element={<Layout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/product" element={<Product />} />
+                <Route path="/supplier" element={<Supplier />} />
               </Route>
             </Routes>
           </BrowserRouter>

@@ -34,5 +34,10 @@
     "General_Label": "Une erreur est survenue",
     "Required_Input": "{{name}} requis",
     "Format_Email": "Format d'email incorrect"
+  },
+  "Routes": {
+    "Dashboard": "Tableau de bord",
+    "Products": "Produits",
+    "Suppliers": "Fournisseurs"
   }
 }
