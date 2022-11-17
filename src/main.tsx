@@ -44,10 +44,10 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route element={<Layout />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/product" element={<Product />} />
-                <Route path="/supplier" element={<Supplier />} />
+              <Route path="*" element={<Layout />}>
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="product" element={<Product />} />
+                <Route path="supplier" element={<Supplier />} />
               </Route>
             </Routes>
           </BrowserRouter>

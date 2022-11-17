@@ -3,11 +3,14 @@
     "Email": "Email",
     "Password": "Password",
     "Firstname": "Firstname",
-    "Lastname": "Lastname"
+    "Lastname": "Lastname",
+    "Store": "Magasin"
   },
     "Dashboard": {
       "Modal": {
-        "SelectStore": "Please select a store"
+        "SelectStore": "Please select a store",
+        "Store": "Store",
+        "Or": "Or"
       }
   },
   "Error": {
@@ -19,6 +22,7 @@
     "Notfound_Label": "Resource not found",
     "General_Label": "An error has occurred",
     "Required_Input": "{{name}} required",
+    "Required_Select": "{{name}} required",
     "Format_Email": "Wrong email format"
   },
   "Header": {

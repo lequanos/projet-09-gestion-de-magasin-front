@@ -43,5 +43,4 @@ export function ContextProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// on prépare un hook custom qui nous permet de récupérer le contexte UserContext
 export const useUserContext = () => useContext<UserContextType>(UserContext);

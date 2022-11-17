@@ -22,6 +22,7 @@ import {
   useLoginMutation,
   useGetSubscriptionMail,
   useUserContext,
+  useAccessToken,
 } from '../../hooks';
 import { useForm } from 'react-hook-form';
 
@@ -39,7 +40,7 @@ function Home() {
     'Error.General_Label',
     'info',
   );
-  const [, setAccessToken] = useLocalStorage('access_token');
+  const { setAccessToken } = useAccessToken();
   const [, setRefreshToken] = useLocalStorage('refresh_token');
   const { user, setUser } = useUserContext();
   const { t } = useTranslation('translation');
