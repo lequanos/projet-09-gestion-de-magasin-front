@@ -1,11 +1,12 @@
 import {
+  InfiniteData,
   useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 
-import { LoginDto } from '../models/auth';
+import { LoginDto, SelectStoreDto } from '../models/auth';
 import { MailDto } from '../models/mail';
 import { ISuccessResponse, IErrorResponse } from '../services/api/interfaces';
 import {
@@ -139,5 +140,15 @@ export const useLoginMutation = (payload: LoginDto) => {
   const service = new AuthService();
   return useMutation({
     mutationFn: () => service.crud.login(payload),
+  });
+};
+
+export const useSelectStoreMutation = (
+  payload: SelectStoreDto,
+  accessToken: string,
+) => {
+  const service = new AuthService(accessToken);
+  return useMutation({
+    mutationFn: () => service.crud.selectStore(payload),
   });
 };

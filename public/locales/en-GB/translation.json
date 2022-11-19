@@ -4,13 +4,14 @@
     "Password": "Password",
     "Firstname": "Firstname",
     "Lastname": "Lastname",
-    "Store": "Magasin"
+    "SelectedStore": "Magasin"
   },
     "Dashboard": {
       "Modal": {
         "SelectStore": "Please select a store",
         "Store": "Store",
-        "Or": "Or"
+        "Or": "Or",
+        "Submit": "Submit"
       }
   },
   "Error": {

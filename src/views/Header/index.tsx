@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { SyntheticEvent, useState } from 'react';
 
-import { RSButton } from '../RS';
+import { RSButton } from '../../components/RS';
 import { useUserContext, emptyUser } from '../../hooks/useUserContext';
 import logo from '../../assets/logo.svg';
 import './Header.scss';
-import LinkTab from '../LinkTab';
+import LinkTab from '../../components/LinkTab';
 
 function Header() {
   // Hooks

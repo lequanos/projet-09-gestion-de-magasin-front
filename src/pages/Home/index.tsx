@@ -14,7 +14,7 @@ import {
   RSToast,
 } from '../../components/RS';
 import { IErrorResponse } from '../../services/api/interfaces/error.interface';
-import { LoginResponse } from '../../services/auth/interfaces/loginResponse.interface';
+import { LoginResponse } from '../../services/auth/interfaces/authResponse.interface';
 import { ISuccessResponse } from '../../services/api/interfaces/success.interface';
 import {
   useLocalStorage,
@@ -53,7 +53,7 @@ function Home() {
   );
   const { firstname, lastname, email, password } = watch();
 
-  // Query Hooks
+  // Queries
   const loginMutation = useLoginMutation({ email, password });
   useGetSubscriptionMail(
     {

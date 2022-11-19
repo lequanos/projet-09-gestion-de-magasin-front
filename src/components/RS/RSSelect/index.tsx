@@ -1,4 +1,10 @@
-import { InputLabel, Select, MenuItem, FormControl } from '@mui/material';
+import {
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControl,
+  FormHelperText,
+} from '@mui/material';
 import { t } from 'i18next';
 import {
   Control,
@@ -7,6 +13,7 @@ import {
   RegisterOptions,
 } from 'react-hook-form';
 import { rulesValidationDictionary } from '../../../helpers/rulesValidationDictionary';
+import { capitalize } from '../../../helpers/utils';
 import { BaseModel } from '../../../services/interfaces/common.interface';
 
 type RSSelectProps<T extends BaseModel> = {
@@ -22,6 +29,7 @@ type RSSelectProps<T extends BaseModel> = {
     | { selectedStore: string },
     any
   >;
+  helperText?: string;
   name: string;
   rules?: Exclude<
     RegisterOptions,
@@ -39,6 +47,7 @@ function RSSelect<T extends BaseModel>({
   id,
   className,
   defaultValue = '',
+  helperText,
   labelId,
   label,
   control,
@@ -47,6 +56,14 @@ function RSSelect<T extends BaseModel>({
   errors,
   items,
 }: RSSelectProps<T>) {
+  const getHelperText = () => {
+    const message = errors[name]?.message;
+
+    if (!message || !errors[name]) {
+      return helperText;
+    }
+    return t(message as string, { name: t(`Common.${capitalize(name)}`) });
+  };
   return (
     <>
       <Controller
@@ -71,6 +88,7 @@ function RSSelect<T extends BaseModel>({
                 </MenuItem>
               ))}
             </Select>
+            <FormHelperText error>{getHelperText()}</FormHelperText>
           </FormControl>
         )}
       />

@@ -4,16 +4,28 @@ import { useTranslation } from 'react-i18next';
 
 import './Dashboard.scss';
 import { isRoleDto } from '../../helpers/typeguards';
-import { useGetAllQuery, useUserContext, useAccessToken } from '../../hooks';
+import {
+  useGetAllQuery,
+  useUserContext,
+  useAccessToken,
+  useSelectStoreMutation,
+  useToast,
+  useLocalStorage,
+} from '../../hooks';
 import { GetAllStoreResponse } from '../../services/store/interfaces/getAllStoreReponse.interface';
-import { RSDivider, RSForm } from '../../components/RS';
+import { RSButton, RSDivider, RSForm } from '../../components/RS';
 import RSSelect from '../../components/RS/RSSelect';
 import { useForm } from 'react-hook-form';
+import {
+  IErrorResponse,
+  ISuccessResponse,
+} from '../../services/api/interfaces';
+import { SelectStoreResponse } from '../../services/auth/interfaces/authResponse.interface';
 
 function Dashboard() {
   // Hooks
   const { user } = useUserContext();
-  const { accessToken } = useAccessToken();
+  const { accessToken, setAccessToken } = useAccessToken();
   const { t } = useTranslation('translation');
   const {
     handleSubmit,
@@ -21,6 +33,12 @@ function Dashboard() {
     formState: { errors },
     watch,
   } = useForm();
+  const [, setToastValues] = useToast(
+    'Error.Error_Title',
+    'Error.General_Label',
+    'info',
+  );
+  const [, setRefreshToken] = useLocalStorage('refresh_token');
   const { selectedStore } = watch();
 
   // States
@@ -29,8 +47,12 @@ function Dashboard() {
 
   // Queries
   useGetAllQuery<GetAllStoreResponse>('store', accessToken, (data) => {
-    setStores(data.pages[0].data);
+    setStores(data.pages[0].data || []);
   });
+  const selectStoreMutation = useSelectStoreMutation(
+    { store: selectedStore },
+    accessToken,
+  );
 
   // Methods
   /**
@@ -44,7 +66,30 @@ function Dashboard() {
    * Call api with the selected store
    */
   const handleSelectStore = () => {
-    console.log(1);
+    selectStoreMutation.mutate(undefined, {
+      onSuccess: (response) => {
+        const { ok } = response;
+        if (!ok) {
+          const selectStoreError =
+            response as IErrorResponse<SelectStoreResponse>;
+          setToastValues({
+            title: selectStoreError.formatted.title,
+            message: selectStoreError.formatted.errorDefault,
+            severity: selectStoreError.formatted.type,
+          });
+          return;
+        }
+        const selectStoreResponse =
+          response as ISuccessResponse<SelectStoreResponse>;
+        setAccessToken(selectStoreResponse.data.access_token);
+        setRefreshToken(selectStoreResponse.data.refresh_token);
+        setToastValues({
+          title: 'Home.Success_Login_Title',
+          message: 'Home.Success_Login',
+          severity: 'success',
+        });
+      },
+    });
   };
 
   // useEffect
@@ -82,6 +127,7 @@ function Dashboard() {
                 control={control}
                 className="dashboard--modal-select"
               />
+              <RSButton type="submit">{t('Dashboard.Modal.Submit')}</RSButton>
             </RSForm>
             <RSDivider>{t('Dashboard.Modal.Or').toUpperCase()}</RSDivider>
           </Box>

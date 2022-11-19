@@ -4,13 +4,14 @@
     "Password": "Mot de passe",
     "Firstname": "Prénom",
     "Lastname": "Nom",
-    "Store": "Magasin"
+    "SelectedStore": "Magasin"
   },
   "Dashboard": {
     "Modal": {
       "SelectStore": "Veuillez sélectionner un magasin",
       "Store": "Magasin",
-      "Or": "Ou"
+      "Or": "Ou",
+      "Submit": "Soumettre"
     }
   },
   "Error": {

@@ -2,9 +2,9 @@ import { Route, Routes } from 'react-router-dom';
 import Dashboard from '../../views/Dashboard';
 import Product from '../../views/Product';
 import Supplier from '../../views/Supplier';
-import Header from '../Header';
+import Header from '../../views/Header';
 
-function Layout() {
+function App() {
   return (
     <>
       <Header />
@@ -17,4 +17,4 @@ function Layout() {
   );
 }
 
-export default Layout;
+export default App;
