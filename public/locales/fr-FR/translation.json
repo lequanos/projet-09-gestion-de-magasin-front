@@ -11,8 +11,14 @@
       "SelectStore": "Veuillez sélectionner un magasin",
       "Store": "Magasin",
       "Or": "Ou",
-      "Submit": "Soumettre"
-    }
+      "Submit": "Soumettre",
+      "AccessDashboard": "Accéder au tableau de bord"
+    },
+    "Card": {
+      "ActiveStores": "Magasins actifs",
+      "ActiveUsers": "Utilisateurs actifs"
+    },
+    "MostActiveStores": "Magasins les plus actifs"
   },
   "Error": {
     "Error_Title": "Erreur",
@@ -47,7 +53,22 @@
   },
   "Routes": {
     "Dashboard": "Tableau de bord",
+    "Stores": "Magasins",
     "Products": "Produits",
-    "Suppliers": "Fournisseurs"
+    "Suppliers": "Fournisseurs",
+    "Aisles": "Rayons",
+    "Users": "Utilisateurs"
+  },
+  "Unauthorized": {
+    "Subtitle": "Oups! Il semblerait que vous n'étiez pas connecté...",
+    "Back": "Retour à la connexion"
+  },
+  "NotFound": {
+    "Subtitle": "Oups! Il semblerait que ce que vous avez demandé n'existe pas...",
+    "Back": "Retour"
+  },
+  "Forbidden": {
+    "Subtitle": "Oups! Il semblerait que vous n'ayez pas accès à ce que vous avez demandé...",
+    "Back": "Retour"
   }
 }

@@ -1,6 +1,10 @@
-import { LoginDto, SelectStoreDto } from '../../../models/auth';
+import { LoginDto, SelectStoreDto } from '@/models/auth';
+import {
+  IErrorResponse,
+  ISuccessResponse,
+  CRUD,
+} from '@/services/api/interfaces';
 import { LoginResponse, SelectStoreResponse } from './authResponse.interface';
-import { IErrorResponse, ISuccessResponse, CRUD } from '../../api/interfaces';
 
 export interface AuthRequest extends CRUD {
   login(

@@ -17,7 +17,6 @@ import { IErrorResponse } from '../../services/api/interfaces/error.interface';
 import { LoginResponse } from '../../services/auth/interfaces/authResponse.interface';
 import { ISuccessResponse } from '../../services/api/interfaces/success.interface';
 import {
-  useLocalStorage,
   useToast,
   useLoginMutation,
   useGetSubscriptionMail,
@@ -41,7 +40,6 @@ function Home() {
     'info',
   );
   const { setAccessToken } = useAccessToken();
-  const [, setRefreshToken] = useLocalStorage('refresh_token');
   const { user, setUser } = useUserContext();
   const { t } = useTranslation('translation');
   const navigate = useNavigate();
@@ -101,11 +99,10 @@ function Home() {
           }
           const loginResponse = response as ISuccessResponse<LoginResponse>;
           setAccessToken(loginResponse.data.access_token);
-          setRefreshToken(loginResponse.data.refresh_token);
           setUser({
             ...user,
-            ...loginResponse.data,
             ...jwtDecode(loginResponse.data.access_token),
+            refreshToken: loginResponse.data.refresh_token,
             logged: true,
             password: '',
           });

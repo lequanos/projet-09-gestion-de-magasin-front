@@ -43,7 +43,7 @@ type RSSelectProps<T extends BaseModel> = {
   items: T[];
 };
 
-function RSSelect<T extends BaseModel>({
+export function RSSelect<T extends BaseModel>({
   id,
   className,
   defaultValue = '',
@@ -95,5 +95,3 @@ function RSSelect<T extends BaseModel>({
     </>
   );
 }
-
-export default RSSelect;

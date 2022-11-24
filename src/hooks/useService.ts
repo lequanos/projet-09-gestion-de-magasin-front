@@ -38,6 +38,7 @@ export const useGetAllQuery = <T>(
         data: InfiniteData<ISuccessResponse<T> | IErrorResponse<T | undefined>>,
       ) => void)
     | undefined,
+  onError?: ((err: unknown) => void) | undefined,
   enabled = true,
 ) => {
   const service = getService(entity, accessToken);
@@ -49,6 +50,7 @@ export const useGetAllQuery = <T>(
     queryFn: () => service.crud.getAll(),
     enabled,
     onSuccess,
+    onError,
   });
 };
 

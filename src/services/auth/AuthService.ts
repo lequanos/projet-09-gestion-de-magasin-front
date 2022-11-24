@@ -1,11 +1,11 @@
-import { LoginDto, SelectStoreDto } from '../../models/auth';
-import { ApiService } from '../api/ApiService';
+import { LoginDto, SelectStoreDto } from '@/models/auth';
+import { ApiService } from '@/services/api/ApiService';
+import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { AuthRequest } from './interfaces/authRequest.interface';
 import {
   LoginResponse,
   SelectStoreResponse,
 } from './interfaces/authResponse.interface';
-import { IErrorResponse, ISuccessResponse } from '../api/interfaces';
 
 export class AuthService extends ApiService {
   public crud: AuthRequest;

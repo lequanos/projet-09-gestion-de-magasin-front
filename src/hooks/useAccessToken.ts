@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useLocalStorage } from './useLocalStorage';
 
@@ -18,8 +19,12 @@ export function useAccessToken() {
     return accessToken;
   };
 
+  useEffect(() => {
+    setAccessToken(getAccessToken() || '');
+  }, []);
+
   return {
-    accessToken: getAccessToken(),
+    accessToken,
     setAccessToken,
   };
 }

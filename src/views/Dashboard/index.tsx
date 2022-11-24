@@ -1,139 +1,80 @@
-import { Backdrop, Fade, Box, Typography, Dialog } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Container, Box, Card, CardContent, CardHeader } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { useState } from 'react';
 
 import './Dashboard.scss';
-import { isRoleDto } from '../../helpers/typeguards';
-import {
-  useGetAllQuery,
-  useUserContext,
-  useAccessToken,
-  useSelectStoreMutation,
-  useToast,
-  useLocalStorage,
-} from '../../hooks';
-import { GetAllStoreResponse } from '../../services/store/interfaces/getAllStoreReponse.interface';
-import { RSButton, RSDivider, RSForm } from '../../components/RS';
-import RSSelect from '../../components/RS/RSSelect';
-import { useForm } from 'react-hook-form';
-import {
-  IErrorResponse,
-  ISuccessResponse,
-} from '../../services/api/interfaces';
-import { SelectStoreResponse } from '../../services/auth/interfaces/authResponse.interface';
+import DashboardCard from '@/components/Dashboard/DashboardCard';
+import DashboardModal from './DashboardModal';
+import { RSToast } from '@/components/RS';
+import { useAccessToken, useGetAllQuery, useToast } from '@/hooks';
+import { IErrorResponse } from '@/services/api/interfaces';
+import { GetAllStoreResponse } from '@/services/store/interfaces/getAllStoreReponse.interface';
+
+const columns: GridColDef[] = [
+  { field: 'name', headerName: 'Name', flex: 1 },
+  { field: 'city', headerName: 'City', flex: 1 },
+  { field: 'siret', headerName: 'SIRET', flex: 1 },
+];
 
 function Dashboard() {
   // Hooks
-  const { user } = useUserContext();
-  const { accessToken, setAccessToken } = useAccessToken();
   const { t } = useTranslation('translation');
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-    watch,
-  } = useForm();
-  const [, setToastValues] = useToast(
+  const [toastValues, setToastValues] = useToast(
     'Error.Error_Title',
     'Error.General_Label',
     'info',
   );
-  const [, setRefreshToken] = useLocalStorage('refresh_token');
-  const { selectedStore } = watch();
-
-  // States
-  const [open, setOpen] = useState(false);
   const [stores, setStores] = useState<GetAllStoreResponse>([]);
+  const { accessToken } = useAccessToken();
 
   // Queries
-  useGetAllQuery<GetAllStoreResponse>('store', accessToken, (data) => {
-    setStores(data.pages[0].data || []);
-  });
-  const selectStoreMutation = useSelectStoreMutation(
-    { store: selectedStore },
-    accessToken,
-  );
-
-  // Methods
-  /**
-   * Called when clicked outside of the modal
-   */
-  const handleClose = () => {
-    console.log('coucou');
-  };
-
-  /**
-   * Call api with the selected store
-   */
-  const handleSelectStore = () => {
-    selectStoreMutation.mutate(undefined, {
-      onSuccess: (response) => {
-        const { ok } = response;
-        if (!ok) {
-          const selectStoreError =
-            response as IErrorResponse<SelectStoreResponse>;
-          setToastValues({
-            title: selectStoreError.formatted.title,
-            message: selectStoreError.formatted.errorDefault,
-            severity: selectStoreError.formatted.type,
-          });
-          return;
-        }
-        const selectStoreResponse =
-          response as ISuccessResponse<SelectStoreResponse>;
-        setAccessToken(selectStoreResponse.data.access_token);
-        setRefreshToken(selectStoreResponse.data.refresh_token);
-        setToastValues({
-          title: 'Home.Success_Login_Title',
-          message: 'Home.Success_Login',
-          severity: 'success',
-        });
-      },
-    });
-  };
-
-  // useEffect
-  useEffect(() => {
-    if (isRoleDto(user.role) && user.role.permissions.includes('READ_ALL')) {
-      setOpen(true);
+  useGetAllQuery<GetAllStoreResponse>('store', accessToken, ({ pages }) => {
+    const { ok, status, data } = pages[0];
+    if ([401, 403].includes(status)) {
+      throw new Response('', { status });
     }
-  }, []);
+
+    if (!ok) {
+      const getStoreError = pages[0] as IErrorResponse<GetAllStoreResponse>;
+      setToastValues({
+        title: getStoreError.formatted.title,
+        message: getStoreError.formatted.errorDefault,
+        severity: getStoreError.formatted.type,
+      });
+      return;
+    }
+
+    setStores(data || []);
+  });
 
   return (
-    <div>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-        className="dashboard--modal"
-      >
-        <Fade in={open}>
-          <Box>
-            <Typography variant="h6" component="h2" color="primary">
-              {t('Dashboard.Modal.SelectStore')}
-            </Typography>
-            <RSForm onSubmit={handleSubmit(handleSelectStore)}>
-              <RSSelect
-                id="select-store"
-                label="Dashboard.Modal.Store"
-                labelId="select-store-label"
-                name="selectedStore"
-                errors={errors}
-                items={stores}
-                control={control}
-                className="dashboard--modal-select"
-              />
-              <RSButton type="submit">{t('Dashboard.Modal.Submit')}</RSButton>
-            </RSForm>
-            <RSDivider>{t('Dashboard.Modal.Or').toUpperCase()}</RSDivider>
-          </Box>
-        </Fade>
-      </Dialog>
-    </div>
+    <>
+      <Container className="dashboard--container">
+        <Box className="dashboard--indicators">
+          <DashboardCard
+            title="Dashboard.Card.ActiveStores"
+            evolution={101010}
+            active={10}
+            total={100}
+          />
+          <DashboardCard
+            title="Dashboard.Card.ActiveUsers"
+            evolution={-10.56}
+            active={10}
+            total={100}
+          />
+        </Box>
+        <Card className="dashboard--active-stores">
+          <CardHeader title={t('Dashboard.MostActiveStores')} />
+          <CardContent className="dashboard--active-stores-table">
+            <DataGrid rows={stores} columns={columns} />
+          </CardContent>
+        </Card>
+      </Container>
+      <DashboardModal setToastValues={setToastValues} stores={stores} />
+      <RSToast toastValues={toastValues} setToastValues={setToastValues} />
+    </>
   );
 }
 

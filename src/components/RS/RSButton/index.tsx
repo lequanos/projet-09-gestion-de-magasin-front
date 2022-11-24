@@ -1,5 +1,6 @@
 import { Button, SxProps, Theme } from '@mui/material';
 import { DefaultTFuncReturn } from 'i18next';
+import { useRef } from 'react';
 
 type RSButtonProps = {
   variant?: 'contained' | 'text' | 'outlined' | undefined;
@@ -28,6 +29,9 @@ export function RSButton({
   color = 'primary',
   type = 'button',
 }: RSButtonProps) {
+  // Hooks
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   let sxProps: SxProps<Theme> & { [key: string]: any } = {
     marginTop: '2.5rem',
     borderRadius: 0,
@@ -40,11 +44,16 @@ export function RSButton({
     };
   }
 
-  if (variant === 'contained') {
+  if (variant === 'contained' && buttonRef && buttonRef.current) {
     sxProps.backgroundImage =
-      'linear-gradient(to bottom left, #7CA2CB, #4578AD)';
+      'linear-gradient(to bottom left, #7CA2CB, #4578AD, #345A83)';
+    sxProps.backgroundSize = `${buttonRef.current.offsetWidth * 2}px ${
+      buttonRef.current.offsetHeight * 2
+    }px`;
+    sxProps.backgroundPosition = 'top right';
+    sxProps.transition = 'background 0.5s ease-in-out';
     sxProps['&:hover'] = {
-      backgroundImage: 'linear-gradient(to bottom left, #4578AD, #345A83)',
+      backgroundPosition: 'bottom left',
       color: 'secondary.main',
     };
   }
@@ -57,6 +66,7 @@ export function RSButton({
       className={className}
       type={type}
       color={color}
+      ref={buttonRef}
     >
       {children}
     </Button>

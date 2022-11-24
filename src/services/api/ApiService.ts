@@ -41,10 +41,7 @@ export abstract class ApiService {
     this.apiUrl = url || import.meta.env['API_BASE_URL'];
     this.httpClient = axios.create({
       baseURL: this.apiUrl,
-      timeout: 1000,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      timeout: 5000,
     });
     if (accessToken) {
       this.addHeaders([
@@ -143,7 +140,7 @@ export abstract class ApiService {
   private formatError<T>(error: AxiosError<T>): IErrorResponse<T | undefined> {
     const err = { error };
     const response = err.error.response;
-    let status = 0;
+    let status = 500;
     let data;
     let returnedError: FormattedError = {
       title: this.ERRORS_TYPE.ERROR.title,
