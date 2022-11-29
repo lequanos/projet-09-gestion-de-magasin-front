@@ -154,3 +154,30 @@ export const useSelectStoreMutation = (
     mutationFn: () => service.crud.selectStore(payload),
   });
 };
+
+export const useGetMostActive = <T>(
+  entity: EntityList,
+  accessToken?: string,
+  onSuccess?:
+    | ((
+        data: InfiniteData<ISuccessResponse<T> | IErrorResponse<T | undefined>>,
+      ) => void)
+    | undefined,
+  onError?: ((err: unknown) => void) | undefined,
+  enabled = true,
+) => {
+  const service = getService(entity, accessToken);
+  return useInfiniteQuery<
+    ISuccessResponse<T> | IErrorResponse<T | undefined>,
+    unknown
+  >({
+    queryKey: [`${entity}s`],
+    queryFn: () =>
+      service.crud.get({
+        complementURL: 'most-active',
+      }),
+    enabled,
+    onSuccess,
+    onError,
+  });
+};

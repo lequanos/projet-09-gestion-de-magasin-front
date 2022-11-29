@@ -18,7 +18,7 @@ import {
   ToastValues,
 } from '@/components/RS';
 import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
-import { GetAllStoreResponse } from '@/services/store/interfaces/getAllStoreReponse.interface';
+import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
 import { SelectStoreResponse } from '@/services/auth/interfaces/authResponse.interface';
 
 type DashboardModalProps = {
@@ -28,7 +28,7 @@ type DashboardModalProps = {
     severity,
     open,
   }: Partial<ToastValues>) => void;
-  stores: GetAllStoreResponse;
+  stores: GetStoresResponse;
 };
 
 function DashboardModal({ setToastValues, stores }: DashboardModalProps) {

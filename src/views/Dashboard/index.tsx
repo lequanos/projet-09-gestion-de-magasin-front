@@ -7,14 +7,15 @@ import './Dashboard.scss';
 import DashboardCard from '@/components/Dashboard/DashboardCard';
 import DashboardModal from './DashboardModal';
 import { RSToast } from '@/components/RS';
-import { useAccessToken, useGetAllQuery, useToast } from '@/hooks';
+import { useAccessToken, useGetMostActive, useToast } from '@/hooks';
 import { IErrorResponse } from '@/services/api/interfaces';
-import { GetAllStoreResponse } from '@/services/store/interfaces/getAllStoreReponse.interface';
+import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
 
 const columns: GridColDef[] = [
   { field: 'name', headerName: 'Name', flex: 1 },
   { field: 'city', headerName: 'City', flex: 1 },
   { field: 'siret', headerName: 'SIRET', flex: 1 },
+  { field: 'movement', headerName: 'Movement', flex: 1 },
 ];
 
 function Dashboard() {
@@ -25,18 +26,18 @@ function Dashboard() {
     'Error.General_Label',
     'info',
   );
-  const [stores, setStores] = useState<GetAllStoreResponse>([]);
+  const [stores, setStores] = useState<GetStoresResponse>([]);
   const { accessToken } = useAccessToken();
 
   // Queries
-  useGetAllQuery<GetAllStoreResponse>('store', accessToken, ({ pages }) => {
+  useGetMostActive<GetStoresResponse>('store', accessToken, ({ pages }) => {
     const { ok, status, data } = pages[0];
     if ([401, 403].includes(status)) {
       throw new Response('', { status });
     }
 
     if (!ok) {
-      const getStoreError = pages[0] as IErrorResponse<GetAllStoreResponse>;
+      const getStoreError = pages[0] as IErrorResponse<GetStoresResponse>;
       setToastValues({
         title: getStoreError.formatted.title,
         message: getStoreError.formatted.errorDefault,
