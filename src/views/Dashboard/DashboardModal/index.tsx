@@ -9,32 +9,19 @@ import {
   useUserContext,
   useAccessToken,
   useSelectStoreMutation,
+  useToastContext,
+  useSearchStores,
 } from '@/hooks';
-import {
-  RSButton,
-  RSDivider,
-  RSForm,
-  RSSelect,
-  ToastValues,
-} from '@/components/RS';
+import { RSButton, RSDivider, RSForm, RSSelect } from '@/components/RS';
 import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
-import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
 import { SelectStoreResponse } from '@/services/auth/interfaces/authResponse.interface';
+import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
 
-type DashboardModalProps = {
-  setToastValues: ({
-    title,
-    message,
-    severity,
-    open,
-  }: Partial<ToastValues>) => void;
-  stores: GetStoresResponse;
-};
-
-function DashboardModal({ setToastValues, stores }: DashboardModalProps) {
+function DashboardModal() {
   // Hooks
   const { user, setUser } = useUserContext();
   const { accessToken, setAccessToken } = useAccessToken();
+  const { toast } = useToastContext();
   const { t } = useTranslation('translation');
   const {
     handleSubmit,
@@ -47,12 +34,21 @@ function DashboardModal({ setToastValues, stores }: DashboardModalProps) {
 
   // States
   const [open, setOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('a');
+  const [enabledSearchStores, setEnabledSearchStores] = useState(true);
+  const [stores, setStores] = useState<GetStoresResponse>([]);
 
   // Queries
   const selectStoreMutation = useSelectStoreMutation(
     { store: selectedStore },
     accessToken || '',
   );
+  useSearchStores(searchValue, enabledSearchStores, accessToken, (data) => {
+    if (data && data.ok && data.data) {
+      setStores(data.data);
+      setEnabledSearchStores(false);
+    }
+  });
 
   // Methods
   /**
@@ -77,11 +73,11 @@ function DashboardModal({ setToastValues, stores }: DashboardModalProps) {
         if (!ok) {
           const selectStoreError =
             response as IErrorResponse<SelectStoreResponse>;
-          setToastValues({
-            title: selectStoreError.formatted.title,
-            message: selectStoreError.formatted.errorDefault,
-            severity: selectStoreError.formatted.type,
-          });
+
+          toast[selectStoreError.formatted.type](
+            selectStoreError.formatted.errorDefault,
+            selectStoreError.formatted.title,
+          );
           return;
         }
 

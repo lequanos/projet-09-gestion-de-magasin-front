@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Header from '@/views/Header';
 
 import './App.scss';
+import { RSToast } from '@/components/RS';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <div className="app">
         <Outlet />
       </div>
+      <RSToast />
     </>
   );
 }

@@ -30,7 +30,11 @@ const initialContext: UserContextType = {
 
 export const UserContext = createContext<UserContextType>(initialContext);
 
-export function ContextProvider({ children }: { children: React.ReactNode }) {
+export function UserContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [user, setUser] = useLocalStorage<UserDto>('user', emptyUser);
 
   const contextValue = {

@@ -6,17 +6,18 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-import { LoginDto, SelectStoreDto } from '../models/auth';
-import { MailDto } from '../models/mail';
-import { ISuccessResponse, IErrorResponse } from '../services/api/interfaces';
+import { LoginDto, SelectStoreDto } from '@/models/auth';
+import { MailDto } from '@/models/mail';
+import { ISuccessResponse, IErrorResponse } from '@/services/api/interfaces';
 import {
   CreateType,
   DeleteType,
   PutType,
-} from '../services/api/interfaces/crud.interface';
-import { AuthService } from '../services/auth/AuthService';
-import { MailService } from '../services/mail/MailService';
-import { StoreService } from '../services/store/StoreService';
+} from '@/services/api/interfaces/crud.interface';
+import { AuthService } from '@/services/auth/AuthService';
+import { MailService } from '@/services/mail/MailService';
+import { StoreService } from '@/services/store/StoreService';
+import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
 
 const serviceDictionary = {
   auth: (accessToken?: string) => new AuthService(accessToken),
@@ -179,5 +180,26 @@ export const useGetMostActive = <T>(
     enabled,
     onSuccess,
     onError,
+  });
+};
+
+export const useSearchStores = (
+  searchValue: string,
+  enabled: boolean,
+  accessToken?: string,
+  onSuccess?:
+    | ((
+        data:
+          | ISuccessResponse<GetStoresResponse>
+          | IErrorResponse<GetStoresResponse | undefined>,
+      ) => void)
+    | undefined,
+) => {
+  const service = new StoreService(accessToken);
+  return useQuery({
+    queryKey: ['stores'],
+    queryFn: () => service.crud.searchStores(searchValue),
+    enabled,
+    onSuccess,
   });
 };

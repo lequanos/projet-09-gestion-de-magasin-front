@@ -6,8 +6,7 @@ import { useState } from 'react';
 import './Dashboard.scss';
 import DashboardCard from '@/components/Dashboard/DashboardCard';
 import DashboardModal from './DashboardModal';
-import { RSToast } from '@/components/RS';
-import { useAccessToken, useGetMostActive, useToast } from '@/hooks';
+import { useAccessToken, useGetMostActive, useToastContext } from '@/hooks';
 import { IErrorResponse } from '@/services/api/interfaces';
 import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
 
@@ -21,11 +20,7 @@ const columns: GridColDef[] = [
 function Dashboard() {
   // Hooks
   const { t } = useTranslation('translation');
-  const [toastValues, setToastValues] = useToast(
-    'Error.Error_Title',
-    'Error.General_Label',
-    'info',
-  );
+  const { toast } = useToastContext();
   const [stores, setStores] = useState<GetStoresResponse>([]);
   const { accessToken } = useAccessToken();
 
@@ -38,11 +33,10 @@ function Dashboard() {
 
     if (!ok) {
       const getStoreError = pages[0] as IErrorResponse<GetStoresResponse>;
-      setToastValues({
-        title: getStoreError.formatted.title,
-        message: getStoreError.formatted.errorDefault,
-        severity: getStoreError.formatted.type,
-      });
+      toast[getStoreError.formatted.type](
+        getStoreError.formatted.errorDefault,
+        getStoreError.formatted.title,
+      );
       return;
     }
 
@@ -73,8 +67,7 @@ function Dashboard() {
           </CardContent>
         </Card>
       </Container>
-      <DashboardModal setToastValues={setToastValues} stores={stores} />
-      <RSToast toastValues={toastValues} setToastValues={setToastValues} />
+      <DashboardModal />
     </>
   );
 }

@@ -3,27 +3,21 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
+import { useForm } from 'react-hook-form';
 
 import './Home.scss';
-import logo from '../../assets/logo.svg';
+import logo from '@/assets/logo.svg';
+import { RSInput, RSForm, RSDivider, RSButton, RSToast } from '@/components/RS';
+import { IErrorResponse } from '@/services/api/interfaces/error.interface';
+import { LoginResponse } from '@/services/auth/interfaces/authResponse.interface';
+import { ISuccessResponse } from '@/services/api/interfaces/success.interface';
 import {
-  RSInput,
-  RSForm,
-  RSDivider,
-  RSButton,
-  RSToast,
-} from '../../components/RS';
-import { IErrorResponse } from '../../services/api/interfaces/error.interface';
-import { LoginResponse } from '../../services/auth/interfaces/authResponse.interface';
-import { ISuccessResponse } from '../../services/api/interfaces/success.interface';
-import {
-  useToast,
   useLoginMutation,
   useGetSubscriptionMail,
   useUserContext,
+  useToastContext,
   useAccessToken,
-} from '../../hooks';
-import { useForm } from 'react-hook-form';
+} from '@/hooks';
 
 function Home() {
   // Hooks
@@ -34,11 +28,7 @@ function Home() {
     setValue,
     watch,
   } = useForm();
-  const [toastValues, setToastValues] = useToast(
-    'Error.Error_Title',
-    'Error.General_Label',
-    'info',
-  );
+  const { toast } = useToastContext();
   const { setAccessToken } = useAccessToken();
   const { user, setUser } = useUserContext();
   const { t } = useTranslation('translation');
@@ -67,18 +57,13 @@ function Home() {
       setEnableMailQuery(false);
       if (!ok) {
         const mailError = response as IErrorResponse<string>;
-        setToastValues({
-          title: mailError.formatted.title,
-          message: mailError.formatted.errorDefault,
-          severity: mailError.formatted.type,
-        });
+        toast[mailError.formatted.type](
+          mailError.formatted.errorDefault,
+          mailError.formatted.title,
+        );
         return;
       }
-      setToastValues({
-        title: 'Home.Success_Mail_Title',
-        message: 'Home.Success_Mail',
-        severity: 'success',
-      });
+      toast.success('Home.Success_Mail', 'Home.Success_Mail_Title');
     },
   );
 
@@ -90,11 +75,10 @@ function Home() {
           const { ok } = response;
           if (!ok) {
             const loginError = response as IErrorResponse<LoginResponse>;
-            setToastValues({
-              title: loginError.formatted.title,
-              message: loginError.formatted.errorDefault,
-              severity: loginError.formatted.type,
-            });
+            toast[loginError.formatted.type](
+              loginError.formatted.errorDefault,
+              loginError.formatted.title,
+            );
             return;
           }
           const loginResponse = response as ISuccessResponse<LoginResponse>;
@@ -106,11 +90,7 @@ function Home() {
             logged: true,
             password: '',
           });
-          setToastValues({
-            title: 'Home.Success_Login_Title',
-            message: 'Home.Success_Login',
-            severity: 'success',
-          });
+          toast.success('Home.Success_Login', 'Home.Success_Login_Title');
           navigate('/dashboard');
           resetForm();
         },
@@ -220,7 +200,7 @@ function Home() {
           </RSButton>
         </RSForm>
       </div>
-      <RSToast toastValues={toastValues} setToastValues={setToastValues} />
+      <RSToast />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 
 import './i18n';
-import { ContextProvider as UserContextProvider } from './hooks';
+import { UserContextProvider, ToastContextProvider } from './hooks';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -45,28 +45,30 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <UserContextProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <BrowserRouter basename={import.meta.env.BASENAME}>
-            <CssBaseline />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/" element={<App />}>
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="store" element={<Store />} />
-                <Route path="product" element={<Product />} />
-                <Route path="supplier" element={<Supplier />} />
-                <Route path="aisle" element={<Aisle />} />
-                <Route path="user" element={<User />} />
-              </Route>
-              <Route path="/401" element={<Unauthorized />} />
-              <Route path="/403" element={<Forbidden />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen={true} />
-      </QueryClientProvider>
+      <ToastContextProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <BrowserRouter basename={import.meta.env.BASENAME}>
+              <CssBaseline />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/" element={<App />}>
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="store" element={<Store />} />
+                  <Route path="product" element={<Product />} />
+                  <Route path="supplier" element={<Supplier />} />
+                  <Route path="aisle" element={<Aisle />} />
+                  <Route path="user" element={<User />} />
+                </Route>
+                <Route path="/401" element={<Unauthorized />} />
+                <Route path="/403" element={<Forbidden />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </ThemeProvider>
+          <ReactQueryDevtools initialIsOpen={true} />
+        </QueryClientProvider>
+      </ToastContextProvider>
     </UserContextProvider>
   </React.StrictMode>,
 );
