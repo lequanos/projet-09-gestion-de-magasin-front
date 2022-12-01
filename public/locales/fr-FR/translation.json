@@ -10,6 +10,7 @@
     "Modal": {
       "SelectStore": "Veuillez sélectionner un magasin",
       "Store": "Magasin",
+      "SearchStores": "Recherche magasin par nom ou siret/siren",
       "Or": "Ou",
       "Submit": "Soumettre",
       "AccessDashboard": "Accéder au tableau de bord"

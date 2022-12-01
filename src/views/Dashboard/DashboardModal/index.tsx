@@ -1,5 +1,5 @@
 import { Backdrop, Fade, Box, Typography, Dialog } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import jwtDecode from 'jwt-decode';
@@ -12,7 +12,7 @@ import {
   useToastContext,
   useSearchStores,
 } from '@/hooks';
-import { RSButton, RSDivider, RSForm, RSSelect } from '@/components/RS';
+import { RSAutocomplete, RSButton, RSDivider, RSForm } from '@/components/RS';
 import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { SelectStoreResponse } from '@/services/auth/interfaces/authResponse.interface';
 import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
@@ -35,7 +35,7 @@ function DashboardModal() {
   // States
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('a');
-  const [enabledSearchStores, setEnabledSearchStores] = useState(true);
+  const [enabledSearchStores, setEnabledSearchStores] = useState(false);
   const [stores, setStores] = useState<GetStoresResponse>([]);
 
   // Queries
@@ -43,9 +43,10 @@ function DashboardModal() {
     { store: selectedStore },
     accessToken || '',
   );
-  useSearchStores(searchValue, enabledSearchStores, accessToken, (data) => {
-    if (data && data.ok && data.data) {
-      setStores(data.data);
+  useSearchStores(searchValue, enabledSearchStores, accessToken, (response) => {
+    const { ok, data } = response;
+    if (ok && data) {
+      setStores(data);
       setEnabledSearchStores(false);
     }
   });
@@ -94,9 +95,29 @@ function DashboardModal() {
     });
   };
 
+  /**
+   * Close the modal and save the choice of not selecting a store to session storage
+   */
   const handleAccessDashboard = () => {
     setOpen(!open);
     sessionStorage.setItem('accessDashboard', JSON.stringify(true));
+  };
+
+  /**
+   * Search for store on api
+   */
+  const handleInputChange = (
+    _event: SyntheticEvent<Element, Event>,
+    value: string,
+  ) => {
+    setSearchValue(value);
+
+    if (value.length >= 3) {
+      setEnabledSearchStores(true);
+    } else {
+      setEnabledSearchStores(false);
+      setStores([]);
+    }
   };
 
   // useEffect
@@ -128,15 +149,15 @@ function DashboardModal() {
               {t('Dashboard.Modal.SelectStore')}
             </Typography>
             <RSForm onSubmit={handleSubmit(handleSelectStore)}>
-              <RSSelect
-                id="select-store"
-                label="Dashboard.Modal.Store"
-                labelId="select-store-label"
+              <RSAutocomplete
+                label="Dashboard.Modal.SearchStores"
                 name="selectedStore"
                 errors={errors}
-                items={stores}
+                defaultValue={stores[0]}
+                options={stores}
                 control={control}
                 className="dashboard--modal-select"
+                onInputChange={handleInputChange}
               />
               <RSButton type="submit">{t('Dashboard.Modal.Submit')}</RSButton>
             </RSForm>

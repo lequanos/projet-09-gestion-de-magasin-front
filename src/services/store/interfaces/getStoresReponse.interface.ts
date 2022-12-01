@@ -1,4 +1,4 @@
-import { BaseModel } from '../../interfaces/common.interface';
+import { BaseModel } from '@/services/interfaces/common.interface';
 
 export type GetStoresResponse = StoreResponse[];
 

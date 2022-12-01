@@ -10,6 +10,7 @@
       "Modal": {
         "SelectStore": "Please select a store",
         "Store": "Store",
+        "SearchStores": "Search stores by name or siret/siren",
         "Or": "Or",
         "Submit": "Submit",
         "AccessDashboard": "Access the dashboard"
