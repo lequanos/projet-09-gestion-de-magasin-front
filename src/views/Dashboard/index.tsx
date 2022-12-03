@@ -26,6 +26,7 @@ function Dashboard() {
 
   // Queries
   useGetMostActive<GetStoresResponse>('store', accessToken, ({ pages }) => {
+    if (!pages) return;
     const { ok, status, data } = pages[0];
     if ([401, 403].includes(status)) {
       throw new Response('', { status });

@@ -153,7 +153,6 @@ function DashboardModal() {
                 label="Dashboard.Modal.SearchStores"
                 name="selectedStore"
                 errors={errors}
-                defaultValue={stores[0]}
                 options={stores}
                 control={control}
                 className="dashboard--modal-select"

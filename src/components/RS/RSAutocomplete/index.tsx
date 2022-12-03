@@ -3,6 +3,7 @@ import {
   FormHelperText,
   Autocomplete,
   TextField,
+  MenuItem,
 } from '@mui/material';
 import { t } from 'i18next';
 import {
@@ -18,7 +19,6 @@ import { SyntheticEvent } from 'react';
 
 type RSAutocompleteProps<T extends BaseModel> = {
   className?: string;
-  defaultValue: T;
   label: string;
   control?: Control<
     | {
@@ -38,7 +38,7 @@ type RSAutocompleteProps<T extends BaseModel> = {
       [x: string]: any;
     }>
   >;
-  options: T[];
+  options: Partial<T>[];
   onInputChange: (
     _event: SyntheticEvent<Element, Event>,
     value: string,
@@ -47,7 +47,6 @@ type RSAutocompleteProps<T extends BaseModel> = {
 
 export function RSAutocomplete<T extends BaseModel>({
   className,
-  defaultValue,
   helperText,
   label,
   control,
@@ -65,23 +64,28 @@ export function RSAutocomplete<T extends BaseModel>({
     }
     return t(message as string, { name: t(`Common.${capitalize(name)}`) });
   };
+
   return (
     <>
       <Controller
         name={name}
         control={control}
         rules={rules || rulesValidationDictionary[name]}
-        defaultValue={defaultValue}
         render={({ field }) => (
           <FormControl variant="filled" className={className}>
             <Autocomplete
-              defaultValue={defaultValue}
-              options={options}
+              options={options.map((option) => option.id)}
               onInputChange={onInputChange}
-              filterOptions={(x) => x}
-              getOptionLabel={(option) => option.name || ''}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
+              getOptionLabel={(id) =>
+                options?.find((opt) => opt.id === id)?.name || ''
+              }
+              isOptionEqualToValue={(option, value) => option === value}
               {...field}
+              value={
+                options.map((option) => option.id).includes(field.value)
+                  ? field.value
+                  : null
+              }
               renderInput={(params) => (
                 <TextField
                   variant="filled"
@@ -89,6 +93,11 @@ export function RSAutocomplete<T extends BaseModel>({
                   label={t(label)}
                   fullWidth
                 />
+              )}
+              renderOption={(params, id) => (
+                <MenuItem {...params} key={id} value={id}>
+                  {options?.find((opt) => opt.id === id)?.name}
+                </MenuItem>
               )}
             />
             <FormHelperText error>{getHelperText()}</FormHelperText>
