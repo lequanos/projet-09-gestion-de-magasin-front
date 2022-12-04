@@ -21,7 +21,7 @@ export class StoreService extends ApiService {
       | IErrorResponse<GetStoresResponse | undefined>
     > => {
       const response = await baseCrud.get<GetStoresResponse>({
-        complementURL: `search/${searchValue}`,
+        complementURL: `search?search=${searchValue}`,
       });
 
       return response;

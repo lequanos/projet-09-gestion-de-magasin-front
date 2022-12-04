@@ -19,7 +19,13 @@
         "ActiveStores": "Active stores",
         "ActiveUsers": "Active users"
       },
-    "MostActiveStores": "Most active stores"
+    "MostActiveStores": "Most active stores",
+    "Columns": {
+      "Name": "Name",
+      "City": "City",
+      "Siret": "Siret",
+      "Movement": "Stock movement"
+    }
   },
   "Error": {
     "Error_Title": "Error",

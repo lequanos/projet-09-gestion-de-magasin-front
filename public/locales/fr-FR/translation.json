@@ -19,7 +19,13 @@
       "ActiveStores": "Magasins actifs",
       "ActiveUsers": "Utilisateurs actifs"
     },
-    "MostActiveStores": "Magasins les plus actifs"
+    "MostActiveStores": "Magasins les plus actifs",
+    "Columns": {
+      "Name": "Nom",
+      "City": "Ville",
+      "Siret": "Siret",
+      "Movement": "Mouvement de stock"
+    }
   },
   "Error": {
     "Error_Title": "Erreur",

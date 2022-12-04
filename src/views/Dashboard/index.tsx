@@ -6,22 +6,26 @@ import { useState } from 'react';
 import './Dashboard.scss';
 import DashboardCard from '@/components/Dashboard/DashboardCard';
 import DashboardModal from './DashboardModal';
-import { useAccessToken, useGetMostActive, useToastContext } from '@/hooks';
+import {
+  useAccessToken,
+  useGetMostActive,
+  useGetStatsQuery,
+  useToastContext,
+} from '@/hooks';
 import { IErrorResponse } from '@/services/api/interfaces';
-import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
-
-const columns: GridColDef[] = [
-  { field: 'name', headerName: 'Name', flex: 1 },
-  { field: 'city', headerName: 'City', flex: 1 },
-  { field: 'siret', headerName: 'SIRET', flex: 1 },
-  { field: 'movement', headerName: 'Movement', flex: 1 },
-];
+import {
+  GetStoresResponse,
+  GetStoreStatsResponse,
+} from '@/services/store/interfaces/getStoresReponse.interface';
 
 function Dashboard() {
   // Hooks
   const { t } = useTranslation('translation');
   const { toast } = useToastContext();
   const [stores, setStores] = useState<GetStoresResponse>([]);
+  const [storeStats, setStoreStats] = useState<GetStoreStatsResponse | null>(
+    null,
+  );
   const { accessToken } = useAccessToken();
 
   // Queries
@@ -44,15 +48,32 @@ function Dashboard() {
     setStores(data || []);
   });
 
+  useGetStatsQuery<GetStoreStatsResponse>('store', accessToken, (response) => {
+    const { ok, status, data } = response;
+    if ([401, 403].includes(status)) {
+      throw new Response('', { status });
+    }
+
+    setStoreStats(data);
+  });
+
+  // Data
+  const columns: GridColDef[] = [
+    { field: 'name', headerName: t('Dashboard.Columns.Name'), flex: 1 },
+    { field: 'city', headerName: t('Dashboard.Columns.City'), flex: 1 },
+    { field: 'siret', headerName: t('Dashboard.Columns.Siret'), flex: 1 },
+    { field: 'movement', headerName: t('Dashboard.Columns.Movement'), flex: 1 },
+  ];
+
   return (
     <>
       <Container className="dashboard--container">
         <Box className="dashboard--indicators">
           <DashboardCard
             title="Dashboard.Card.ActiveStores"
-            evolution={101010}
-            active={10}
-            total={100}
+            evolution={storeStats?.progression}
+            active={storeStats?.activeStoresCount}
+            total={storeStats?.storesCount}
           />
           <DashboardCard
             title="Dashboard.Card.ActiveUsers"
@@ -64,7 +85,12 @@ function Dashboard() {
         <Card className="dashboard--active-stores">
           <CardHeader title={t('Dashboard.MostActiveStores')} />
           <CardContent className="dashboard--active-stores-table">
-            <DataGrid rows={stores} columns={columns} />
+            <DataGrid
+              rows={stores}
+              columns={columns}
+              disableSelectionOnClick
+              autoPageSize
+            />
           </CardContent>
         </Card>
       </Container>

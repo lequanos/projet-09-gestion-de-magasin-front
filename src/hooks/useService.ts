@@ -203,3 +203,21 @@ export const useSearchStores = (
     onSuccess,
   });
 };
+
+export const useGetStatsQuery = <T>(
+  entity: EntityList,
+  accessToken: string,
+  onSuccess?:
+    | ((data: ISuccessResponse<T> | IErrorResponse<T>) => void)
+    | undefined,
+) => {
+  const service = getService(entity, accessToken);
+  return useQuery({
+    queryKey: [entity],
+    queryFn: () =>
+      service.crud.get({
+        complementURL: 'stats',
+      }),
+    onSuccess,
+  });
+};

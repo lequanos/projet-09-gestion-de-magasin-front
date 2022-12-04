@@ -1,18 +1,23 @@
 import { Card, CardHeader, CardContent, Typography } from '@mui/material';
-import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
+import {
+  ArrowUpward,
+  ArrowDownward,
+  HorizontalRule,
+} from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import { ReactElement } from 'react';
 
 // Types
 type DashboardCardProps = {
   title: string;
-  evolution: number;
-  active: number;
-  total: number;
+  evolution?: number;
+  active?: number;
+  total?: number;
 };
 
 function DashboardCard({
   title,
-  evolution = 10,
+  evolution,
   active,
   total,
 }: DashboardCardProps) {
@@ -21,20 +26,44 @@ function DashboardCard({
 
   // Methods
   /**
+   * Get evolution text elements
+   */
+  const getEvolutionTextElements = () => {
+    let color: string;
+    let text: string;
+    let icon: ReactElement<any, any>;
+
+    switch (true) {
+      case evolution && evolution > 0:
+        color = 'success.main';
+        text = `+${evolution}`;
+        icon = <ArrowUpward color="success" fontSize="small" />;
+        break;
+      case evolution && evolution < 0:
+        color = 'error.main';
+        text = `${evolution}`;
+        icon = <ArrowDownward color="error" fontSize="small" />;
+        break;
+      default:
+        color = 'primary.main';
+        text = `${evolution}`;
+        icon = <HorizontalRule color="primary" fontSize="small" />;
+    }
+
+    return {
+      color,
+      text,
+      icon,
+    };
+  };
+  /**
    * Get the evolution text and color based on the number
    */
   const getEvolutionText = () => {
+    const { color, text, icon } = getEvolutionTextElements();
     return (
-      <Typography
-        variant="subtitle1"
-        color={evolution > 0 ? 'success.main' : 'error.main'}
-      >
-        {evolution > 0 ? `+${evolution}` : evolution}%{' '}
-        {evolution > 0 ? (
-          <ArrowUpward color="success" fontSize="small" />
-        ) : (
-          <ArrowDownward color="error" fontSize="small" />
-        )}
+      <Typography variant="subtitle1" color={color}>
+        {text}% {icon}
       </Typography>
     );
   };

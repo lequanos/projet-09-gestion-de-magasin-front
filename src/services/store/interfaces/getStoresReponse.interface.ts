@@ -12,3 +12,9 @@ export type StoreResponse = {
   siret?: string;
   movement?: number;
 } & BaseModel;
+
+export type GetStoreStatsResponse = {
+  activeStoresCount: number;
+  storesCount: number;
+  progression: number;
+};
