@@ -8,17 +8,18 @@ import {
   RegisterOptions,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { rulesValidationDictionary } from '../../../helpers/rulesValidationDictionary';
-import { capitalize } from '../../../helpers/utils';
+import { rulesValidationDictionary } from '@/helpers/rulesValidationDictionary';
+import { capitalize } from '@/helpers/utils';
 
 type RSInputProps = {
   className?: string;
   control?: Control<
     {
-      [x: string]: any;
+      [key: string]: any;
     },
     any
   >;
+  defaultValue?: string;
   errors: Partial<
     FieldErrorsImpl<{
       [x: string]: any;
@@ -40,6 +41,7 @@ type RSInputProps = {
 export function RSInput({
   className,
   control,
+  defaultValue = '',
   errors,
   helperText,
   id,
@@ -102,6 +104,7 @@ export function RSInput({
       name={name}
       control={control}
       rules={rules || rulesValidationDictionary[name]}
+      defaultValue={defaultValue}
       render={({ field }) => (
         <TextField
           className={className}

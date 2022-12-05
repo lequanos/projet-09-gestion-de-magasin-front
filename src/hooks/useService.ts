@@ -1,24 +1,30 @@
 import {
+  InfiniteData,
   useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 
-import { LoginDto } from '../models/auth';
-import { MailDto } from '../models/mail';
-import { ISuccessResponse, IErrorResponse } from '../services/api/interfaces';
+import { LoginDto, SelectStoreDto } from '@/models/auth';
+import { MailDto } from '@/models/mail';
+import { ISuccessResponse, IErrorResponse } from '@/services/api/interfaces';
 import {
   CreateType,
   DeleteType,
   PutType,
-} from '../services/api/interfaces/crud.interface';
-import { AuthService } from '../services/auth/AuthService';
-import { MailService } from '../services/mail/MailService';
+} from '@/services/api/interfaces/crud.interface';
+import { AuthService } from '@/services/auth/AuthService';
+import { MailService } from '@/services/mail/MailService';
+import { StoreService } from '@/services/store/StoreService';
+import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
+import { DashboardService } from '@/services/dashboard/DashboardService';
+import { GetDashboardInfosResponse } from '@/services/dashboard/interfaces/dashboardResponse.interface';
 
 const serviceDictionary = {
   auth: (accessToken?: string) => new AuthService(accessToken),
   mail: () => new MailService(),
+  store: (accessToken?: string) => new StoreService(accessToken),
 };
 
 export type EntityList = keyof typeof serviceDictionary;
@@ -27,11 +33,27 @@ const getService = (entity: EntityList, accessToken?: string) => {
   return serviceDictionary[entity](accessToken);
 };
 
-export const useGetAllQuery = (entity: EntityList, accessToken?: string) => {
+export const useGetAllQuery = <T>(
+  entity: EntityList,
+  accessToken?: string,
+  onSuccess?:
+    | ((
+        data: InfiniteData<ISuccessResponse<T> | IErrorResponse<T | undefined>>,
+      ) => void)
+    | undefined,
+  onError?: ((err: unknown) => void) | undefined,
+  enabled = true,
+) => {
   const service = getService(entity, accessToken);
-  return useInfiniteQuery({
+  return useInfiniteQuery<
+    ISuccessResponse<T> | IErrorResponse<T | undefined>,
+    unknown
+  >({
     queryKey: [`${entity}s`],
-    queryFn: () => service.crud.getAll,
+    queryFn: () => service.crud.getAll(),
+    enabled,
+    onSuccess,
+    onError,
   });
 };
 
@@ -123,5 +145,99 @@ export const useLoginMutation = (payload: LoginDto) => {
   const service = new AuthService();
   return useMutation({
     mutationFn: () => service.crud.login(payload),
+  });
+};
+
+export const useSelectStoreMutation = (
+  payload: SelectStoreDto,
+  accessToken: string,
+) => {
+  const service = new AuthService(accessToken);
+  return useMutation({
+    mutationFn: () => service.crud.selectStore(payload),
+  });
+};
+
+export const useGetMostActive = <T>(
+  entity: EntityList,
+  accessToken?: string,
+  onSuccess?:
+    | ((
+        data: InfiniteData<ISuccessResponse<T> | IErrorResponse<T | undefined>>,
+      ) => void)
+    | undefined,
+  onError?: ((err: unknown) => void) | undefined,
+  enabled = true,
+) => {
+  const service = getService(entity, accessToken);
+  return useInfiniteQuery<
+    ISuccessResponse<T> | IErrorResponse<T | undefined>,
+    unknown
+  >({
+    queryKey: [`${entity}s`],
+    queryFn: () =>
+      service.crud.get({
+        complementURL: 'most-active',
+      }),
+    enabled,
+    onSuccess,
+    onError,
+  });
+};
+
+export const useSearchStores = (
+  searchValue: string,
+  enabled: boolean,
+  accessToken?: string,
+  onSuccess?:
+    | ((
+        data:
+          | ISuccessResponse<GetStoresResponse>
+          | IErrorResponse<GetStoresResponse | undefined>,
+      ) => void)
+    | undefined,
+) => {
+  const service = new StoreService(accessToken);
+  return useQuery({
+    queryKey: ['stores'],
+    queryFn: () => service.crud.searchStores(searchValue),
+    enabled,
+    onSuccess,
+  });
+};
+
+export const useGetStatsQuery = <T>(
+  entity: EntityList,
+  accessToken: string,
+  onSuccess?:
+    | ((data: ISuccessResponse<T> | IErrorResponse<T>) => void)
+    | undefined,
+) => {
+  const service = getService(entity, accessToken);
+  return useQuery({
+    queryKey: [entity],
+    queryFn: () =>
+      service.crud.get({
+        complementURL: 'stats',
+      }),
+    onSuccess,
+  });
+};
+
+export const useGetDashboardInfos = (
+  accessToken: string,
+  onSuccess:
+    | ((
+        data:
+          | ISuccessResponse<GetDashboardInfosResponse>
+          | IErrorResponse<GetDashboardInfosResponse>,
+      ) => void)
+    | undefined,
+) => {
+  const service = new DashboardService(accessToken);
+  return useQuery({
+    queryKey: ['dashboard'],
+    queryFn: () => service.crud.getInfos(),
+    onSuccess,
   });
 };

@@ -18,12 +18,12 @@ export function RSDivider({ children }: RSDividerProps) {
         '&.MuiDivider-root::before': {
           borderColor: 'primary.main',
           borderWidth: 2,
-          transform: 'translateY(calc(50% - 2px))',
+          transform: 'translateY(calc(50% - 9px))',
         },
         '&.MuiDivider-root::after': {
           borderColor: 'primary.main',
           borderWidth: 2,
-          transform: 'translateY(calc(50% - 2px))',
+          transform: 'translateY(calc(50% - 9px))',
         },
       }}
     >

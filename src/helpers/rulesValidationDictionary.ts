@@ -23,4 +23,7 @@ export const rulesValidationDictionary: {
   lastname: {
     required: 'Error.Required_Input',
   },
+  selectedStore: {
+    required: 'Error.Required_Select',
+  },
 };

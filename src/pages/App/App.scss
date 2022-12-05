@@ -1,0 +1,7 @@
+@import '../../styles/variables';
+
+#root .app {
+  background-color: $light-grey;
+  padding: calc($gutter * 3);
+  height: calc(100vh - 64px);
+}

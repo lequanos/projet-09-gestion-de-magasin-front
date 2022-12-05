@@ -1,8 +1,11 @@
-import { LoginDto } from '../../models/auth';
-import { ApiService } from '../api/ApiService';
+import { LoginDto, SelectStoreDto } from '@/models/auth';
+import { ApiService } from '@/services/api/ApiService';
+import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { AuthRequest } from './interfaces/authRequest.interface';
-import { LoginResponse } from './interfaces/loginResponse.interface';
-import { IErrorResponse, ISuccessResponse } from '../api/interfaces';
+import {
+  LoginResponse,
+  SelectStoreResponse,
+} from './interfaces/authResponse.interface';
 
 export class AuthService extends ApiService {
   public crud: AuthRequest;
@@ -29,6 +32,26 @@ export class AuthService extends ApiService {
           },
         },
       });
+
+      return response;
+    };
+
+    baseCrud.selectStore = async (
+      selectStoreDto: SelectStoreDto,
+    ): Promise<
+      | ISuccessResponse<SelectStoreResponse>
+      | IErrorResponse<SelectStoreResponse | undefined>
+    > => {
+      const response = await baseCrud.post<SelectStoreDto, SelectStoreResponse>(
+        {
+          complementURL: 'store',
+          query: {
+            body: {
+              store: selectStoreDto.store,
+            },
+          },
+        },
+      );
 
       return response;
     };

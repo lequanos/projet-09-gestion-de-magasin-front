@@ -3,7 +3,7 @@ import { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
 
 type RSFormProps = {
   children: JSX.Element | JSX.Element[];
-  className: string;
+  className?: string;
   onSubmit: ReturnType<UseFormHandleSubmit<FieldValues>>;
 };
 

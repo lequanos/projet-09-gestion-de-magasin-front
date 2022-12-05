@@ -1,0 +1,50 @@
+@import '../../styles/variables';
+
+#root .header {
+  background: $background-gradient;
+  background-size: 200vw 128px;
+  background-position: top right;
+  transition: background 1s ease-in-out;
+
+  &:hover {
+    background-position: bottom left;
+  }
+
+  &--toolbar {
+    display: flex;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  }
+
+  &--logo {
+    padding: 8px 0;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    &-pic {
+      margin-right: auto;
+      width: 40%;
+    }
+  }
+
+  &--btns {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  &--logout-btn {
+    margin-top: 0;
+    margin-left: auto;
+  }
+
+  &--tabs {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+
+    & a.MuiButtonBase-root:not(.Mui-selected) {
+      color: white;
+    }
+  }
+}

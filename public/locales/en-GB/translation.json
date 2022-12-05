@@ -3,7 +3,49 @@
     "Email": "Email",
     "Password": "Password",
     "Firstname": "Firstname",
-    "Lastname": "Lastname"
+    "Lastname": "Lastname",
+    "SelectedStore": "Magasin"
+  },
+    "Dashboard": {
+      "Modal": {
+        "SelectStore": "Please select a store",
+        "Store": "Store",
+        "SearchStores": "Search stores by name or siret/siren",
+        "Or": "Or",
+        "Submit": "Submit",
+        "AccessDashboard": "Access the dashboard"
+      },
+      "Card": {
+        "ActiveStores": "Active stores",
+        "ActiveUsers": "Active users",
+        "ActiveSuppliers": "Active suppliers",
+        "ActiveProducts": "Active products"
+      },
+    "MostActiveStores": "Most active stores",
+    "MostSoldProducts": "Most sold products",
+    "Columns": {
+      "Name": "Name",
+      "City": "City",
+      "Siret": "Siret",
+      "Movement": "Stock movement",
+      "Code": "EAN Code",
+      "Sales": "Sales"
+    }
+  },
+  "Error": {
+    "Error_Title": "Error",
+    "Warning_Title": "Warning",
+    "Badrequest_Label": "Wrong data",
+    "Unauthorized_Label": "Please login",
+    "Forbidden_Label": "Insufficient permissions",
+    "Notfound_Label": "Resource not found",
+    "General_Label": "An error has occurred",
+    "Required_Input": "{{name}} required",
+    "Required_Select": "{{name}} required",
+    "Format_Email": "Wrong email format"
+  },
+  "Header": {
+    "Logout": "Logout"
   },
   "Home": {
     "Login": "Login",
@@ -21,23 +63,24 @@
     "Success_Mail": "Your request has been sent successfully",
     "Success_Mail_Title": "Email sent"
   },
-  "Header": {
-    "Logout": "Logout"
-  },
-  "Error": {
-    "Error_Title": "Error",
-    "Warning_Title": "Warning",
-    "Badrequest_Label": "Wrong data",
-    "Unauthorized_Label": "Please login",
-    "Forbidden_Label": "Insufficient permissions",
-    "Notfound_Label": "Resource not found",
-    "General_Label": "An error has occurred",
-    "Required_Input": "{{name}} required",
-    "Format_Email": "Wrong email format"
-  },
   "Routes": {
     "Dashboard": "Dashboard",
+    "Stores": "Stores",
     "Products": "Products",
-    "Suppliers": "Suppliers"
+    "Suppliers": "Suppliers",
+    "Aisles": "Aisles",
+    "Users": "Users"
+  },
+  "Unauthorized": {
+    "Subtitle": "Oops! It seems like you were not logged in...",
+    "Back": "Back to login"
+  },
+  "NotFound": {
+    "Subtitle": "Oops! It seems like what you've asked for doesn't exist...",
+    "Back": "Back"
+  },
+  "Forbidden": {
+    "Subtitle": "Oops! It seems like you don't have access to what you've asked for...",
+    "Back": "Back"
   }
 }

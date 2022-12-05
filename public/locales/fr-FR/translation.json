@@ -3,7 +3,49 @@
     "Email": "Email",
     "Password": "Mot de passe",
     "Firstname": "Prénom",
-    "Lastname": "Nom"
+    "Lastname": "Nom",
+    "SelectedStore": "Magasin"
+  },
+  "Dashboard": {
+    "Modal": {
+      "SelectStore": "Veuillez sélectionner un magasin",
+      "Store": "Magasin",
+      "SearchStores": "Recherche magasin par nom ou siret/siren",
+      "Or": "Ou",
+      "Submit": "Soumettre",
+      "AccessDashboard": "Accéder au tableau de bord"
+    },
+    "Card": {
+      "ActiveStores": "Magasins actifs",
+      "ActiveUsers": "Utilisateurs actifs",
+      "ActiveSuppliers": "Fournisseurs actifs",
+      "ActiveProducts": "Produits actifs"
+    },
+    "MostActiveStores": "Magasins les plus actifs",
+    "MostSoldProducts": "Produits les plus vendus",
+    "Columns": {
+      "Name": "Nom",
+      "City": "Ville",
+      "Siret": "Siret",
+      "Movement": "Mouvement de stock",
+      "Code": "Code EAN",
+      "Sales": "Quantité vendue"
+    }
+  },
+  "Error": {
+    "Error_Title": "Erreur",
+    "Warning_Title": "Avertissement",
+    "Badrequest_Label": "Données incorrectes",
+    "Unauthorized_Label": "Veuillez vous authentifier",
+    "Forbidden_Label": "Autorisations insuffisantes",
+    "Notfound_Label": "Ressource non trouvée",
+    "General_Label": "Une erreur est survenue",
+    "Required_Input": "{{name}} requis",
+    "Required_Select": "{{name}} requis",
+    "Format_Email": "Format d'email incorrect"
+  },
+  "Header": {
+    "Logout": "Se déconnecter"
   },
   "Home": {
     "Login": "Connexion",
@@ -21,23 +63,24 @@
     "Success_Mail": "Votre demande a bien été envoyée",
     "Success_Mail_Title": "Email envoyé"
   },
-  "Header": {
-    "Logout": "Se déconnecter"
-  },
-  "Error": {
-    "Error_Title": "Erreur",
-    "Warning_Title": "Avertissement",
-    "Badrequest_Label": "Données incorrectes",
-    "Unauthorized_Label": "Veuillez vous authentifier",
-    "Forbidden_Label": "Autorisations insuffisantes",
-    "Notfound_Label": "Ressource non trouvée",
-    "General_Label": "Une erreur est survenue",
-    "Required_Input": "{{name}} requis",
-    "Format_Email": "Format d'email incorrect"
-  },
   "Routes": {
     "Dashboard": "Tableau de bord",
+    "Stores": "Magasins",
     "Products": "Produits",
-    "Suppliers": "Fournisseurs"
+    "Suppliers": "Fournisseurs",
+    "Aisles": "Rayons",
+    "Users": "Utilisateurs"
+  },
+  "Unauthorized": {
+    "Subtitle": "Oups! Il semblerait que vous n'étiez pas connecté...",
+    "Back": "Retour à la connexion"
+  },
+  "NotFound": {
+    "Subtitle": "Oups! Il semblerait que ce que vous avez demandé n'existe pas...",
+    "Back": "Retour"
+  },
+  "Forbidden": {
+    "Subtitle": "Oups! Il semblerait que vous n'ayez pas accès à ce que vous avez demandé...",
+    "Back": "Retour"
   }
 }

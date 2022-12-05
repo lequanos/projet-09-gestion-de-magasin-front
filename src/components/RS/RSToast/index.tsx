@@ -1,3 +1,4 @@
+import { useToastContext } from '@/hooks';
 import { Snackbar, Alert, AlertTitle } from '@mui/material';
 import { t } from 'i18next';
 import { SyntheticEvent } from 'react';
@@ -11,12 +12,10 @@ export type ToastValues = {
 
 export type Severity = 'error' | 'warning' | 'info' | 'success';
 
-type RSToastProps = {
-  toastValues: ToastValues;
-  setToastValues: (toastValues: Partial<ToastValues>) => void;
-};
+export function RSToast() {
+  // Hooks
+  const { open, title, message, severity, toast } = useToastContext();
 
-export function RSToast({ toastValues, setToastValues }: RSToastProps) {
   const handleCloseSnackbar = (
     event?: SyntheticEvent | Event,
     reason?: string,
@@ -25,20 +24,18 @@ export function RSToast({ toastValues, setToastValues }: RSToastProps) {
       return;
     }
 
-    setToastValues({
-      open: false,
-    });
+    toast.close();
   };
   return (
     <Snackbar
-      open={toastValues.open}
+      open={open}
       autoHideDuration={1500}
       onClose={handleCloseSnackbar}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
     >
-      <Alert onClose={handleCloseSnackbar} severity={toastValues.severity}>
-        <AlertTitle>{t(toastValues.title)}</AlertTitle>
-        {t(toastValues.message)}
+      <Alert onClose={handleCloseSnackbar} severity={severity}>
+        <AlertTitle>{t(title)}</AlertTitle>
+        {t(message)}
       </Alert>
     </Snackbar>
   );

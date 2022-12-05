@@ -1,3 +1,5 @@
+import { RoleDto } from '../role';
+
 export type UserDto = {
   id: string;
   firstname: string;
@@ -7,6 +9,6 @@ export type UserDto = {
   logged: boolean;
   pictureUrl: string;
   refreshToken: string;
-  role: number;
-  store: number;
+  role: number | RoleDto;
+  store: number | null;
 };

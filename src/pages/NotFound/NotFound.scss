@@ -1,0 +1,19 @@
+@import '../../styles/variables';
+
+#root .notfound {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: $background-gradient;
+  max-width: none;
+
+  &--title {
+    text-align: center;
+    font-size: 25rem;
+    font-weight: bold;
+    color: $secondary-color;
+  }
+}
