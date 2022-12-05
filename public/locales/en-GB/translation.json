@@ -17,14 +17,19 @@
       },
       "Card": {
         "ActiveStores": "Active stores",
-        "ActiveUsers": "Active users"
+        "ActiveUsers": "Active users",
+        "ActiveSuppliers": "Active suppliers",
+        "ActiveProducts": "Active products"
       },
     "MostActiveStores": "Most active stores",
+    "MostSoldProducts": "Most sold products",
     "Columns": {
       "Name": "Name",
       "City": "City",
       "Siret": "Siret",
-      "Movement": "Stock movement"
+      "Movement": "Stock movement",
+      "Code": "EAN Code",
+      "Sales": "Sales"
     }
   },
   "Error": {

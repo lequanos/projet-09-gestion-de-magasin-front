@@ -6,88 +6,102 @@ import { useState } from 'react';
 import './Dashboard.scss';
 import DashboardCard from '@/components/Dashboard/DashboardCard';
 import DashboardModal from './DashboardModal';
+import { useAccessToken, useGetDashboardInfos, useToastContext } from '@/hooks';
+import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import {
-  useAccessToken,
-  useGetMostActive,
-  useGetStatsQuery,
-  useToastContext,
-} from '@/hooks';
-import { IErrorResponse } from '@/services/api/interfaces';
-import {
-  GetStoresResponse,
-  GetStoreStatsResponse,
-} from '@/services/store/interfaces/getStoresReponse.interface';
+  GetDashboardInfosResponse,
+  StatsResponse,
+  TableDataResponse,
+} from '@/services/dashboard/interfaces/dashboardResponse.interface';
+import { capitalize } from '@/helpers/utils';
 
 function Dashboard() {
   // Hooks
   const { t } = useTranslation('translation');
   const { toast } = useToastContext();
-  const [stores, setStores] = useState<GetStoresResponse>([]);
-  const [storeStats, setStoreStats] = useState<GetStoreStatsResponse | null>(
-    null,
-  );
+  const [tableData, setTableData] = useState<TableDataResponse>([]);
+  const [stats, setStats] = useState<StatsResponse>({});
   const { accessToken } = useAccessToken();
 
   // Queries
-  useGetMostActive<GetStoresResponse>('store', accessToken, ({ pages }) => {
-    if (!pages) return;
-    const { ok, status, data } = pages[0];
+  const { isLoading } = useGetDashboardInfos(accessToken, (response) => {
+    const { ok, status } = response;
+
     if ([401, 403].includes(status)) {
       throw new Response('', { status });
     }
 
     if (!ok) {
-      const getStoreError = pages[0] as IErrorResponse<GetStoresResponse>;
-      toast[getStoreError.formatted.type](
-        getStoreError.formatted.errorDefault,
-        getStoreError.formatted.title,
+      const getInfosError =
+        response as IErrorResponse<GetDashboardInfosResponse>;
+
+      toast[getInfosError.formatted.type](
+        getInfosError.formatted.errorDefault,
+        getInfosError.formatted.title,
       );
       return;
     }
 
-    setStores(data || []);
+    const getInfosResponse =
+      response as ISuccessResponse<GetDashboardInfosResponse>;
+    setStats(getInfosResponse.data.stats);
+    setTableData(getInfosResponse.data.tableData);
   });
 
-  useGetStatsQuery<GetStoreStatsResponse>('store', accessToken, (response) => {
-    const { ok, status, data } = response;
-    if ([401, 403].includes(status)) {
-      throw new Response('', { status });
-    }
+  // Methods
+  /**
+   * Get columns depending on tableData
+   */
+  const getColumns = (): GridColDef[] => {
+    if (!tableData.length) return [];
 
-    setStoreStats(data);
-  });
+    return Object.keys(tableData[0])
+      .map((key) => {
+        if (key === 'id') return;
 
-  // Data
-  const columns: GridColDef[] = [
-    { field: 'name', headerName: t('Dashboard.Columns.Name'), flex: 1 },
-    { field: 'city', headerName: t('Dashboard.Columns.City'), flex: 1 },
-    { field: 'siret', headerName: t('Dashboard.Columns.Siret'), flex: 1 },
-    { field: 'movement', headerName: t('Dashboard.Columns.Movement'), flex: 1 },
-  ];
+        return {
+          field: key,
+          headerName: t(`Dashboard.Columns.${capitalize(key)}`),
+          flex: 1,
+        };
+      })
+      .filter((value) => !!value) as GridColDef[];
+  };
+
+  /**
+   * Get table title depending on tableData
+   */
+  const getTableTitle = (): string => {
+    if (!tableData.length) return '';
+
+    const dataKeys = Object.keys(tableData[0]);
+
+    return dataKeys.includes('sales')
+      ? 'Dashboard.MostSoldProducts'
+      : 'Dashboard.MostActiveStores';
+  };
 
   return (
     <>
       <Container className="dashboard--container">
         <Box className="dashboard--indicators">
-          <DashboardCard
-            title="Dashboard.Card.ActiveStores"
-            evolution={storeStats?.progression}
-            active={storeStats?.activeStoresCount}
-            total={storeStats?.storesCount}
-          />
-          <DashboardCard
-            title="Dashboard.Card.ActiveUsers"
-            evolution={-10.56}
-            active={10}
-            total={100}
-          />
+          {Object.entries(stats).map(([key, value]) => (
+            <DashboardCard
+              key={key}
+              title={`Dashboard.Card.Active${capitalize(key)}s`}
+              evolution={Number(value.progression.toFixed(2))}
+              active={value[`active${capitalize(key)}sCount`]}
+              total={value[`${key}sCount`]}
+            />
+          ))}
         </Box>
         <Card className="dashboard--active-stores">
-          <CardHeader title={t('Dashboard.MostActiveStores')} />
+          <CardHeader title={t(getTableTitle())} />
           <CardContent className="dashboard--active-stores-table">
             <DataGrid
-              rows={stores}
-              columns={columns}
+              rows={tableData}
+              columns={getColumns()}
+              loading={isLoading}
               disableSelectionOnClick
               autoPageSize
             />

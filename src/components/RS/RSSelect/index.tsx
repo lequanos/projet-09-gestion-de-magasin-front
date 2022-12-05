@@ -12,9 +12,9 @@ import {
   FieldErrorsImpl,
   RegisterOptions,
 } from 'react-hook-form';
-import { rulesValidationDictionary } from '../../../helpers/rulesValidationDictionary';
-import { capitalize } from '../../../helpers/utils';
-import { BaseModel } from '../../../services/interfaces/common.interface';
+import { rulesValidationDictionary } from '@/helpers/rulesValidationDictionary';
+import { capitalize } from '@/helpers/utils';
+import { BaseModel } from '@/services/interfaces/common.interface';
 
 type RSSelectProps<T extends BaseModel> = {
   id: string;

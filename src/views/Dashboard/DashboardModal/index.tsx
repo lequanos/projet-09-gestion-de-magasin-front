@@ -43,13 +43,17 @@ function DashboardModal() {
     { store: selectedStore },
     accessToken || '',
   );
-  useSearchStores(searchValue, enabledSearchStores, accessToken, (response) => {
-    const { ok, data } = response;
-    if (ok && data) {
-      setStores(data);
-      setEnabledSearchStores(false);
-    }
-  });
+  useSearchStores(
+    searchValue,
+    enabledSearchStores,
+    accessToken,
+    ({ ok, data }) => {
+      if (ok && data) {
+        setStores(data);
+        setEnabledSearchStores(false);
+      }
+    },
+  );
 
   // Methods
   /**

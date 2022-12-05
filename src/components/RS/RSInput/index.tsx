@@ -8,8 +8,8 @@ import {
   RegisterOptions,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { rulesValidationDictionary } from '../../../helpers/rulesValidationDictionary';
-import { capitalize } from '../../../helpers/utils';
+import { rulesValidationDictionary } from '@/helpers/rulesValidationDictionary';
+import { capitalize } from '@/helpers/utils';
 
 type RSInputProps = {
   className?: string;

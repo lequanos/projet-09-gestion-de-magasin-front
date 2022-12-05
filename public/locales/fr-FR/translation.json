@@ -17,14 +17,19 @@
     },
     "Card": {
       "ActiveStores": "Magasins actifs",
-      "ActiveUsers": "Utilisateurs actifs"
+      "ActiveUsers": "Utilisateurs actifs",
+      "ActiveSuppliers": "Fournisseurs actifs",
+      "ActiveProducts": "Produits actifs"
     },
     "MostActiveStores": "Magasins les plus actifs",
+    "MostSoldProducts": "Produits les plus vendus",
     "Columns": {
       "Name": "Nom",
       "City": "Ville",
       "Siret": "Siret",
-      "Movement": "Mouvement de stock"
+      "Movement": "Mouvement de stock",
+      "Code": "Code EAN",
+      "Sales": "Quantité vendue"
     }
   },
   "Error": {

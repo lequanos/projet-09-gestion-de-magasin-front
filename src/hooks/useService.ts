@@ -18,6 +18,8 @@ import { AuthService } from '@/services/auth/AuthService';
 import { MailService } from '@/services/mail/MailService';
 import { StoreService } from '@/services/store/StoreService';
 import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
+import { DashboardService } from '@/services/dashboard/DashboardService';
+import { GetDashboardInfosResponse } from '@/services/dashboard/interfaces/dashboardResponse.interface';
 
 const serviceDictionary = {
   auth: (accessToken?: string) => new AuthService(accessToken),
@@ -218,6 +220,24 @@ export const useGetStatsQuery = <T>(
       service.crud.get({
         complementURL: 'stats',
       }),
+    onSuccess,
+  });
+};
+
+export const useGetDashboardInfos = (
+  accessToken: string,
+  onSuccess:
+    | ((
+        data:
+          | ISuccessResponse<GetDashboardInfosResponse>
+          | IErrorResponse<GetDashboardInfosResponse>,
+      ) => void)
+    | undefined,
+) => {
+  const service = new DashboardService(accessToken);
+  return useQuery({
+    queryKey: ['dashboard'],
+    queryFn: () => service.crud.getInfos(),
     onSuccess,
   });
 };
