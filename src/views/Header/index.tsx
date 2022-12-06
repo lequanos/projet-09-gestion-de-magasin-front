@@ -51,6 +51,7 @@ function Header() {
     _: SyntheticEvent<Element, Event>,
     newIndex: number,
   ) => {
+    console.log(newIndex);
     setIndex(newIndex);
   };
 
