@@ -1,14 +1,12 @@
-import {
-  InfiniteData,
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { LoginDto, SelectStoreDto } from '@/models/auth';
 import { MailDto } from '@/models/mail';
-import { ISuccessResponse, IErrorResponse } from '@/services/api/interfaces';
+import {
+  ISuccessResponse,
+  IErrorResponse,
+  IParam,
+} from '@/services/api/interfaces';
 import {
   CreateType,
   DeleteType,
@@ -20,11 +18,13 @@ import { StoreService } from '@/services/store/StoreService';
 import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
 import { DashboardService } from '@/services/dashboard/DashboardService';
 import { GetDashboardInfosResponse } from '@/services/dashboard/interfaces/dashboardResponse.interface';
+import { ProductService } from '@/services/product/ProductService';
 
 const serviceDictionary = {
   auth: (accessToken?: string) => new AuthService(accessToken),
   mail: () => new MailService(),
   store: (accessToken?: string) => new StoreService(accessToken),
+  product: (accessToken?: string) => new ProductService(accessToken),
 };
 
 export type EntityList = keyof typeof serviceDictionary;
@@ -36,25 +36,23 @@ const getService = (entity: EntityList, accessToken?: string) => {
 export const useGetAllQuery = <T>(
   entity: EntityList,
   accessToken?: string,
+  query?: IParam<string>,
+  enabled = true,
   onSuccess?:
-    | ((
-        data: InfiniteData<ISuccessResponse<T> | IErrorResponse<T | undefined>>,
-      ) => void)
+    | ((data: ISuccessResponse<T> | IErrorResponse<T | undefined>) => void)
     | undefined,
   onError?: ((err: unknown) => void) | undefined,
-  enabled = true,
 ) => {
   const service = getService(entity, accessToken);
-  return useInfiniteQuery<
-    ISuccessResponse<T> | IErrorResponse<T | undefined>,
-    unknown
-  >({
-    queryKey: [`${entity}s`],
-    queryFn: () => service.crud.getAll(),
-    enabled,
-    onSuccess,
-    onError,
-  });
+  return useQuery<ISuccessResponse<T> | IErrorResponse<T | undefined>, unknown>(
+    {
+      queryKey: [`${entity}s`],
+      queryFn: () => service.crud.getAll<T, string>(query),
+      enabled,
+      onSuccess,
+      onError,
+    },
+  );
 };
 
 export const useGetOneQuery = (entity: EntityList, accessToken?: string) => {
@@ -162,27 +160,24 @@ export const useGetMostActive = <T>(
   entity: EntityList,
   accessToken?: string,
   onSuccess?:
-    | ((
-        data: InfiniteData<ISuccessResponse<T> | IErrorResponse<T | undefined>>,
-      ) => void)
+    | ((data: ISuccessResponse<T> | IErrorResponse<T | undefined>) => void)
     | undefined,
   onError?: ((err: unknown) => void) | undefined,
   enabled = true,
 ) => {
   const service = getService(entity, accessToken);
-  return useInfiniteQuery<
-    ISuccessResponse<T> | IErrorResponse<T | undefined>,
-    unknown
-  >({
-    queryKey: [`${entity}s`],
-    queryFn: () =>
-      service.crud.get({
-        complementURL: 'most-active',
-      }),
-    enabled,
-    onSuccess,
-    onError,
-  });
+  return useQuery<ISuccessResponse<T> | IErrorResponse<T | undefined>, unknown>(
+    {
+      queryKey: [`${entity}s`],
+      queryFn: () =>
+        service.crud.get({
+          complementURL: 'most-active',
+        }),
+      enabled,
+      onSuccess,
+      onError,
+    },
+  );
 };
 
 export const useSearchStores = (

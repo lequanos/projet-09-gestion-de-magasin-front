@@ -1,0 +1,55 @@
+@import '../../styles/variables';
+
+#root .product {
+  &--container {
+    padding: $gutter;
+    display: flex !important;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  &--add-btn {
+    align-self: flex-end;
+    min-width: 200px;
+    border-radius: 9999px;
+  }
+
+  &--table-container {
+    margin-top: calc($gutter * 2);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+  }
+  
+  &--table {
+    flex: 1;
+  }
+
+  &--modal {
+
+    &-select {
+      width: 100%;
+      min-width: 200px !important;
+      margin-top: calc($gutter * 2) !important;
+    }
+
+    & .MuiDialog-paper {
+      height: 45%;
+      width: 50%;
+      padding: $gutter;
+      display: flex;
+      justify-content: center;
+
+      & .MuiBox-root {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    & form {
+      width: 70%;
+    }
+  }
+}

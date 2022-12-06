@@ -33,9 +33,14 @@ const theme = createTheme({
       light: '#7CA2CB',
     },
     secondary: {
-      main: '#FAE398',
-      dark: '#F6CB3C',
-      light: '#FCEFC5',
+      main: '#FCF0C5',
+      dark: '#FAE69E',
+      light: '#FEFAEC',
+    },
+    error: {
+      main: '#F05442',
+      dark: '#ED311D',
+      light: '#F37668',
     },
   },
 });

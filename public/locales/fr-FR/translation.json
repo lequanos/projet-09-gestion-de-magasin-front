@@ -63,6 +63,18 @@
     "Success_Mail": "Votre demande a bien été envoyée",
     "Success_Mail_Title": "Email envoyé"
   },
+  "Product": {
+    "Columns": {
+      "Name": "Nom",
+      "Code": "Code EAN",
+      "Price": "Prix de vente",
+      "Threshold": "Alerte",
+      "IsActive": "Actif",
+      "InStock": "Stock actuel"
+    },
+    "MustOrder": "à commander",
+    "AddProduct": "Ajouter un produit"
+  },
   "Routes": {
     "Dashboard": "Tableau de bord",
     "Stores": "Magasins",

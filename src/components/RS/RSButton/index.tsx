@@ -15,6 +15,7 @@ type RSButtonProps = {
     | 'info'
     | 'warning'
     | undefined;
+  disableRipple?: boolean;
   onClick?: () => void;
   sx?: SxProps<Theme>;
   type?: 'button' | 'submit' | 'reset' | undefined;
@@ -24,6 +25,7 @@ export function RSButton({
   variant = 'contained',
   className,
   children,
+  disableRipple = true,
   onClick,
   sx,
   color = 'primary',
@@ -44,7 +46,12 @@ export function RSButton({
     };
   }
 
-  if (variant === 'contained' && buttonRef && buttonRef.current) {
+  if (
+    variant === 'contained' &&
+    color === 'primary' &&
+    buttonRef &&
+    buttonRef.current
+  ) {
     sxProps.backgroundImage =
       'linear-gradient(to bottom left, #7CA2CB, #4578AD, #345A83)';
     sxProps.backgroundSize = `${buttonRef.current.offsetWidth * 2}px ${
@@ -58,6 +65,26 @@ export function RSButton({
     };
   }
 
+  if (
+    variant === 'contained' &&
+    color === 'secondary' &&
+    buttonRef &&
+    buttonRef.current
+  ) {
+    sxProps.fontWeight = 400;
+    sxProps.backgroundImage =
+      'linear-gradient(to bottom left, #FEFAEC, #FCEFC5, #FAE49E)';
+    sxProps.backgroundSize = `${buttonRef.current.offsetWidth * 2}px ${
+      buttonRef.current.offsetHeight * 2
+    }px`;
+    sxProps.backgroundPosition = 'top right';
+    sxProps.transition = 'background 0.5s ease-in-out';
+    sxProps['&:hover'] = {
+      backgroundPosition: 'bottom left',
+      color: 'primary.main',
+    };
+  }
+
   return (
     <Button
       variant={variant}
@@ -67,6 +94,7 @@ export function RSButton({
       type={type}
       color={color}
       ref={buttonRef}
+      disableRipple={disableRipple}
     >
       {children}
     </Button>

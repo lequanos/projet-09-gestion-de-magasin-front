@@ -63,6 +63,18 @@
     "Success_Mail": "Your request has been sent successfully",
     "Success_Mail_Title": "Email sent"
   },
+  "Product": {
+    "Columns": {
+      "Name": "Name",
+      "Code": "EAN Code",
+      "Price": "Selling price",
+      "Threshold": "Alert",
+      "IsActive": "Active",
+      "InStock": "Current stock"
+    },
+    "MustOrder": "must order",
+    "AddProduct": "Add product"
+  },
   "Routes": {
     "Dashboard": "Dashboard",
     "Stores": "Stores",

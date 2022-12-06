@@ -55,7 +55,7 @@ function Dashboard() {
   const getColumns = (): GridColDef[] => {
     if (!tableData.length) return [];
 
-    return Object.keys(tableData[0])
+    const columns = Object.keys(tableData[0])
       .map((key) => {
         if (key === 'id') return;
 
@@ -63,9 +63,17 @@ function Dashboard() {
           field: key,
           headerName: t(`Dashboard.Columns.${capitalize(key)}`),
           flex: 1,
-        };
+        } as GridColDef;
       })
       .filter((value) => !!value) as GridColDef[];
+
+    const salesField = columns?.find((col) => col?.field === 'sales');
+
+    if (salesField) {
+      salesField.renderCell = (params) => params.value || 0;
+    }
+
+    return columns;
   };
 
   /**
