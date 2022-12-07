@@ -64,6 +64,10 @@
     "Success_Mail_Title": "Email sent"
   },
   "Product": {
+    "Modal": {
+      "Step1": "Search product",
+      "Step2": "Edit product"
+    },
     "Columns": {
       "Name": "Name",
       "Code": "EAN Code",

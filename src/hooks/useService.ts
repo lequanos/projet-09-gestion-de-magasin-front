@@ -25,6 +25,7 @@ const serviceDictionary = {
   mail: () => new MailService(),
   store: (accessToken?: string) => new StoreService(accessToken),
   product: (accessToken?: string) => new ProductService(accessToken),
+  dashboard: (accessToken?: string) => new DashboardService(accessToken),
 };
 
 export type EntityList = keyof typeof serviceDictionary;

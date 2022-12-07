@@ -9,12 +9,14 @@ type RSButtonProps = {
   color?:
     | 'inherit'
     | 'primary'
+    | 'primaryDark'
     | 'secondary'
     | 'success'
     | 'error'
     | 'info'
     | 'warning'
     | undefined;
+  disabled?: boolean;
   disableRipple?: boolean;
   onClick?: () => void;
   sx?: SxProps<Theme>;
@@ -25,6 +27,7 @@ export function RSButton({
   variant = 'contained',
   className,
   children,
+  disabled = false,
   disableRipple = true,
   onClick,
   sx,
@@ -65,25 +68,20 @@ export function RSButton({
     };
   }
 
-  if (
-    variant === 'contained' &&
-    color === 'secondary' &&
-    buttonRef &&
-    buttonRef.current
-  ) {
-    sxProps.fontWeight = 400;
-    sxProps.backgroundImage =
-      'linear-gradient(to bottom left, #FEFAEC, #FCEFC5, #FAE49E)';
-    sxProps.backgroundSize = `${buttonRef.current.offsetWidth * 2}px ${
-      buttonRef.current.offsetHeight * 2
-    }px`;
-    sxProps.backgroundPosition = 'top right';
-    sxProps.transition = 'background 0.5s ease-in-out';
-    sxProps['&:hover'] = {
-      backgroundPosition: 'bottom left',
-      color: 'primary.main',
-    };
-  }
+  /**
+   * Get colorProps for Mui button from custom button props
+   */
+  const getColor = () => {
+    return color.split(/(?=[A-Z])/)[0] as
+      | 'inherit'
+      | 'primary'
+      | 'secondary'
+      | 'success'
+      | 'error'
+      | 'info'
+      | 'warning'
+      | undefined;
+  };
 
   return (
     <Button
@@ -92,9 +90,10 @@ export function RSButton({
       onClick={onClick}
       className={className}
       type={type}
-      color={color}
+      color={getColor()}
       ref={buttonRef}
       disableRipple={disableRipple}
+      disabled={disabled}
     >
       {children}
     </Button>

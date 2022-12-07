@@ -1,5 +1,21 @@
-import { Backdrop, Fade, Box, Typography, Dialog } from '@mui/material';
-import { SyntheticEvent, useEffect, useState } from 'react';
+import {
+  Backdrop,
+  Fade,
+  Box,
+  Stepper,
+  Step,
+  StepLabel,
+  Dialog,
+  Typography,
+  StepContent,
+} from '@mui/material';
+import {
+  Dispatch,
+  SetStateAction,
+  SyntheticEvent,
+  useEffect,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import jwtDecode from 'jwt-decode';
@@ -12,12 +28,17 @@ import {
   useToastContext,
   useSearchStores,
 } from '@/hooks';
-import { RSAutocomplete, RSButton, RSDivider, RSForm } from '@/components/RS';
+import { RSAutocomplete, RSButton, RSInput, RSForm } from '@/components/RS';
 import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { SelectStoreResponse } from '@/services/auth/interfaces/authResponse.interface';
 import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
 
-function ProductModal() {
+type ProductModalProps = {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+function ProductModal({ open, setOpen }: ProductModalProps) {
   // Hooks
   const { user, setUser } = useUserContext();
   const { accessToken, setAccessToken } = useAccessToken();
@@ -27,113 +48,32 @@ function ProductModal() {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
     watch,
   } = useForm();
 
-  const { selectedStore } = watch();
-
   // States
-  const [open, setOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState('a');
-  const [enabledSearchStores, setEnabledSearchStores] = useState(false);
-  const [stores, setStores] = useState<GetStoresResponse>([]);
+  const [activeStep, setActiveStep] = useState(0);
 
-  // Queries
-  const selectStoreMutation = useSelectStoreMutation(
-    { store: selectedStore },
-    accessToken || '',
-  );
-  useSearchStores(
-    searchValue,
-    enabledSearchStores,
-    accessToken,
-    ({ ok, data }) => {
-      if (ok && data) {
-        setStores(data);
-        setEnabledSearchStores(false);
-      }
-    },
-  );
+  // Data
+  const steps = [t('Product.Modal.Step1'), t('Product.Modal.Step2')];
 
   // Methods
   /**
    * Called when clicked outside of the modal
    */
   const handleClose = () => {
-    setOpen(true);
+    setOpen(false);
   };
 
   /**
-   * Call api with the selected store
+   * Go to next step
    */
-  const handleSelectStore = () => {
-    selectStoreMutation.mutate(undefined, {
-      onSuccess: (response) => {
-        const { ok, status } = response;
-
-        if ([401, 403].includes(status)) {
-          throw new Response('', { status });
-        }
-
-        if (!ok) {
-          const selectStoreError =
-            response as IErrorResponse<SelectStoreResponse>;
-
-          toast[selectStoreError.formatted.type](
-            selectStoreError.formatted.errorDefault,
-            selectStoreError.formatted.title,
-          );
-          return;
-        }
-
-        const selectStoreResponse =
-          response as ISuccessResponse<SelectStoreResponse>;
-        setAccessToken(selectStoreResponse.data.access_token);
-        setUser({
-          ...user,
-          ...jwtDecode(selectStoreResponse.data.access_token),
-        });
-        sessionStorage.setItem('accessDashboard', JSON.stringify(true));
-        setOpen(false);
-      },
-    });
-  };
-
-  /**
-   * Close the modal and save the choice of not selecting a store to session storage
-   */
-  const handleAccessDashboard = () => {
-    setOpen(!open);
-    sessionStorage.setItem('accessDashboard', JSON.stringify(true));
-  };
-
-  /**
-   * Search for store on api
-   */
-  const handleInputChange = (
-    _event: SyntheticEvent<Element, Event>,
-    value: string,
-  ) => {
-    setSearchValue(value);
-
-    if (value.length >= 3) {
-      setEnabledSearchStores(true);
-    } else {
-      setEnabledSearchStores(false);
-      setStores([]);
+  const handleNext = () => {
+    if (activeStep < 1) {
+      return setActiveStep((prev) => prev + 1);
     }
   };
-
-  // useEffect
-  useEffect(() => {
-    const accessDashboard = JSON.parse(
-      sessionStorage.getItem('accessDashboard') || 'false',
-    );
-
-    if (!user.store && !accessDashboard) {
-      setOpen(true);
-    }
-  }, []);
 
   return (
     <div>
@@ -145,33 +85,39 @@ function ProductModal() {
         BackdropProps={{
           timeout: 500,
         }}
-        className="dashboard--modal"
+        className="product--modal"
+        sx={{
+          width: '100%',
+        }}
       >
         <Fade in={open}>
-          <Box>
-            <Typography variant="h6" component="h2" color="primary">
-              {t('Dashboard.Modal.SelectStore')}
-            </Typography>
-            <RSForm onSubmit={handleSubmit(handleSelectStore)}>
-              <RSAutocomplete
-                label="Dashboard.Modal.SearchStores"
-                name="selectedStore"
-                errors={errors}
-                options={stores}
-                control={control}
-                className="dashboard--modal-select"
-                onInputChange={handleInputChange}
-              />
-              <RSButton type="submit">{t('Dashboard.Modal.Submit')}</RSButton>
-            </RSForm>
-            <RSDivider>{t('Dashboard.Modal.Or').toUpperCase()}</RSDivider>
-            <RSButton
-              sx={{ marginTop: 0 }}
-              variant="outlined"
-              onClick={handleAccessDashboard}
-            >
-              {t('Dashboard.Modal.AccessDashboard')}
-            </RSButton>
+          <Box className="product--modal-container">
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {steps.map((label, index) => (
+                <Step key={label} completed={activeStep > index}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <RSInput
+              label={t('Home.Email')}
+              name="searchedProduct"
+              className="home--login-input"
+              control={control}
+              errors={errors}
+            />
+            <div className="product--modal-footer">
+              <RSButton
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={() => setActiveStep((prev) => prev - 1)}
+              >
+                Back
+              </RSButton>
+              <RSButton onClick={handleNext}>
+                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              </RSButton>
+            </div>
           </Box>
         </Fade>
       </Dialog>
