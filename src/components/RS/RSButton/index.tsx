@@ -1,11 +1,11 @@
 import { useUserContext } from '@/hooks';
 import { Permission, RoleDto } from '@/models/role';
+import { AddCircleOutline } from '@mui/icons-material';
 import { Button, SxProps, Theme } from '@mui/material';
 import { DefaultTFuncReturn } from 'i18next';
 import { useRef } from 'react';
 
 type RSButtonProps = {
-  variant?: 'contained' | 'text' | 'outlined' | undefined;
   className?: string;
   children: string | string[] | DefaultTFuncReturn;
   color?:
@@ -19,10 +19,12 @@ type RSButtonProps = {
     | 'warning';
   disabled?: boolean;
   disableRipple?: boolean;
-  onClick?: () => void;
+  startIcon?: 'add';
   permissions?: Permission[];
   sx?: SxProps<Theme>;
   type?: 'button' | 'submit' | 'reset';
+  variant?: 'contained' | 'text' | 'outlined';
+  onClick?: () => void;
 };
 
 export function RSButton({
@@ -31,8 +33,9 @@ export function RSButton({
   color = 'primary',
   disabled = false,
   disableRipple = true,
-  sx,
+  startIcon,
   permissions,
+  sx,
   type = 'button',
   variant = 'contained',
   onClick,
@@ -40,37 +43,6 @@ export function RSButton({
   // Hooks
   const buttonRef = useRef<HTMLButtonElement>(null);
   const { user } = useUserContext();
-
-  let sxProps: SxProps<Theme> & { [key: string]: any } = {
-    marginTop: '2.5rem',
-    borderRadius: 0,
-  };
-
-  if (sx) {
-    sxProps = {
-      ...sxProps,
-      ...sx,
-    };
-  }
-
-  if (
-    variant === 'contained' &&
-    color === 'primary' &&
-    buttonRef &&
-    buttonRef.current
-  ) {
-    sxProps.backgroundImage =
-      'linear-gradient(to bottom left, #7CA2CB, #4578AD, #345A83)';
-    sxProps.backgroundSize = `${buttonRef.current.offsetWidth * 2}px ${
-      buttonRef.current.offsetHeight * 2
-    }px`;
-    sxProps.backgroundPosition = 'top right';
-    sxProps.transition = 'background 0.5s ease-in-out';
-    sxProps['&:hover'] = {
-      backgroundPosition: 'bottom left',
-      color: 'secondary.main',
-    };
-  }
 
   /**
    * Get colorProps for Mui button from custom button props
@@ -87,6 +59,55 @@ export function RSButton({
       | undefined;
   };
 
+  /**
+   * Get sx props for button
+   */
+  const getSxProps = () => {
+    let sxProps: SxProps<Theme> & { [key: string]: any } = {
+      marginTop: '2.5rem',
+      borderRadius: 0,
+    };
+
+    if (sx) {
+      sxProps = {
+        ...sxProps,
+        ...sx,
+      };
+    }
+
+    if (
+      variant === 'contained' &&
+      color === 'primary' &&
+      buttonRef &&
+      buttonRef.current
+    ) {
+      sxProps.backgroundImage =
+        'linear-gradient(to bottom left, #7CA2CB, #4578AD, #345A83)';
+      sxProps.backgroundSize = `${buttonRef.current.offsetWidth * 2}px ${
+        buttonRef.current.offsetHeight * 2
+      }px`;
+      sxProps.backgroundPosition = 'top right';
+      sxProps.transition = 'background 0.5s ease-in-out';
+      sxProps['&:hover'] = {
+        backgroundPosition: 'bottom left',
+        color: 'secondary.main',
+      };
+    }
+
+    return sxProps;
+  };
+
+  /**
+   * Get icon for button
+   */
+  const getStartIcon = () => {
+    const iconDictionary = {
+      add: <AddCircleOutline />,
+    };
+
+    return startIcon ? iconDictionary[startIcon] : undefined;
+  };
+
   return (
     <>
       {(!permissions ||
@@ -94,8 +115,9 @@ export function RSButton({
           permissions?.includes(perm),
         )) && (
         <Button
+          startIcon={getStartIcon()}
           variant={variant}
-          sx={sxProps}
+          sx={getSxProps()}
           onClick={onClick}
           className={className}
           type={type}

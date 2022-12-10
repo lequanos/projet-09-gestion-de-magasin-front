@@ -66,7 +66,8 @@
   "Product": {
     "Modal": {
       "Step1": "Recherche du produit",
-      "Step2": "Edition du produit"
+      "Step2": "Edition du produit",
+      "SearchProduct": "Recherche produit par code EAN"
     },
     "Columns": {
       "Name": "Nom",

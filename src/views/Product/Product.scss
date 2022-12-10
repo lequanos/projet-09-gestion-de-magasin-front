@@ -39,6 +39,19 @@
       height: 100%;
     }
 
+    &-search {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+      padding: $gutter;
+      width: 100%;
+
+      &-input {
+        width: 60%;
+      }
+    }
+
     &-footer {
       display: flex;
       flex-direction: row;
@@ -47,8 +60,8 @@
     }
   
     & .MuiDialog-paper {
-      height: 80%;
-      min-width: 80%;
+      height: 60%;
+      min-width: 50%;
       padding: $gutter;
       display: flex;
       justify-content: center;

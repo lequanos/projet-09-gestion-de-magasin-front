@@ -70,6 +70,7 @@ function Product() {
           color="primary"
           onClick={openAddProductModal}
           permissions={[Permission.MANAGE_ALL, Permission.MANAGE_PRODUCT]}
+          startIcon="add"
         >
           {t('Product.AddProduct')}
         </RSButton>

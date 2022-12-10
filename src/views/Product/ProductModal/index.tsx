@@ -99,13 +99,15 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
                 </Step>
               ))}
             </Stepper>
-            <RSInput
-              label={t('Home.Email')}
-              name="searchedProduct"
-              className="home--login-input"
-              control={control}
-              errors={errors}
-            />
+            <Box className="product--modal-search">
+              <RSInput
+                label={t('Product.Modal.SearchProduct')}
+                name="searchedProduct"
+                className="product--modal-search-input"
+                control={control}
+                errors={errors}
+              />
+            </Box>
             <div className="product--modal-footer">
               <RSButton
                 color="inherit"

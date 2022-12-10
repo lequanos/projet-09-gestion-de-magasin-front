@@ -1,6 +1,6 @@
 import { useUserContext } from '@/hooks';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 function RequireStore() {
   // Hooks
@@ -14,7 +14,11 @@ function RequireStore() {
     }
   });
 
-  return <></>;
+  return (
+    <>
+      <Outlet />
+    </>
+  );
 }
 
 export default RequireStore;
