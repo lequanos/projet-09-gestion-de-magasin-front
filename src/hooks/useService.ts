@@ -19,6 +19,7 @@ import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.
 import { DashboardService } from '@/services/dashboard/DashboardService';
 import { GetDashboardInfosResponse } from '@/services/dashboard/interfaces/dashboardResponse.interface';
 import { ProductService } from '@/services/product/ProductService';
+import { ProductResponse } from '@/services/product/interfaces/productResponse.interface';
 
 const serviceDictionary = {
   auth: (accessToken?: string) => new AuthService(accessToken),
@@ -234,6 +235,27 @@ export const useGetDashboardInfos = (
   return useQuery({
     queryKey: ['dashboard'],
     queryFn: () => service.crud.getInfos(),
+    onSuccess,
+  });
+};
+
+export const useSearchProduct = (
+  searchValue: string,
+  enabled: boolean,
+  accessToken?: string,
+  onSuccess?:
+    | ((
+        data:
+          | ISuccessResponse<ProductResponse>
+          | IErrorResponse<ProductResponse | undefined>,
+      ) => void)
+    | undefined,
+) => {
+  const service = new ProductService(accessToken);
+  return useQuery({
+    queryKey: ['product'],
+    queryFn: () => service.crud.searchProduct(searchValue),
+    enabled,
     onSuccess,
   });
 };

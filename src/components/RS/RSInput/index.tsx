@@ -1,6 +1,6 @@
-import { VisibilityOff, Visibility } from '@mui/icons-material';
+import { VisibilityOff, Visibility, Search } from '@mui/icons-material';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useState, SyntheticEvent } from 'react';
 import {
   Control,
   Controller,
@@ -25,16 +25,19 @@ type RSInputProps = {
       [x: string]: any;
     }>
   >;
+  endIcon?: 'search';
   helperText?: string;
   id?: string;
   inputProps?: { [key: string]: any };
   label: string;
   name: string;
+  onChange?: (e: SyntheticEvent) => void;
+  readOnly?: boolean;
   rules?: Exclude<
     RegisterOptions,
     'valueAsNumber' | 'valueAsDate' | 'setValueAs'
   >;
-  variant?: 'standard' | 'filled' | 'outlined' | undefined;
+  variant?: 'standard' | 'filled' | 'outlined';
   type?: 'text' | 'email' | 'password' | 'number';
 };
 
@@ -43,11 +46,14 @@ export function RSInput({
   control,
   defaultValue = '',
   errors,
+  endIcon,
   helperText,
   id,
   inputProps,
   label,
   name,
+  onChange,
+  readOnly = false,
   rules,
   variant = 'filled',
   type = 'text',
@@ -96,6 +102,26 @@ export function RSInput({
       };
     }
 
+    if (endIcon === 'search') {
+      inputPropsToReturn = {
+        ...inputProps,
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton edge="end">
+              <Search />
+            </IconButton>
+          </InputAdornment>
+        ),
+      };
+    }
+
+    if (readOnly) {
+      inputPropsToReturn = {
+        ...inputProps,
+        readOnly,
+      };
+    }
+
     return inputPropsToReturn;
   };
 
@@ -119,6 +145,7 @@ export function RSInput({
             marginTop: '1rem',
           }}
           {...field}
+          onChange={onChange}
         />
       )}
     />

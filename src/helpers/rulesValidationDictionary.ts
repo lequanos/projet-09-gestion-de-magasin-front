@@ -26,4 +26,11 @@ export const rulesValidationDictionary: {
   selectedStore: {
     required: 'Error.Required_Select',
   },
+  searchedProduct: {
+    required: 'Error.Required_Input',
+    pattern: {
+      value: /^[0-9]{13}$/i,
+      message: 'Error.Format_EAN',
+    },
+  },
 };

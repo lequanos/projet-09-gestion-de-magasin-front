@@ -15,6 +15,7 @@ export type ProductResponse = {
   ingredients?: string;
   inStock?: number;
   sales?: number;
+  brand?: { name: string };
 } & BaseModel;
 
 export type GetProductStatsResponse = {

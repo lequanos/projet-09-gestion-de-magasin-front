@@ -9,6 +9,7 @@ import { CssBaseline } from '@mui/material';
 import './i18n';
 import { UserContextProvider, ToastContextProvider } from './hooks';
 
+import './main.scss';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -24,8 +25,6 @@ import Supplier from './views/Supplier';
 import Store from './views/Store';
 import Aisle from './views/Aisle';
 import User from './views/User';
-
-import './main.scss';
 import RequireStore from './components/RequireStore';
 
 const theme = createTheme({

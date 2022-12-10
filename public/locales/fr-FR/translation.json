@@ -4,7 +4,8 @@
     "Password": "Mot de passe",
     "Firstname": "Prénom",
     "Lastname": "Nom",
-    "SelectedStore": "Magasin"
+    "SelectedStore": "Magasin",
+    "SearchedProduct": "Code EAN"
   },
   "Dashboard": {
     "Modal": {
@@ -42,7 +43,8 @@
     "General_Label": "Une erreur est survenue",
     "Required_Input": "{{name}} requis",
     "Required_Select": "{{name}} requis",
-    "Format_Email": "Format d'email incorrect"
+    "Format_Email": "Format d'email incorrect",
+    "Format_EAN": "Format de code EAN incorrect"
   },
   "Header": {
     "Logout": "Se déconnecter"
@@ -67,7 +69,20 @@
     "Modal": {
       "Step1": "Recherche du produit",
       "Step2": "Edition du produit",
-      "SearchProduct": "Recherche produit par code EAN"
+      "SearchProduct": "Recherche produit par code EAN",
+      "NotFoundProduct": "Aucun produit trouvé pour le code EAN {{searchedProduct}}",
+      "Back": "Retour",
+      "Next": "Suivant",
+      "Add": "Ajouter",
+      "AddProduct": {
+        "Brand": "Marque",
+        "Name": "Nom",
+        "Code": "Code EAN",
+        "Price": "Prix de vente",
+        "UnitPackaging": "Conditionnement unitaire",
+        "Threshold": "Seuil d'alerte",
+        "Ingredients": "Ingrédients"
+      }
     },
     "Columns": {
       "Name": "Nom",

@@ -6,32 +6,18 @@ import {
   Step,
   StepLabel,
   Dialog,
-  Typography,
-  StepContent,
 } from '@mui/material';
-import {
-  Dispatch,
-  SetStateAction,
-  SyntheticEvent,
-  useEffect,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import jwtDecode from 'jwt-decode';
+import { SyntheticEvent } from 'react';
 
 import '../Product.scss';
-import {
-  useUserContext,
-  useAccessToken,
-  useSelectStoreMutation,
-  useToastContext,
-  useSearchStores,
-} from '@/hooks';
-import { RSAutocomplete, RSButton, RSInput, RSForm } from '@/components/RS';
-import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
-import { SelectStoreResponse } from '@/services/auth/interfaces/authResponse.interface';
-import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
+import { useAccessToken, useToastContext, useSearchProduct } from '@/hooks';
+import { RSButton, RSInput, RSForm } from '@/components/RS';
+import { IErrorResponse } from '@/services/api/interfaces';
+import { ProductResponse } from '@/services/product/interfaces/productResponse.interface';
+import ProductModalContent from './ProductModalContent';
 
 type ProductModalProps = {
   open: boolean;
@@ -40,8 +26,7 @@ type ProductModalProps = {
 
 function ProductModal({ open, setOpen }: ProductModalProps) {
   // Hooks
-  const { user, setUser } = useUserContext();
-  const { accessToken, setAccessToken } = useAccessToken();
+  const { accessToken } = useAccessToken();
   const { toast } = useToastContext();
   const { t } = useTranslation('translation');
   const {
@@ -51,9 +36,43 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
     setValue,
     watch,
   } = useForm();
+  const { searchedProduct } = watch();
 
   // States
   const [activeStep, setActiveStep] = useState(0);
+  const [enableSearchProduct, setEnableSearchProduct] = useState(false);
+  const [notFound, setNotFound] = useState(false);
+  const [product, setProduct] = useState<ProductResponse>();
+
+  // Queries
+  useSearchProduct(
+    searchedProduct,
+    enableSearchProduct,
+    accessToken,
+    (response) => {
+      const { ok, status, data } = response;
+      setEnableSearchProduct(false);
+
+      if ([401, 403].includes(status)) {
+        throw new Response('', { status });
+      }
+
+      if (status === 404) {
+        return setNotFound(true);
+      }
+
+      if (!ok) {
+        const error = response as IErrorResponse<ProductResponse>;
+        toast[error.formatted.type](
+          error.formatted.errorDefault,
+          error.formatted.title,
+        );
+        return;
+      }
+
+      setProduct(data);
+    },
+  );
 
   // Data
   const steps = [t('Product.Modal.Step1'), t('Product.Modal.Step2')];
@@ -73,6 +92,23 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
     if (activeStep < 1) {
       return setActiveStep((prev) => prev + 1);
     }
+  };
+
+  /**
+   * Search for product on backend api
+   */
+  const handleSearchProduct = () => {
+    setEnableSearchProduct(true);
+    setNotFound(false);
+    setProduct(undefined);
+  };
+
+  /**
+   * Handle search input change
+   */
+  const handleInputChange = (e: SyntheticEvent) => {
+    setNotFound(false);
+    setValue('searchedProduct', (e.target as HTMLInputElement).value);
   };
 
   return (
@@ -99,14 +135,31 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
                 </Step>
               ))}
             </Stepper>
-            <Box className="product--modal-search">
-              <RSInput
-                label={t('Product.Modal.SearchProduct')}
-                name="searchedProduct"
-                className="product--modal-search-input"
-                control={control}
-                errors={errors}
-              />
+            <Box className="product--modal-main">
+              {activeStep === 0 && (
+                <RSForm
+                  className="product--modal-search"
+                  onSubmit={handleSubmit(handleSearchProduct)}
+                >
+                  <RSInput
+                    className="product--modal-search-input"
+                    label={t('Product.Modal.SearchProduct')}
+                    name="searchedProduct"
+                    control={control}
+                    errors={errors}
+                    endIcon="search"
+                    onChange={handleInputChange}
+                  />
+                </RSForm>
+              )}
+              <Box className="product--modal-content">
+                <ProductModalContent
+                  activeStep={activeStep}
+                  notFound={notFound}
+                  searchedProduct={searchedProduct}
+                  product={product}
+                />
+              </Box>
             </Box>
             <div className="product--modal-footer">
               <RSButton
@@ -114,10 +167,16 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
                 disabled={activeStep === 0}
                 onClick={() => setActiveStep((prev) => prev - 1)}
               >
-                Back
+                {t('Product.Modal.Back')}
               </RSButton>
-              <RSButton onClick={handleNext}>
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              <RSButton
+                color={product ? 'primary' : 'inherit'}
+                disabled={!product}
+                onClick={handleNext}
+              >
+                {activeStep === steps.length - 1
+                  ? t('Product.Modal.Add')
+                  : t('Product.Modal.Next')}
               </RSButton>
             </div>
           </Box>
