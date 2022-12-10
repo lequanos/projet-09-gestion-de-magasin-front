@@ -1,3 +1,5 @@
+import { useUserContext } from '@/hooks';
+import { Permission, RoleDto } from '@/models/role';
 import { Button, SxProps, Theme } from '@mui/material';
 import { DefaultTFuncReturn } from 'i18next';
 import { useRef } from 'react';
@@ -14,28 +16,30 @@ type RSButtonProps = {
     | 'success'
     | 'error'
     | 'info'
-    | 'warning'
-    | undefined;
+    | 'warning';
   disabled?: boolean;
   disableRipple?: boolean;
   onClick?: () => void;
+  permissions?: Permission[];
   sx?: SxProps<Theme>;
-  type?: 'button' | 'submit' | 'reset' | undefined;
+  type?: 'button' | 'submit' | 'reset';
 };
 
 export function RSButton({
-  variant = 'contained',
   className,
   children,
+  color = 'primary',
   disabled = false,
   disableRipple = true,
-  onClick,
   sx,
-  color = 'primary',
+  permissions,
   type = 'button',
+  variant = 'contained',
+  onClick,
 }: RSButtonProps) {
   // Hooks
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const { user } = useUserContext();
 
   let sxProps: SxProps<Theme> & { [key: string]: any } = {
     marginTop: '2.5rem',
@@ -84,18 +88,25 @@ export function RSButton({
   };
 
   return (
-    <Button
-      variant={variant}
-      sx={sxProps}
-      onClick={onClick}
-      className={className}
-      type={type}
-      color={getColor()}
-      ref={buttonRef}
-      disableRipple={disableRipple}
-      disabled={disabled}
-    >
-      {children}
-    </Button>
+    <>
+      {(!permissions ||
+        (user.role as RoleDto).permissions.some((perm) =>
+          permissions?.includes(perm),
+        )) && (
+        <Button
+          variant={variant}
+          sx={sxProps}
+          onClick={onClick}
+          className={className}
+          type={type}
+          color={getColor()}
+          ref={buttonRef}
+          disableRipple={disableRipple}
+          disabled={disabled}
+        >
+          {children}
+        </Button>
+      )}
+    </>
   );
 }

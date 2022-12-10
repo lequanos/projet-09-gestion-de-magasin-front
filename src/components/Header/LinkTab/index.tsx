@@ -20,7 +20,13 @@ function LinkTab(props: LinkTabProps) {
   };
   return (
     <>
-      <Tab component={Link} to={props.pathname} {...props} sx={isDisplayed()} />
+      <Tab
+        component={Link}
+        to={props.pathname}
+        {...props}
+        sx={isDisplayed()}
+        disabled={!user.store && props.value > 1}
+      />
     </>
   );
 }

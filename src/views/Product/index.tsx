@@ -10,6 +10,7 @@ import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { GetProductsResponse } from '@/services/product/interfaces/productResponse.interface';
 import { RSButton } from '@/components/RS';
 import { getColumns } from '@/helpers/utils';
+import { Permission } from '@/models/role';
 
 function Product() {
   // Hooks
@@ -68,6 +69,7 @@ function Product() {
           className="product--add-btn"
           color="primary"
           onClick={openAddProductModal}
+          permissions={[Permission.MANAGE_ALL, Permission.MANAGE_PRODUCT]}
         >
           {t('Product.AddProduct')}
         </RSButton>

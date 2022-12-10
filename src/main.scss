@@ -1,0 +1,10 @@
+$primaryMain: #4578AD;
+$primaryDark: #345A83;
+$primaryLight: #7CA2CB;
+
+#root {
+  & .header--tabs a.MuiButtonBase-root.Mui-disabled {
+    opacity: 0.5;
+    color: $primaryDark;
+  }
+}

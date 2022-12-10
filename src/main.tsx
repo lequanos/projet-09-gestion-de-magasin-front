@@ -25,6 +25,9 @@ import Store from './views/Store';
 import Aisle from './views/Aisle';
 import User from './views/User';
 
+import './main.scss';
+import RequireStore from './components/RequireStore';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -60,10 +63,12 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 <Route path="/" element={<App />}>
                   <Route path="dashboard" element={<Dashboard />} />
                   <Route path="store" element={<Store />} />
-                  <Route path="product" element={<Product />} />
-                  <Route path="supplier" element={<Supplier />} />
-                  <Route path="aisle" element={<Aisle />} />
-                  <Route path="user" element={<User />} />
+                  <Route path="" element={<RequireStore />}>
+                    <Route path="product" element={<Product />} />
+                    <Route path="supplier" element={<Supplier />} />
+                    <Route path="aisle" element={<Aisle />} />
+                    <Route path="user" element={<User />} />
+                  </Route>
                 </Route>
                 <Route path="/401" element={<Unauthorized />} />
                 <Route path="/403" element={<Forbidden />} />
