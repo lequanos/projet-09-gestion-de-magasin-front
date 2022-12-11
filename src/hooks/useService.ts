@@ -15,18 +15,20 @@ import {
 import { AuthService } from '@/services/auth/AuthService';
 import { MailService } from '@/services/mail/MailService';
 import { StoreService } from '@/services/store/StoreService';
-import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
 import { DashboardService } from '@/services/dashboard/DashboardService';
 import { GetDashboardInfosResponse } from '@/services/dashboard/interfaces/dashboardResponse.interface';
 import { ProductService } from '@/services/product/ProductService';
-import { ProductResponse } from '@/services/product/interfaces/productResponse.interface';
+import { AisleService } from '@/services/aisle/AisleService';
+import { ProductDto } from '@/models/product';
+import { StoreDto } from '@/models/store';
 
 const serviceDictionary = {
   auth: (accessToken?: string) => new AuthService(accessToken),
-  mail: () => new MailService(),
-  store: (accessToken?: string) => new StoreService(accessToken),
-  product: (accessToken?: string) => new ProductService(accessToken),
+  aisle: (accessToken?: string) => new AisleService(accessToken),
   dashboard: (accessToken?: string) => new DashboardService(accessToken),
+  mail: () => new MailService(),
+  product: (accessToken?: string) => new ProductService(accessToken),
+  store: (accessToken?: string) => new StoreService(accessToken),
 };
 
 export type EntityList = keyof typeof serviceDictionary;
@@ -189,8 +191,8 @@ export const useSearchStores = (
   onSuccess?:
     | ((
         data:
-          | ISuccessResponse<GetStoresResponse>
-          | IErrorResponse<GetStoresResponse | undefined>,
+          | ISuccessResponse<StoreDto[]>
+          | IErrorResponse<StoreDto[] | undefined>,
       ) => void)
     | undefined,
 ) => {
@@ -246,8 +248,8 @@ export const useSearchProduct = (
   onSuccess?:
     | ((
         data:
-          | ISuccessResponse<ProductResponse>
-          | IErrorResponse<ProductResponse | undefined>,
+          | ISuccessResponse<ProductDto>
+          | IErrorResponse<ProductDto | undefined>,
       ) => void)
     | undefined,
 ) => {

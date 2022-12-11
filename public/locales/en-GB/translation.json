@@ -74,6 +74,7 @@
       "Back": "Back",
       "Next": "Next",
       "Add": "Add",
+      "Cancel": "Cancel",
       "AddProduct": {
         "Brand": "Brand",
         "Name": "Name",
@@ -81,7 +82,9 @@
         "Price": "Selling price",
         "UnitPackaging": "Unit packaging",
         "Threshold": "Alert threshold",
-        "Ingredients": "Ingredients"
+        "Ingredients": "Ingredients",
+        "Aisle": "Aisle",
+        "Categories": "Categories"
       }
     },
     "Columns": {

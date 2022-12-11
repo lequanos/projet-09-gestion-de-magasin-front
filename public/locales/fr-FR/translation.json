@@ -74,6 +74,7 @@
       "Back": "Retour",
       "Next": "Suivant",
       "Add": "Ajouter",
+      "Cancel": "Annuler",
       "AddProduct": {
         "Brand": "Marque",
         "Name": "Nom",
@@ -81,7 +82,9 @@
         "Price": "Prix de vente",
         "UnitPackaging": "Conditionnement unitaire",
         "Threshold": "Seuil d'alerte",
-        "Ingredients": "Ingrédients"
+        "Ingredients": "Ingrédients",
+        "Aisle": "Rayon",
+        "Categories": "Catégories"
       }
     },
     "Columns": {

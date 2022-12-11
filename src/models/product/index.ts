@@ -1,3 +1,21 @@
+import { BrandDto } from '../brand';
+import { BaseModel } from '../interfaces/common.interface';
+
+export type ProductDto = BaseModel & {
+  code?: string;
+  price?: number;
+  isActive?: boolean;
+  pictureUrl?: string;
+  nutriScore?: ProductNutriScore;
+  ecoScore?: ProductEcoScore;
+  unitPackaging?: string;
+  threshold?: number;
+  ingredients?: string;
+  inStock?: number;
+  sales?: number;
+  brand?: BrandDto;
+};
+
 export enum ProductNutriScore {
   A = 'A',
   B = 'B',

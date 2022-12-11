@@ -16,12 +16,16 @@ import '../Product.scss';
 import { useAccessToken, useToastContext, useSearchProduct } from '@/hooks';
 import { RSButton, RSInput, RSForm } from '@/components/RS';
 import { IErrorResponse } from '@/services/api/interfaces';
-import { ProductResponse } from '@/services/product/interfaces/productResponse.interface';
 import ProductModalContent from './ProductModalContent';
+import { ProductDto } from '@/models/product';
 
 type ProductModalProps = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+export type SearchProductFormValues = {
+  searchedProduct: string;
 };
 
 function ProductModal({ open, setOpen }: ProductModalProps) {
@@ -35,14 +39,14 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
     formState: { errors },
     setValue,
     watch,
-  } = useForm();
+  } = useForm<SearchProductFormValues>();
   const { searchedProduct } = watch();
 
   // States
   const [activeStep, setActiveStep] = useState(0);
   const [enableSearchProduct, setEnableSearchProduct] = useState(false);
   const [notFound, setNotFound] = useState(false);
-  const [product, setProduct] = useState<ProductResponse>();
+  const [product, setProduct] = useState<ProductDto>();
 
   // Queries
   useSearchProduct(
@@ -62,7 +66,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
       }
 
       if (!ok) {
-        const error = response as IErrorResponse<ProductResponse>;
+        const error = response as IErrorResponse<ProductDto>;
         toast[error.formatted.type](
           error.formatted.errorDefault,
           error.formatted.title,
@@ -79,10 +83,18 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
 
   // Methods
   /**
-   * Called when clicked outside of the modal
+   * Called when clicked on cancel button or close icon
    */
   const handleClose = () => {
     setOpen(false);
+  };
+
+  /**
+   * Go to previous step or close modal
+   */
+  const handleBack = () => {
+    if (!activeStep) return handleClose();
+    setActiveStep((prev) => prev - 1);
   };
 
   /**
@@ -115,7 +127,6 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
     <div>
       <Dialog
         open={open}
-        onClose={handleClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -162,12 +173,10 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
               </Box>
             </Box>
             <div className="product--modal-footer">
-              <RSButton
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={() => setActiveStep((prev) => prev - 1)}
-              >
-                {t('Product.Modal.Back')}
+              <RSButton color="inherit" onClick={handleBack}>
+                {activeStep === 0
+                  ? t('Product.Modal.Cancel')
+                  : t('Product.Modal.Back')}
               </RSButton>
               <RSButton
                 color={product ? 'primary' : 'inherit'}

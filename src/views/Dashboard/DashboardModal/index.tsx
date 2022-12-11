@@ -15,7 +15,7 @@ import {
 import { RSAutocomplete, RSButton, RSDivider, RSForm } from '@/components/RS';
 import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { SelectStoreResponse } from '@/services/auth/interfaces/authResponse.interface';
-import { GetStoresResponse } from '@/services/store/interfaces/getStoresReponse.interface';
+import { StoreDto } from '@/models/store';
 
 function DashboardModal() {
   // Hooks
@@ -36,7 +36,7 @@ function DashboardModal() {
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('a');
   const [enabledSearchStores, setEnabledSearchStores] = useState(false);
-  const [stores, setStores] = useState<GetStoresResponse>([]);
+  const [stores, setStores] = useState<StoreDto[]>([]);
 
   // Queries
   const selectStoreMutation = useSelectStoreMutation(

@@ -1,6 +1,6 @@
-export type RoleDto = {
-  id: number;
-  name: string;
+import { BaseModel } from '../interfaces/common.interface';
+
+export type RoleDto = BaseModel & {
   permissions: Permission[];
 };
 

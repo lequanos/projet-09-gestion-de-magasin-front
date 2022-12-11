@@ -1,7 +1,7 @@
+import { ProductDto } from '@/models/product';
 import { ApiService } from '../api/ApiService';
 import { ISuccessResponse, IErrorResponse } from '../api/interfaces';
 import { ProductRequest } from './interfaces/productRequest.interface';
-import { ProductResponse } from './interfaces/productResponse.interface';
 
 export class ProductService extends ApiService {
   public crud: ProductRequest;
@@ -17,10 +17,9 @@ export class ProductService extends ApiService {
     baseCrud.searchProduct = async (
       searchValue: string,
     ): Promise<
-      | ISuccessResponse<ProductResponse>
-      | IErrorResponse<ProductResponse | undefined>
+      ISuccessResponse<ProductDto> | IErrorResponse<ProductDto | undefined>
     > => {
-      const response = await baseCrud.get<ProductResponse>({
+      const response = await baseCrud.get<ProductDto>({
         complementURL: `search?search=${searchValue}`,
       });
 

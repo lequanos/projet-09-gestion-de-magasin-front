@@ -1,11 +1,7 @@
-import {
-  GetProductStatsResponse,
-  GetProductsResponse,
-} from '@/services/product/interfaces/productResponse.interface';
-import {
-  GetStoresResponse,
-  GetStoreStatsResponse,
-} from '@/services/store/interfaces/getStoresReponse.interface';
+import { ProductDto } from '@/models/product';
+import { StoreDto } from '@/models/store';
+import { GetProductStatsResponse } from '@/services/product/interfaces/productResponse.interface';
+import { GetStoreStatsResponse } from '@/services/store/interfaces/storeReponse.interface';
 import { GetSupplierStatsResponse } from '@/services/supplier/interfaces/supplierResponse.interface';
 import { GetUserStatsResponse } from '@/services/user/interfaces/userResponse.interface';
 
@@ -21,4 +17,4 @@ export type StatsResponse = {
   user?: GetUserStatsResponse;
 };
 
-export type TableDataResponse = GetStoresResponse | GetProductsResponse;
+export type TableDataResponse = StoreDto[] | ProductDto[];

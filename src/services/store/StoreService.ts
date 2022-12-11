@@ -1,6 +1,6 @@
+import { StoreDto } from '@/models/store';
 import { ApiService } from '../api/ApiService';
 import { IErrorResponse, ISuccessResponse } from '../api/interfaces';
-import { GetStoresResponse } from './interfaces/getStoresReponse.interface';
 import { StoreRequest } from './interfaces/storeRequest.interface';
 
 export class StoreService extends ApiService {
@@ -17,10 +17,9 @@ export class StoreService extends ApiService {
     baseCrud.searchStores = async (
       searchValue: string,
     ): Promise<
-      | ISuccessResponse<GetStoresResponse>
-      | IErrorResponse<GetStoresResponse | undefined>
+      ISuccessResponse<StoreDto[]> | IErrorResponse<StoreDto[] | undefined>
     > => {
-      const response = await baseCrud.get<GetStoresResponse>({
+      const response = await baseCrud.get<StoreDto[]>({
         complementURL: `search?search=${searchValue}`,
       });
 

@@ -14,7 +14,7 @@ import {
 } from 'react-hook-form';
 import { rulesValidationDictionary } from '@/helpers/rulesValidationDictionary';
 import { capitalize } from '@/helpers/utils';
-import { BaseModel } from '@/services/interfaces/common.interface';
+import { BaseModel } from '@/models/interfaces/common.interface';
 import { SyntheticEvent } from 'react';
 
 type RSAutocompleteProps<T extends BaseModel> = {

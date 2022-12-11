@@ -7,21 +7,21 @@ import './Product.scss';
 import ProductModal from './ProductModal';
 import { useAccessToken, useGetAllQuery, useToastContext } from '@/hooks';
 import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
-import { GetProductsResponse } from '@/services/product/interfaces/productResponse.interface';
 import { RSButton } from '@/components/RS';
 import { getColumns } from '@/helpers/utils';
 import { Permission } from '@/models/role';
+import { ProductDto } from '@/models/product';
 
 function Product() {
   // Hooks
   const { t } = useTranslation('translation');
   const { toast } = useToastContext();
   const { accessToken } = useAccessToken();
-  const [tableData, setTableData] = useState<GetProductsResponse>([]);
+  const [tableData, setTableData] = useState<ProductDto[]>([]);
   const [open, setOpen] = useState(false);
 
   // Queries
-  const { isLoading } = useGetAllQuery<GetProductsResponse>(
+  const { isLoading } = useGetAllQuery<ProductDto[]>(
     'product',
     accessToken,
     {
@@ -38,8 +38,7 @@ function Product() {
       }
 
       if (!ok) {
-        const getProductsError =
-          response as IErrorResponse<GetProductsResponse>;
+        const getProductsError = response as IErrorResponse<ProductDto[]>;
 
         toast[getProductsError.formatted.type](
           getProductsError.formatted.errorDefault,
@@ -48,8 +47,7 @@ function Product() {
         return;
       }
 
-      const getProductsResponse =
-        response as ISuccessResponse<GetProductsResponse>;
+      const getProductsResponse = response as ISuccessResponse<ProductDto[]>;
       setTableData(getProductsResponse.data);
     },
   );

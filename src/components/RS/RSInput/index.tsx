@@ -5,32 +5,25 @@ import {
   Control,
   Controller,
   FieldErrorsImpl,
+  FieldValues,
+  Path,
   RegisterOptions,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { rulesValidationDictionary } from '@/helpers/rulesValidationDictionary';
 import { capitalize } from '@/helpers/utils';
 
-type RSInputProps = {
+type RSInputProps<T extends FieldValues> = {
   className?: string;
-  control?: Control<
-    {
-      [key: string]: any;
-    },
-    any
-  >;
-  defaultValue?: string;
-  errors: Partial<
-    FieldErrorsImpl<{
-      [x: string]: any;
-    }>
-  >;
+  control?: Control<T, any>;
+  errors: Partial<FieldErrorsImpl<T>>;
   endIcon?: 'search';
   helperText?: string;
   id?: string;
   inputProps?: { [key: string]: any };
   label: string;
-  name: string;
+  name: Path<T>;
+  multiline?: boolean;
   onChange?: (e: SyntheticEvent) => void;
   readOnly?: boolean;
   rules?: Exclude<
@@ -38,13 +31,13 @@ type RSInputProps = {
     'valueAsNumber' | 'valueAsDate' | 'setValueAs'
   >;
   variant?: 'standard' | 'filled' | 'outlined';
+  size?: 'small' | 'medium';
   type?: 'text' | 'email' | 'password' | 'number';
 };
 
-export function RSInput({
+export function RSInput<T extends FieldValues>({
   className,
   control,
-  defaultValue = '',
   errors,
   endIcon,
   helperText,
@@ -52,12 +45,14 @@ export function RSInput({
   inputProps,
   label,
   name,
+  multiline = false,
   onChange,
   readOnly = false,
   rules,
   variant = 'filled',
+  size = 'medium',
   type = 'text',
-}: RSInputProps) {
+}: RSInputProps<T>) {
   // Hooks
   const { t } = useTranslation('translation');
   const [show, setShow] = useState(false);
@@ -130,7 +125,6 @@ export function RSInput({
       name={name}
       control={control}
       rules={rules || rulesValidationDictionary[name]}
-      defaultValue={defaultValue}
       render={({ field }) => (
         <TextField
           className={className}
@@ -138,14 +132,17 @@ export function RSInput({
           helperText={getHelperText()}
           id={id}
           InputProps={getInputProps()}
+          multiline={multiline}
           label={label}
           type={show && type === 'password' ? 'text' : type}
           variant={variant}
+          size={size}
           sx={{
             marginTop: '1rem',
           }}
           {...field}
-          onChange={onChange}
+          rows={3}
+          onChange={onChange || field.onChange}
         />
       )}
     />
