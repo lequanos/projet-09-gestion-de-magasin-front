@@ -11,22 +11,17 @@ import {
   Controller,
   FieldErrorsImpl,
   RegisterOptions,
+  FieldValues,
 } from 'react-hook-form';
 import { rulesValidationDictionary } from '@/helpers/rulesValidationDictionary';
 import { capitalize } from '@/helpers/utils';
 import { BaseModel } from '@/models/interfaces/common.interface';
 import { SyntheticEvent } from 'react';
 
-type RSAutocompleteProps<T extends BaseModel> = {
+type RSAutocompleteProps<T extends BaseModel, U extends FieldValues> = {
   className?: string;
   label: string;
-  control?: Control<
-    | {
-        [x: string]: any;
-      }
-    | { selectedStore: string },
-    any
-  >;
+  control?: Control<U | any>;
   helperText?: string;
   name: string;
   rules?: Exclude<
@@ -45,7 +40,7 @@ type RSAutocompleteProps<T extends BaseModel> = {
   ) => void;
 };
 
-export function RSAutocomplete<T extends BaseModel>({
+export function RSAutocomplete<T extends BaseModel, U extends FieldValues>({
   className,
   helperText,
   label,
@@ -55,7 +50,7 @@ export function RSAutocomplete<T extends BaseModel>({
   errors,
   options,
   onInputChange,
-}: RSAutocompleteProps<T>) {
+}: RSAutocompleteProps<T, U>) {
   const getHelperText = () => {
     const message = errors[name]?.message;
 

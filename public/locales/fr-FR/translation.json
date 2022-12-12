@@ -5,7 +5,9 @@
     "Firstname": "Prénom",
     "Lastname": "Nom",
     "SelectedStore": "Magasin",
-    "SearchedProduct": "Code EAN"
+    "SearchedProduct": "Code EAN",
+    "Aisle": "Rayon",
+    "Categories": "Catégories"
   },
   "Dashboard": {
     "Modal": {

@@ -34,7 +34,14 @@ function Home() {
     formState: { errors },
     setValue,
     watch,
-  } = useForm<LoginFormValues>();
+  } = useForm<LoginFormValues>({
+    defaultValues: {
+      firstname: '',
+      lastname: '',
+      email: '',
+      password: '',
+    },
+  });
   const { toast } = useToastContext();
   const { setAccessToken } = useAccessToken();
   const { user, setUser } = useUserContext();

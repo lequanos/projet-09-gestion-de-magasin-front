@@ -17,6 +17,10 @@ import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { SelectStoreResponse } from '@/services/auth/interfaces/authResponse.interface';
 import { StoreDto } from '@/models/store';
 
+export type SelectStoreFormValues = {
+  selectedStore: number;
+};
+
 function DashboardModal() {
   // Hooks
   const { user, setUser } = useUserContext();
@@ -28,7 +32,11 @@ function DashboardModal() {
     control,
     formState: { errors },
     watch,
-  } = useForm();
+  } = useForm<SelectStoreFormValues>({
+    defaultValues: {
+      selectedStore: 0,
+    },
+  });
 
   const { selectedStore } = watch();
 

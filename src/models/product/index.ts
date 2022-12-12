@@ -14,6 +14,7 @@ export type ProductDto = BaseModel & {
   inStock?: number;
   sales?: number;
   brand?: BrandDto;
+  productSuppliers: ProductSupplierDto[];
 };
 
 export enum ProductNutriScore {
@@ -33,3 +34,8 @@ export enum ProductEcoScore {
   E = 'E',
   'NOT-APPLICABLE' = 'NOT-APPLICABLE',
 }
+
+export type ProductSupplierDto = {
+  supplier: number;
+  purchasePrice: number;
+};

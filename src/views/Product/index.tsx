@@ -21,7 +21,7 @@ function Product() {
   const [open, setOpen] = useState(false);
 
   // Queries
-  const { isLoading } = useGetAllQuery<ProductDto[]>(
+  const { isFetching } = useGetAllQuery<ProductDto[]>(
     'product',
     accessToken,
     {
@@ -77,7 +77,7 @@ function Product() {
             <DataGrid
               rows={tableData}
               columns={getColumns(tableData, 'product')}
-              loading={isLoading}
+              loading={isFetching}
               disableSelectionOnClick
               autoPageSize
             />

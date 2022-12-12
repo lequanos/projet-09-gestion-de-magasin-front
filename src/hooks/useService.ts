@@ -18,6 +18,7 @@ import { StoreService } from '@/services/store/StoreService';
 import { DashboardService } from '@/services/dashboard/DashboardService';
 import { GetDashboardInfosResponse } from '@/services/dashboard/interfaces/dashboardResponse.interface';
 import { ProductService } from '@/services/product/ProductService';
+import { SupplierService } from '@/services/supplier/SupplierService';
 import { AisleService } from '@/services/aisle/AisleService';
 import { ProductDto } from '@/models/product';
 import { StoreDto } from '@/models/store';
@@ -29,6 +30,7 @@ const serviceDictionary = {
   mail: () => new MailService(),
   product: (accessToken?: string) => new ProductService(accessToken),
   store: (accessToken?: string) => new StoreService(accessToken),
+  supplier: (accessToken?: string) => new SupplierService(accessToken),
 };
 
 export type EntityList = keyof typeof serviceDictionary;

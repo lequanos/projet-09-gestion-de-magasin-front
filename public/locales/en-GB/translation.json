@@ -5,7 +5,9 @@
     "Firstname": "Firstname",
     "Lastname": "Lastname",
     "SelectedStore": "Store",
-    "SearchedProduct": "EAN Code"
+    "SearchedProduct": "EAN Code",
+    "Aisle": "Aisle",
+    "Categories": "Categories"
   },
     "Dashboard": {
       "Modal": {

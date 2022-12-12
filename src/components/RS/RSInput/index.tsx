@@ -17,7 +17,7 @@ type RSInputProps<T extends FieldValues> = {
   className?: string;
   control?: Control<T, any>;
   errors: Partial<FieldErrorsImpl<T>>;
-  endIcon?: 'search';
+  endIcon?: 'search' | 'monetary';
   helperText?: string;
   id?: string;
   inputProps?: { [key: string]: any };
@@ -107,6 +107,13 @@ export function RSInput<T extends FieldValues>({
             </IconButton>
           </InputAdornment>
         ),
+      };
+    }
+
+    if (endIcon === 'monetary') {
+      inputPropsToReturn = {
+        ...inputProps,
+        endAdornment: <InputAdornment position="end">€</InputAdornment>,
       };
     }
 

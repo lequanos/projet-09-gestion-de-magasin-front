@@ -1,19 +1,34 @@
-import { Typography, Card, CardMedia, CardContent, Box } from '@mui/material';
+import {
+  Typography,
+  Card,
+  CardMedia,
+  CardContent,
+  Box,
+  SelectChangeEvent,
+  CircularProgress,
+  Fab,
+} from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 
 import { RSForm, RSInput, RSSelect } from '@/components/RS';
 import { useAccessToken, useGetAllQuery, useToastContext } from '@/hooks';
-import { ProductDto } from '@/models/product';
+import { ProductDto, ProductSupplierDto } from '@/models/product';
 import { AisleDto } from '@/models/aisle';
 import { IErrorResponse } from '@/services/api/interfaces';
+import { DataGrid } from '@mui/x-data-grid';
+import SelectSupplierEditCell from './SelectSupplierEditCell';
+import { Add } from '@mui/icons-material';
+import { SupplierDto } from '@/models/supplier';
 
 type ProductModalContentProps = {
   activeStep: number;
   notFound: boolean;
   searchedProduct: string;
   product?: ProductDto;
+  isFetching: boolean;
 };
 
 export type AddProductFormValues = {
@@ -26,6 +41,7 @@ export type AddProductFormValues = {
   ingredients: string;
   aisle: number;
   categories: number[];
+  productSuppliers: ProductSupplierDto[];
 };
 
 function ProductModalContent({
@@ -33,6 +49,7 @@ function ProductModalContent({
   notFound,
   searchedProduct,
   product,
+  isFetching,
 }: ProductModalContentProps) {
   // Hooks
   const { t } = useTranslation('translation');
@@ -55,12 +72,14 @@ function ProductModalContent({
       ingredients: '',
       aisle: 0,
       categories: [],
+      productSuppliers: [],
     },
   });
-  const { aisle } = watch();
+  const { aisle, productSuppliers } = watch();
 
   // States
   const [aisles, setAisles] = useState<AisleDto[]>([]);
+  const [suppliers, setSuppliers] = useState<SupplierDto[]>([]);
 
   // Queries
   useGetAllQuery<AisleDto[]>(
@@ -93,12 +112,55 @@ function ProductModalContent({
     },
   );
 
+  useGetAllQuery<SupplierDto[]>(
+    'supplier',
+    accessToken,
+    {},
+    true,
+    (response) => {
+      const { ok, data, status } = response;
+
+      if ([401, 403].includes(status)) {
+        throw new Response('', { status });
+      }
+
+      if (!ok) {
+        const error = response as IErrorResponse<SupplierDto[]>;
+        toast[error.formatted.type](
+          error.formatted.errorDefault,
+          error.formatted.title,
+        );
+        return;
+      }
+
+      if (data) setSuppliers(data);
+    },
+  );
+
   // Methods
   /**
    * Post product to backend API
    */
   const handleAddProduct = () => {
     console.log(aisle);
+  };
+
+  /**
+   * Change aisle and reset categories
+   */
+  const handleAisleChange = (e: SelectChangeEvent<any>) => {
+    setValue('aisle', e.target.value);
+    setValue('categories', []);
+  };
+
+  /**
+   * Add productSuppliers
+   */
+  const handleAddProductSuppliers = () => {
+    setValue('productSuppliers', [
+      ...productSuppliers,
+      { supplier: 1, purchasePrice: 0 },
+    ]);
   };
 
   // useEffect
@@ -108,10 +170,12 @@ function ProductModalContent({
     setValue('code', product?.code || '');
     setValue('unitPackaging', product?.unitPackaging || '');
     setValue('ingredients', product?.ingredients || '');
+    setValue('productSuppliers', product?.productSuppliers || []);
   }, [product]);
 
   return (
     <>
+      {isFetching && <CircularProgress />}
       {activeStep === 0 && notFound && (
         <Typography color="error">
           {t('Product.Modal.NotFoundProduct', { searchedProduct })}
@@ -181,11 +245,14 @@ function ProductModalContent({
             </div>
             <div className="product--modal-add-input">
               <RSInput
+                className="product--modal-add-number"
                 label={t('Product.Modal.AddProduct.Price')}
                 name="price"
                 control={control}
                 errors={errors}
                 size="small"
+                endIcon="monetary"
+                type="number"
               />
               <RSInput
                 label={t('Product.Modal.AddProduct.Threshold')}
@@ -193,6 +260,7 @@ function ProductModalContent({
                 control={control}
                 errors={errors}
                 size="small"
+                type="number"
               />
             </div>
             <RSInput
@@ -209,18 +277,19 @@ function ProductModalContent({
               <RSSelect
                 className="product--modal-add-select"
                 id="aisle"
-                label={t('Product.Modal.AddProduct.Aisle')}
+                label={'Product.Modal.AddProduct.Aisle'}
                 labelId="aisleLabel"
                 name="aisle"
                 errors={errors}
                 control={control}
                 items={aisles}
                 size="small"
+                onChange={handleAisleChange}
               />
               <RSSelect
                 className="product--modal-add-select"
                 id="categories"
-                label={t('Product.Modal.AddProduct.Categories')}
+                label={'Product.Modal.AddProduct.Categories'}
                 labelId="categoriesLabel"
                 name="categories"
                 errors={errors}
@@ -231,6 +300,50 @@ function ProductModalContent({
                 multiple
                 size="small"
               />
+            </div>
+            <div className="product--modal-add-productSuppliers">
+              <DataGrid
+                className="product--modal-add-datagrid"
+                rows={productSuppliers.map((ps) => ({
+                  ...ps,
+                  id: uuidv4(),
+                }))}
+                columns={[
+                  {
+                    field: 'supplier',
+                    headerName: 'Fournisseurs',
+                    flex: 1,
+                    renderEditCell: (params) => (
+                      <SelectSupplierEditCell
+                        {...params}
+                        suppliers={suppliers.filter(
+                          (supplier) =>
+                            !productSuppliers.find(
+                              (ps) => ps.supplier === supplier.id,
+                            ),
+                        )}
+                      />
+                    ),
+                    editable: true,
+                  },
+                  {
+                    field: 'purchasePrice',
+                    headerName: 'purchasing price',
+                    flex: 1,
+                    editable: true,
+                  },
+                ]}
+                density="compact"
+                hideFooter
+                experimentalFeatures={{ newEditingApi: true }}
+              />
+              <Fab
+                className="product--modal-add-productSuppliers-btn"
+                size="small"
+                color="primary"
+              >
+                <Add onClick={handleAddProductSuppliers} />
+              </Fab>
             </div>
           </RSForm>
         </Box>

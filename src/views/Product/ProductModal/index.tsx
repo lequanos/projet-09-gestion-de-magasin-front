@@ -39,7 +39,11 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
     formState: { errors },
     setValue,
     watch,
-  } = useForm<SearchProductFormValues>();
+  } = useForm<SearchProductFormValues>({
+    defaultValues: {
+      searchedProduct: '',
+    },
+  });
   const { searchedProduct } = watch();
 
   // States
@@ -49,7 +53,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
   const [product, setProduct] = useState<ProductDto>();
 
   // Queries
-  useSearchProduct(
+  const { isFetching } = useSearchProduct(
     searchedProduct,
     enableSearchProduct,
     accessToken,
@@ -169,6 +173,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
                   notFound={notFound}
                   searchedProduct={searchedProduct}
                   product={product}
+                  isFetching={isFetching}
                 />
               </Box>
             </Box>

@@ -73,11 +73,18 @@ export function RSSelect<T extends BaseModel, U extends FieldValues>({
     return t(message as string, { name: t(`Common.${capitalize(name)}`) });
   };
 
+  /**
+   * Render method for single select
+   */
   const onRenderValue = (selected: PathValue<U, Path<U>>) =>
-    items.find((item) => item.id === (selected as number)).name;
+    items.find((item) => item.id === (selected as number))?.name;
+
+  /**
+   * Render method for multiple select
+   */
   const onMultipleRenderValue = (selected: PathValue<U, Path<U>>) =>
     selected
-      .map((select) => items.find((item) => item.id === select).name)
+      .map((select: number) => items.find((item) => item.id === select)?.name)
       .join(', ');
   return (
     <>
@@ -110,9 +117,7 @@ export function RSSelect<T extends BaseModel, U extends FieldValues>({
                 <MenuItem key={item.id} value={item.id}>
                   {multiple ? (
                     <>
-                      <Checkbox
-                        checked={field.value?.indexOf(item.name) > -1}
-                      />
+                      <Checkbox checked={field.value?.indexOf(item.id) > -1} />
                       <ListItemText primary={item.name} />
                     </>
                   ) : (
