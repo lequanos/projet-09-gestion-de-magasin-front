@@ -24,6 +24,7 @@ function SelectSupplierEditCell(
       field,
       value: event.target.value,
     });
+    console.log(id, field, event.target.value);
     apiRef.current.stopCellEditMode({ id, field });
   };
 
@@ -35,9 +36,12 @@ function SelectSupplierEditCell(
       id={`${id}`}
       label="fournisseurs"
       labelId="fournisseurs"
+      sx={{ width: '100%' }}
     >
       {suppliers.map((supplier) => (
-        <MenuItem value={supplier.id}>{supplier.name}</MenuItem>
+        <MenuItem key={supplier.id} value={supplier.id}>
+          {supplier.name}
+        </MenuItem>
       ))}
     </Select>
   );

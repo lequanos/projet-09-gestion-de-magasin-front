@@ -11,6 +11,14 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridColumns,
+  GridRowParams,
+  ValueOptions,
+} from '@mui/x-data-grid';
+import { Add, Delete } from '@mui/icons-material';
 import { v4 as uuidv4 } from 'uuid';
 
 import { RSForm, RSInput, RSSelect } from '@/components/RS';
@@ -18,9 +26,7 @@ import { useAccessToken, useGetAllQuery, useToastContext } from '@/hooks';
 import { ProductDto, ProductSupplierDto } from '@/models/product';
 import { AisleDto } from '@/models/aisle';
 import { IErrorResponse } from '@/services/api/interfaces';
-import { DataGrid } from '@mui/x-data-grid';
 import SelectSupplierEditCell from './SelectSupplierEditCell';
-import { Add } from '@mui/icons-material';
 import { SupplierDto } from '@/models/supplier';
 
 type ProductModalContentProps = {
@@ -41,7 +47,7 @@ export type AddProductFormValues = {
   ingredients: string;
   aisle: number;
   categories: number[];
-  productSuppliers: ProductSupplierDto[];
+  productSuppliers: (ProductSupplierDto & { id?: string })[];
 };
 
 function ProductModalContent({
@@ -80,6 +86,52 @@ function ProductModalContent({
   // States
   const [aisles, setAisles] = useState<AisleDto[]>([]);
   const [suppliers, setSuppliers] = useState<SupplierDto[]>([]);
+
+  // Data
+  const columns: GridColumns<ProductSupplierDto> = [
+    {
+      field: 'supplier',
+      headerName: 'Fournisseurs',
+      flex: 1,
+      renderCell: (params) => (
+        <div>
+          {
+            suppliers.find((supplier) => supplier.id === params.row.supplier)
+              ?.name
+          }
+        </div>
+      ),
+      renderEditCell: (params) => (
+        <SelectSupplierEditCell
+          {...params}
+          suppliers={suppliers.filter(
+            (supplier) =>
+              !productSuppliers.find((ps) => ps.supplier === supplier.id) ||
+              supplier.id === params.row.supplier,
+          )}
+        />
+      ),
+      editable: true,
+    },
+    {
+      field: 'purchasePrice',
+      headerName: 'purchasing price',
+      flex: 1,
+      editable: true,
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      getActions: (params: GridRowParams) => [
+        <GridActionsCellItem
+          icon={<Delete />}
+          onClick={() => console.log(params)}
+          label="Delete"
+        />,
+      ],
+    },
+  ];
 
   // Queries
   useGetAllQuery<AisleDto[]>(
@@ -157,10 +209,20 @@ function ProductModalContent({
    * Add productSuppliers
    */
   const handleAddProductSuppliers = () => {
-    setValue('productSuppliers', [
-      ...productSuppliers,
-      { supplier: 1, purchasePrice: 0 },
-    ]);
+    const foundSuppliers = suppliers.filter(
+      (supplier) => !productSuppliers.find((ps) => ps.supplier === supplier.id),
+    );
+
+    if (foundSuppliers.length) {
+      setValue('productSuppliers', [
+        ...productSuppliers,
+        {
+          id: uuidv4(),
+          supplier: foundSuppliers[0].id,
+          purchasePrice: 0,
+        },
+      ]);
+    } else toast.warning('No more supplier');
   };
 
   // useEffect
@@ -304,35 +366,8 @@ function ProductModalContent({
             <div className="product--modal-add-productSuppliers">
               <DataGrid
                 className="product--modal-add-datagrid"
-                rows={productSuppliers.map((ps) => ({
-                  ...ps,
-                  id: uuidv4(),
-                }))}
-                columns={[
-                  {
-                    field: 'supplier',
-                    headerName: 'Fournisseurs',
-                    flex: 1,
-                    renderEditCell: (params) => (
-                      <SelectSupplierEditCell
-                        {...params}
-                        suppliers={suppliers.filter(
-                          (supplier) =>
-                            !productSuppliers.find(
-                              (ps) => ps.supplier === supplier.id,
-                            ),
-                        )}
-                      />
-                    ),
-                    editable: true,
-                  },
-                  {
-                    field: 'purchasePrice',
-                    headerName: 'purchasing price',
-                    flex: 1,
-                    editable: true,
-                  },
-                ]}
+                rows={productSuppliers}
+                columns={columns}
                 density="compact"
                 hideFooter
                 experimentalFeatures={{ newEditingApi: true }}
