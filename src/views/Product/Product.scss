@@ -106,18 +106,31 @@
       }
 
       &-productSuppliers {
-        height: 30%;
-        width: 80%;
+        margin-top: calc($gutter / 2);
         display: flex;
-        justify-content: space-between;
-        margin-top: 1rem;
-        position: relative;
+        flex-direction: column;
+        width: 80%;
+        height: 30%;
 
-        &-btn.MuiFab-circular{
-          position: absolute;
-          right: calc($gutter / 2);
-          bottom: calc($gutter / 2);
+        &-title {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          & > button {
+            border-radius: 9999px;
+            margin-top: 0;
+            font-size: 0.7rem;
+          }
         }
+
+        &-data {
+          height: 100%;
+          width: 100%;
+          margin-top: 1rem;
+          position: relative;
+        }
+
       }
 
       &-datagrid {

@@ -24,7 +24,7 @@ function SelectSupplierEditCell(
       field,
       value: event.target.value,
     });
-    console.log(id, field, event.target.value);
+
     apiRef.current.stopCellEditMode({ id, field });
   };
 

@@ -39,3 +39,5 @@ export type ProductSupplierDto = {
   supplier: number;
   purchasePrice: number;
 };
+
+export type ExtendedProductSupplierDto = ProductSupplierDto & { id?: string };

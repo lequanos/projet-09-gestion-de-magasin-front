@@ -21,6 +21,7 @@ type RSButtonProps = {
   disableRipple?: boolean;
   startIcon?: 'add';
   permissions?: Permission[];
+  size?: 'small' | 'medium' | 'large';
   sx?: SxProps<Theme>;
   type?: 'button' | 'submit' | 'reset';
   variant?: 'contained' | 'text' | 'outlined';
@@ -35,6 +36,7 @@ export function RSButton({
   disableRipple = true,
   startIcon,
   permissions,
+  size = 'medium',
   sx,
   type = 'button',
   variant = 'contained',
@@ -117,6 +119,7 @@ export function RSButton({
         <Button
           startIcon={getStartIcon()}
           variant={variant}
+          size={size}
           sx={getSxProps()}
           onClick={onClick}
           className={className}

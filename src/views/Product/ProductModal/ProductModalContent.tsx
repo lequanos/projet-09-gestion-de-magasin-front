@@ -16,14 +16,17 @@ import {
   GridActionsCellItem,
   GridColumns,
   GridRowParams,
-  ValueOptions,
 } from '@mui/x-data-grid';
-import { Add, Delete } from '@mui/icons-material';
+import { Delete } from '@mui/icons-material';
 import { v4 as uuidv4 } from 'uuid';
 
-import { RSForm, RSInput, RSSelect } from '@/components/RS';
+import { RSButton, RSForm, RSInput, RSSelect } from '@/components/RS';
 import { useAccessToken, useGetAllQuery, useToastContext } from '@/hooks';
-import { ProductDto, ProductSupplierDto } from '@/models/product';
+import {
+  ExtendedProductSupplierDto,
+  ProductDto,
+  ProductSupplierDto,
+} from '@/models/product';
 import { AisleDto } from '@/models/aisle';
 import { IErrorResponse } from '@/services/api/interfaces';
 import SelectSupplierEditCell from './SelectSupplierEditCell';
@@ -47,7 +50,7 @@ export type AddProductFormValues = {
   ingredients: string;
   aisle: number;
   categories: number[];
-  productSuppliers: (ProductSupplierDto & { id?: string })[];
+  productSuppliers: ExtendedProductSupplierDto[];
 };
 
 function ProductModalContent({
@@ -128,6 +131,9 @@ function ProductModalContent({
           icon={<Delete />}
           onClick={() => console.log(params)}
           label="Delete"
+          showInMenu={false}
+          onResize={undefined}
+          onResizeCapture={undefined}
         />,
       ],
     },
@@ -223,6 +229,18 @@ function ProductModalContent({
         },
       ]);
     } else toast.warning('No more supplier');
+  };
+
+  const handleRowUpdate = (newRow: ExtendedProductSupplierDto) => {
+    const updatedRow = productSuppliers.find((ps) => ps.id === newRow.id);
+
+    if (updatedRow) {
+      updatedRow.purchasePrice = newRow.purchasePrice;
+      updatedRow.supplier = newRow.supplier;
+    }
+
+    setValue('productSuppliers', [...productSuppliers]);
+    return newRow;
   };
 
   // useEffect
@@ -364,21 +382,29 @@ function ProductModalContent({
               />
             </div>
             <div className="product--modal-add-productSuppliers">
-              <DataGrid
-                className="product--modal-add-datagrid"
-                rows={productSuppliers}
-                columns={columns}
-                density="compact"
-                hideFooter
-                experimentalFeatures={{ newEditingApi: true }}
-              />
-              <Fab
-                className="product--modal-add-productSuppliers-btn"
-                size="small"
-                color="primary"
-              >
-                <Add onClick={handleAddProductSuppliers} />
-              </Fab>
+              <div className="product--modal-add-productSuppliers-title">
+                <Typography variant="subtitle2">Fournisseurs</Typography>
+                <RSButton
+                  variant="outlined"
+                  startIcon="add"
+                  size="small"
+                  onClick={handleAddProductSuppliers}
+                >
+                  Ajouter
+                </RSButton>
+              </div>
+              <div className="product--modal-add-productSuppliers-data">
+                <DataGrid
+                  className="product--modal-add-datagrid"
+                  rows={productSuppliers}
+                  columns={columns}
+                  density="compact"
+                  hideFooter
+                  experimentalFeatures={{ newEditingApi: true }}
+                  processRowUpdate={handleRowUpdate}
+                  onProcessRowUpdateError={(error) => console.log(error)}
+                />
+              </div>
             </div>
           </RSForm>
         </Box>
