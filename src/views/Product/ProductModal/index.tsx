@@ -9,14 +9,21 @@ import {
 } from '@mui/material';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { SyntheticEvent } from 'react';
 
 import '../Product.scss';
-import { useAccessToken, useToastContext, useSearchProduct } from '@/hooks';
+import {
+  useAccessToken,
+  useToastContext,
+  useSearchProduct,
+  useCreateMutation,
+} from '@/hooks';
 import { RSButton, RSInput, RSForm } from '@/components/RS';
 import { IErrorResponse } from '@/services/api/interfaces';
-import ProductModalContent from './ProductModalContent';
+import ProductModalContent, {
+  AddProductFormValues,
+} from './ProductModalContent';
 import { ProductDto } from '@/models/product';
 
 type ProductModalProps = {
@@ -44,7 +51,22 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
       searchedProduct: '',
     },
   });
+  const addProductFormMethods = useForm<AddProductFormValues>({
+    defaultValues: {
+      brand: '',
+      name: '',
+      code: '',
+      unitPackaging: '',
+      price: 0,
+      threshold: 0,
+      ingredients: '',
+      aisle: 0,
+      categories: [],
+      productSuppliers: [],
+    },
+  });
   const { searchedProduct } = watch();
+  const addProductPayload = addProductFormMethods.watch();
 
   // States
   const [activeStep, setActiveStep] = useState(0);
@@ -82,6 +104,26 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
     },
   );
 
+  const addProductMutation = useCreateMutation<ProductDto>(
+    {
+      toCreate: {
+        body: {
+          ...addProductPayload,
+          price: Number(addProductPayload.price),
+          threshold: Number(addProductPayload.threshold),
+          ecoScore: product?.ecoScore,
+          nutriScore: product?.nutriScore,
+          productSuppliers: addProductPayload.productSuppliers.map((ps) => ({
+            supplier: ps.supplier,
+            purchasePrice: ps.purchasePrice,
+          })),
+        },
+      },
+    },
+    'product',
+    accessToken,
+  );
+
   // Data
   const steps = [t('Product.Modal.Step1'), t('Product.Modal.Step2')];
 
@@ -108,6 +150,9 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
     if (activeStep < 1) {
       return setActiveStep((prev) => prev + 1);
     }
+    if (activeStep === 1) {
+      addProductFormMethods.handleSubmit(handleAddProduct)();
+    }
   };
 
   /**
@@ -125,6 +170,24 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
   const handleInputChange = (e: SyntheticEvent) => {
     setNotFound(false);
     setValue('searchedProduct', (e.target as HTMLInputElement).value);
+  };
+
+  const handleAddProduct = () => {
+    addProductMutation.mutate(undefined, {
+      onSuccess: (response) => {
+        const { ok } = response;
+        if (!ok) {
+          const addProductError = response as IErrorResponse<ProductDto>;
+          toast[addProductError.formatted.type](
+            addProductError.formatted.errorDefault,
+            addProductError.formatted.title,
+          );
+          return;
+        }
+        toast.success('Product.Modal.AddProduct.Success');
+        addProductFormMethods.reset();
+      },
+    });
   };
 
   return (
@@ -168,13 +231,15 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
                 </RSForm>
               )}
               <Box className="product--modal-content">
-                <ProductModalContent
-                  activeStep={activeStep}
-                  notFound={notFound}
-                  searchedProduct={searchedProduct}
-                  product={product}
-                  isFetching={isFetching}
-                />
+                <FormProvider {...addProductFormMethods}>
+                  <ProductModalContent
+                    activeStep={activeStep}
+                    notFound={notFound}
+                    searchedProduct={searchedProduct}
+                    product={product}
+                    isFetching={isFetching}
+                  />
+                </FormProvider>
               </Box>
             </Box>
             <div className="product--modal-footer">
@@ -189,7 +254,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
                 onClick={handleNext}
               >
                 {activeStep === steps.length - 1
-                  ? t('Product.Modal.Add')
+                  ? t('Product.Modal.Save')
                   : t('Product.Modal.Next')}
               </RSButton>
             </div>

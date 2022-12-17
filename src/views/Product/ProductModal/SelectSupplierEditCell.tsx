@@ -1,5 +1,6 @@
 import { SelectChangeEvent, Select, MenuItem } from '@mui/material';
 import { GridRenderCellParams, useGridApiContext } from '@mui/x-data-grid';
+import { useTranslation } from 'react-i18next';
 
 import { SupplierDto } from '@/models/supplier';
 
@@ -13,6 +14,7 @@ function SelectSupplierEditCell(
   // Hooks
   const { id, value, field, suppliers } = props;
   const apiRef = useGridApiContext();
+  const { t } = useTranslation('translation');
 
   // Methods
   /**
@@ -33,9 +35,9 @@ function SelectSupplierEditCell(
       size="small"
       onChange={handleChange}
       value={value}
-      id={`${id}`}
-      label="fournisseurs"
-      labelId="fournisseurs"
+      id={id as string}
+      label={t('Product.Modal.AddProduct.Name')}
+      labelId={t('Product.Modal.AddProduct.Name')}
       sx={{ width: '100%' }}
     >
       {suppliers.map((supplier) => (

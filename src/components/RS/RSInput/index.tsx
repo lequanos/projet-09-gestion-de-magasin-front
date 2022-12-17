@@ -17,7 +17,7 @@ type RSInputProps<T extends FieldValues> = {
   className?: string;
   control?: Control<T, any>;
   errors: Partial<FieldErrorsImpl<T>>;
-  endIcon?: 'search' | 'monetary';
+  endIcon?: 'search';
   helperText?: string;
   id?: string;
   inputProps?: { [key: string]: any };
@@ -32,6 +32,7 @@ type RSInputProps<T extends FieldValues> = {
   >;
   variant?: 'standard' | 'filled' | 'outlined';
   size?: 'small' | 'medium';
+  startIcon?: 'monetary';
   type?: 'text' | 'email' | 'password' | 'number';
 };
 
@@ -51,6 +52,7 @@ export function RSInput<T extends FieldValues>({
   rules,
   variant = 'filled',
   size = 'medium',
+  startIcon,
   type = 'text',
 }: RSInputProps<T>) {
   // Hooks
@@ -63,6 +65,13 @@ export function RSInput<T extends FieldValues>({
     if (!message || !errors[name]) {
       return helperText;
     }
+
+    if (['threshold', 'price'].includes(name)) {
+      return t(message as string, {
+        [name]: inputProps?.min,
+      });
+    }
+
     return t(message as string, { name: t(`Common.${capitalize(name)}`) });
   };
 
@@ -77,11 +86,13 @@ export function RSInput<T extends FieldValues>({
   };
 
   const getInputProps = () => {
-    let inputPropsToReturn = inputProps || {};
+    let inputPropsToReturn: { inputProps?: { [key: string]: any } } & {
+      [key: string]: any;
+    } = inputProps ? { inputProps } : {};
 
     if (type === 'password') {
       inputPropsToReturn = {
-        ...inputProps,
+        inputProps,
         endAdornment: (
           <InputAdornment position="end">
             <IconButton
@@ -99,7 +110,7 @@ export function RSInput<T extends FieldValues>({
 
     if (endIcon === 'search') {
       inputPropsToReturn = {
-        ...inputProps,
+        inputProps,
         endAdornment: (
           <InputAdornment position="end">
             <IconButton edge="end">
@@ -110,16 +121,16 @@ export function RSInput<T extends FieldValues>({
       };
     }
 
-    if (endIcon === 'monetary') {
+    if (startIcon === 'monetary') {
       inputPropsToReturn = {
-        ...inputProps,
-        endAdornment: <InputAdornment position="end">€</InputAdornment>,
+        inputProps,
+        startAdornment: <InputAdornment position="start">€</InputAdornment>,
       };
     }
 
     if (readOnly) {
       inputPropsToReturn = {
-        ...inputProps,
+        inputProps,
         readOnly,
       };
     }

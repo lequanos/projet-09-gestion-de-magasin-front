@@ -1,3 +1,5 @@
+import { CategoryDto } from '@/models/category';
+import { ProductSupplierDto } from '@/models/product';
 import { RegisterOptions } from 'react-hook-form';
 
 export const rulesValidationDictionary: {
@@ -31,6 +33,61 @@ export const rulesValidationDictionary: {
     pattern: {
       value: /^[0-9]{13}$/i,
       message: 'Error.Format_EAN',
+    },
+  },
+  name: {
+    required: 'Error.Required_Input',
+  },
+  brand: {
+    required: 'Error.Required_Input',
+  },
+  code: {
+    required: 'Error.Required_Input',
+  },
+  unitPackaging: {
+    required: 'Error.Required_Input',
+  },
+  price: {
+    required: 'Error.Required_Input',
+    min: {
+      value: 0,
+      message: 'Error.Min_Price',
+    },
+  },
+  threshold: {
+    required: 'Error.Required_Input',
+    min: {
+      value: 0,
+      message: 'Error.Threshold',
+    },
+  },
+  ingredients: {
+    required: 'Error.Required_Input',
+  },
+  aisle: {
+    required: 'Error.Required_Input',
+  },
+  categories: {
+    validate: {
+      notEmpty: (v: CategoryDto[]) => !!v.length || 'Error.Required_Input',
+      sameAisle: (v: CategoryDto[]) =>
+        v.every((current, index) => {
+          if (index) {
+            return current.aisle === v[index - 1]?.aisle;
+          }
+          return true;
+        }) || 'Error.Same_Aisle',
+    },
+  },
+  productSuppliers: {
+    validate: {
+      notEmpty: (v: ProductSupplierDto[]) =>
+        !!v.length || 'Error.Required_Input',
+      notEmptySupplier: (v: ProductSupplierDto[]) =>
+        v.every((current) => current.supplier) || 'Error.Empty_Supplier',
+      notEmptyPurchasePrice: (v: ProductSupplierDto[]) =>
+        v.every((current) => current.purchasePrice) ||
+        'Error.Empty_PurchasePrice',
     },
   },
 };

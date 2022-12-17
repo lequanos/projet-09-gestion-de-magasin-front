@@ -6,11 +6,10 @@ import {
   Box,
   SelectChangeEvent,
   CircularProgress,
-  Fab,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import {
   DataGrid,
   GridActionsCellItem,
@@ -65,25 +64,11 @@ function ProductModalContent({
   const { toast } = useToastContext();
   const { accessToken } = useAccessToken();
   const {
-    handleSubmit,
     control,
     formState: { errors },
     setValue,
     watch,
-  } = useForm<AddProductFormValues>({
-    defaultValues: {
-      brand: '',
-      name: '',
-      code: '',
-      unitPackaging: '',
-      price: 0,
-      threshold: 0,
-      ingredients: '',
-      aisle: 0,
-      categories: [],
-      productSuppliers: [],
-    },
-  });
+  } = useFormContext<AddProductFormValues>();
   const { aisle, productSuppliers } = watch();
 
   // States
@@ -94,7 +79,7 @@ function ProductModalContent({
   const columns: GridColumns<ProductSupplierDto> = [
     {
       field: 'supplier',
-      headerName: 'Fournisseurs',
+      headerName: t('Product.Modal.AddProduct.Name'),
       flex: 1,
       renderCell: (params) => (
         <div>
@@ -117,19 +102,23 @@ function ProductModalContent({
       editable: true,
     },
     {
+      type: 'number',
       field: 'purchasePrice',
-      headerName: 'purchasing price',
+      headerName: t('Product.Modal.AddProduct.PurchasePrice'),
       flex: 1,
       editable: true,
+      valueParser(value) {
+        return Number(value);
+      },
     },
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: t('Product.Modal.AddProduct.Actions'),
       getActions: (params: GridRowParams) => [
         <GridActionsCellItem
           icon={<Delete />}
-          onClick={() => console.log(params)}
+          onClick={() => handleDeleteSupplier(params)}
           label="Delete"
           showInMenu={false}
           onResize={undefined}
@@ -165,7 +154,7 @@ function ProductModalContent({
 
       if (data) {
         setAisles(data.filter((aisle) => aisle.name !== 'All'));
-        setValue('aisle', data[0].id);
+        setValue('aisle', data[0].id || 1);
       }
     },
   );
@@ -197,13 +186,6 @@ function ProductModalContent({
 
   // Methods
   /**
-   * Post product to backend API
-   */
-  const handleAddProduct = () => {
-    console.log(aisle);
-  };
-
-  /**
    * Change aisle and reset categories
    */
   const handleAisleChange = (e: SelectChangeEvent<any>) => {
@@ -231,6 +213,9 @@ function ProductModalContent({
     } else toast.warning('No more supplier');
   };
 
+  /**
+   * Update productSuppliers value when model of the data gris is updated
+   */
   const handleRowUpdate = (newRow: ExtendedProductSupplierDto) => {
     const updatedRow = productSuppliers.find((ps) => ps.id === newRow.id);
 
@@ -243,9 +228,25 @@ function ProductModalContent({
     return newRow;
   };
 
+  /**
+   * Delete one supplier from productSuppliers
+   */
+  const handleDeleteSupplier = (params: GridRowParams) => {
+    const updatedProductSuppliers = productSuppliers.filter(
+      (ps) => ps.id !== params.id,
+    );
+
+    setValue('productSuppliers', [...updatedProductSuppliers]);
+  };
+
   // useEffect
   useEffect(() => {
-    setValue('brand', product?.brand?.name || '');
+    setValue(
+      'brand',
+      typeof product?.brand === 'string'
+        ? product?.brand
+        : product?.brand?.name || '',
+    );
     setValue('name', product?.name || '');
     setValue('code', product?.code || '');
     setValue('unitPackaging', product?.unitPackaging || '');
@@ -269,7 +270,9 @@ function ProductModalContent({
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {product.brand?.name}
+              {typeof product?.brand === 'string'
+                ? product?.brand
+                : product?.brand?.name}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
               {product.name}
@@ -281,12 +284,9 @@ function ProductModalContent({
         <Box className="product--modal-add">
           <Box
             className="product--modal-add-picture"
-            sx={{ backgroundImage: `url(${product?.pictureUrl}) ` }}
+            sx={{ backgroundImage: `url(${product?.pictureUrl})` }}
           />
-          <RSForm
-            className="product--modal-add-form"
-            onSubmit={handleSubmit(handleAddProduct)}
-          >
+          <RSForm className="product--modal-add-form">
             <RSInput
               className="product--modal-add-input"
               label={t('Product.Modal.AddProduct.Brand')}
@@ -331,8 +331,11 @@ function ProductModalContent({
                 control={control}
                 errors={errors}
                 size="small"
-                endIcon="monetary"
+                startIcon="monetary"
                 type="number"
+                inputProps={{
+                  min: 0,
+                }}
               />
               <RSInput
                 label={t('Product.Modal.AddProduct.Threshold')}
@@ -341,6 +344,9 @@ function ProductModalContent({
                 errors={errors}
                 size="small"
                 type="number"
+                inputProps={{
+                  min: 0,
+                }}
               />
             </div>
             <RSInput
@@ -383,14 +389,16 @@ function ProductModalContent({
             </div>
             <div className="product--modal-add-productSuppliers">
               <div className="product--modal-add-productSuppliers-title">
-                <Typography variant="subtitle2">Fournisseurs</Typography>
+                <Typography variant="subtitle2">
+                  {t('Product.Modal.AddProduct.Suppliers')}
+                </Typography>
                 <RSButton
                   variant="outlined"
                   startIcon="add"
                   size="small"
                   onClick={handleAddProductSuppliers}
                 >
-                  Ajouter
+                  {t('Product.Modal.Add')}
                 </RSButton>
               </div>
               <div className="product--modal-add-productSuppliers-data">

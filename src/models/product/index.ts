@@ -13,7 +13,7 @@ export type ProductDto = BaseModel & {
   ingredients?: string;
   inStock?: number;
   sales?: number;
-  brand?: BrandDto;
+  brand?: BrandDto | string;
   productSuppliers: ProductSupplierDto[];
 };
 

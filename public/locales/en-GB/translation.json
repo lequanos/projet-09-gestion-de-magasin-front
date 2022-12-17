@@ -7,7 +7,15 @@
     "SelectedStore": "Store",
     "SearchedProduct": "EAN Code",
     "Aisle": "Aisle",
-    "Categories": "Categories"
+    "Categories": "Categories",
+    "Code": "EAN Code",
+    "Brand": "Brand",
+    "Name": "Name",
+    "UnitPackaging": "Unit packaging",
+    "Price": "Selling price",
+    "Threshold": "Threshold",
+    "Ingredients": "Ingredients",
+    "ProductSuppliers": "Suppliers"
   },
     "Dashboard": {
       "Modal": {
@@ -46,7 +54,12 @@
     "Required_Input": "{{name}} required",
     "Required_Select": "{{name}} required",
     "Format_Email": "Wrong email format",
-    "Format_EAN": "Wrong EAN code format"
+    "Format_EAN": "Wrong EAN code format",
+    "Min_Price": "Minimum required {{price}}",
+    "Threshold": "Minimum required {{threshold}}",
+    "Same_Aisle": "Please select categories belonging to the same aisle",
+    "Empty_Supplier": "Please select a supplier for every entry",
+    "Empty_PurchasePrice": "Please set a purchasing price for every entry"
   },
   "Header": {
     "Logout": "Logout"
@@ -76,6 +89,7 @@
       "Back": "Back",
       "Next": "Next",
       "Add": "Add",
+      "Save": "Save",
       "Cancel": "Cancel",
       "AddProduct": {
         "Brand": "Brand",
@@ -86,7 +100,11 @@
         "Threshold": "Alert threshold",
         "Ingredients": "Ingredients",
         "Aisle": "Aisle",
-        "Categories": "Categories"
+        "Categories": "Categories",
+        "Suppliers": "Suppliers",
+        "PurchasePrice": "Purchasing price",
+        "Actions": "Actions",
+        "Success": "Product created successfully"
       }
     },
     "Columns": {

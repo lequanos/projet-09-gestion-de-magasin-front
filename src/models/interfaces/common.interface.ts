@@ -1,4 +1,4 @@
 export type BaseModel = {
-  id: number;
-  name: string;
+  id?: number;
+  name?: string;
 };

@@ -7,7 +7,15 @@
     "SelectedStore": "Magasin",
     "SearchedProduct": "Code EAN",
     "Aisle": "Rayon",
-    "Categories": "Catégories"
+    "Categories": "Catégories",
+    "Code": "Code EAN",
+    "Brand": "Marque",
+    "Name": "Nom",
+    "UnitPackaging": "Conditionnement unitaire",
+    "Price": "Prix de vente",
+    "Threshold": "Seuil d'alerte",
+    "Ingredients": "Ingrédients",
+    "ProductSuppliers": "Fournisseurs"
   },
   "Dashboard": {
     "Modal": {
@@ -46,7 +54,12 @@
     "Required_Input": "{{name}} requis",
     "Required_Select": "{{name}} requis",
     "Format_Email": "Format d'email incorrect",
-    "Format_EAN": "Format de code EAN incorrect"
+    "Format_EAN": "Format de code EAN incorrect",
+    "Min_Price": "Minimum requis {{price}}",
+    "Threshold": "Minimum requis {{threshold}}",
+    "Same_Aisle": "Veuillez sélectionner des catégories appartenant au même rayon",
+    "Empty_Supplier": "Veuillez sélectionner un fournisseur pour chaque entrée",
+    "Empty_PurchasePrice": "Veuillez définir un prix d'achat pour chaque entrée"
   },
   "Header": {
     "Logout": "Se déconnecter"
@@ -76,6 +89,7 @@
       "Back": "Retour",
       "Next": "Suivant",
       "Add": "Ajouter",
+      "Save": "Enregistrer",
       "Cancel": "Annuler",
       "AddProduct": {
         "Brand": "Marque",
@@ -86,7 +100,11 @@
         "Threshold": "Seuil d'alerte",
         "Ingredients": "Ingrédients",
         "Aisle": "Rayon",
-        "Categories": "Catégories"
+        "Categories": "Catégories",
+        "Suppliers": "Fournisseurs",
+        "PurchasePrice": "Prix d'achat",
+        "Actions": "Actions",
+        "Success": "Produit créé avec succès"
       }
     },
     "Columns": {
