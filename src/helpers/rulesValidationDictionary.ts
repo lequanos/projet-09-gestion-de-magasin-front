@@ -67,6 +67,9 @@ export const rulesValidationDictionary: {
   aisle: {
     required: 'Error.Required_Input',
   },
+  inStock: {
+    required: 'Error.Required_Input',
+  },
   categories: {
     validate: {
       notEmpty: (v: CategoryDto[]) => !!v.length || 'Error.Required_Input',

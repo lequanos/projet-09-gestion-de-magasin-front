@@ -24,7 +24,11 @@ import { IErrorResponse } from '@/services/api/interfaces';
 import ProductModalContent, {
   AddProductFormValues,
 } from './ProductModalContent';
-import { ProductDto } from '@/models/product';
+import {
+  ProductDto,
+  ProductEcoScore,
+  ProductNutriScore,
+} from '@/models/product';
 
 type ProductModalProps = {
   open: boolean;
@@ -59,6 +63,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
       unitPackaging: '',
       price: 0,
       threshold: 0,
+      inStock: 0,
       ingredients: '',
       aisle: 0,
       categories: [],
@@ -94,7 +99,9 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
       if (!ok) {
         const error = response as IErrorResponse<ProductDto>;
         toast[error.formatted.type](
-          error.formatted.errorDefault,
+          t(error.formatted.errorDefault as string, {
+            name: t(`Common.Product`),
+          }),
           error.formatted.title,
         );
         return;
@@ -111,8 +118,14 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
           ...addProductPayload,
           price: Number(addProductPayload.price),
           threshold: Number(addProductPayload.threshold),
-          ecoScore: product?.ecoScore,
-          nutriScore: product?.nutriScore,
+          ecoScore:
+            product?.ecoScore === 'UNKNOWN'
+              ? ProductEcoScore['NOT-APPLICABLE']
+              : product?.ecoScore,
+          nutriScore:
+            product?.nutriScore === 'UNKNOWN'
+              ? ProductNutriScore['NOT-APPLICABLE']
+              : product?.nutriScore,
           productSuppliers: addProductPayload.productSuppliers.map((ps) => ({
             supplier: ps.supplier,
             purchasePrice: ps.purchasePrice,
@@ -139,18 +152,23 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
    * Go to previous step or close modal
    */
   const handleBack = () => {
-    if (!activeStep) return handleClose();
+    if (!activeStep) {
+      setProduct(undefined);
+      setValue('searchedProduct', '');
+      return handleClose();
+    }
     setActiveStep((prev) => prev - 1);
   };
 
   /**
    * Go to next step
    */
-  const handleNext = () => {
+  const handleNext = async () => {
     if (activeStep < 1) {
       return setActiveStep((prev) => prev + 1);
     }
     if (activeStep === 1) {
+      await addProductFormMethods.trigger('productSuppliers');
       addProductFormMethods.handleSubmit(handleAddProduct)();
     }
   };
@@ -175,17 +193,31 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
   const handleAddProduct = () => {
     addProductMutation.mutate(undefined, {
       onSuccess: (response) => {
-        const { ok } = response;
+        const { ok, status } = response;
+
+        if ([401, 403].includes(status)) {
+          throw new Response('', { status });
+        }
+
         if (!ok) {
           const addProductError = response as IErrorResponse<ProductDto>;
           toast[addProductError.formatted.type](
-            addProductError.formatted.errorDefault,
+            t(addProductError.formatted.errorDefault as string, {
+              name: t(`Common.Product`),
+            }),
             addProductError.formatted.title,
           );
           return;
         }
-        toast.success('Product.Modal.AddProduct.Success');
+        toast.success(
+          'Product.Modal.AddProduct.Success',
+          'Product.Modal.AddProduct.Success_Title',
+        );
         addProductFormMethods.reset();
+        handleClose();
+        setProduct(undefined);
+        setValue('searchedProduct', '');
+        setActiveStep(0);
       },
     });
   };

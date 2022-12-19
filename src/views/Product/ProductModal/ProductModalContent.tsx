@@ -6,10 +6,11 @@ import {
   Box,
   SelectChangeEvent,
   CircularProgress,
+  FormHelperText,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, Controller } from 'react-hook-form';
 import {
   DataGrid,
   GridActionsCellItem,
@@ -30,6 +31,7 @@ import { AisleDto } from '@/models/aisle';
 import { IErrorResponse } from '@/services/api/interfaces';
 import SelectSupplierEditCell from './SelectSupplierEditCell';
 import { SupplierDto } from '@/models/supplier';
+import { rulesValidationDictionary } from '@/helpers/rulesValidationDictionary';
 
 type ProductModalContentProps = {
   activeStep: number;
@@ -45,6 +47,7 @@ export type AddProductFormValues = {
   code: string;
   unitPackaging: string;
   price: number;
+  inStock: number;
   threshold: number;
   ingredients: string;
   aisle: number;
@@ -109,6 +112,17 @@ function ProductModalContent({
       editable: true,
       valueParser(value) {
         return Number(value);
+      },
+      valueSetter({ value, row }) {
+        if (value < 0) {
+          row.purchasePrice = 0;
+        } else {
+          row.purchasePrice = value;
+        }
+        return row;
+      },
+      valueFormatter({ value }) {
+        return `${value.toFixed(2)}€`;
       },
     },
     {
@@ -239,6 +253,15 @@ function ProductModalContent({
     setValue('productSuppliers', [...updatedProductSuppliers]);
   };
 
+  /**
+   * Get errors on form validation for Datagrid
+   */
+  const getDataGridErrors = () => {
+    return t(errors.productSuppliers?.message as string, {
+      name: t('Common.ProductSuppliers'),
+    });
+  };
+
   // useEffect
   useEffect(() => {
     setValue(
@@ -293,7 +316,6 @@ function ProductModalContent({
               name="brand"
               control={control}
               errors={errors}
-              readOnly
               size="small"
             />
             <RSInput
@@ -302,7 +324,6 @@ function ProductModalContent({
               name="name"
               control={control}
               errors={errors}
-              readOnly
               size="small"
             />
             <div className="product--modal-add-input">
@@ -319,7 +340,6 @@ function ProductModalContent({
                 name="unitPackaging"
                 control={control}
                 errors={errors}
-                readOnly
                 size="small"
               />
             </div>
@@ -338,6 +358,19 @@ function ProductModalContent({
                 }}
               />
               <RSInput
+                className="product--modal-add-number"
+                label={t('Product.Modal.AddProduct.InStock')}
+                name="inStock"
+                control={control}
+                errors={errors}
+                size="small"
+                type="number"
+                inputProps={{
+                  min: 0,
+                }}
+              />
+              <RSInput
+                className="product--modal-add-number"
                 label={t('Product.Modal.AddProduct.Threshold')}
                 name="threshold"
                 control={control}
@@ -355,7 +388,6 @@ function ProductModalContent({
               name="ingredients"
               control={control}
               errors={errors}
-              readOnly
               size="small"
               multiline
             />
@@ -402,15 +434,27 @@ function ProductModalContent({
                 </RSButton>
               </div>
               <div className="product--modal-add-productSuppliers-data">
-                <DataGrid
-                  className="product--modal-add-datagrid"
-                  rows={productSuppliers}
-                  columns={columns}
-                  density="compact"
-                  hideFooter
-                  experimentalFeatures={{ newEditingApi: true }}
-                  processRowUpdate={handleRowUpdate}
-                  onProcessRowUpdateError={(error) => console.log(error)}
+                <Controller
+                  name="productSuppliers"
+                  control={control}
+                  rules={rulesValidationDictionary.productSuppliers}
+                  render={() => (
+                    <>
+                      <DataGrid
+                        className="product--modal-add-datagrid"
+                        rows={productSuppliers}
+                        columns={columns}
+                        density="compact"
+                        hideFooter
+                        experimentalFeatures={{ newEditingApi: true }}
+                        processRowUpdate={handleRowUpdate}
+                        onProcessRowUpdateError={(error) => console.log(error)}
+                      />
+                      <FormHelperText error>
+                        {getDataGridErrors()}
+                      </FormHelperText>
+                    </>
+                  )}
                 />
               </div>
             </div>

@@ -4,6 +4,7 @@ export type FormattedError = {
   title: 'Error.Error_Title' | 'Error.Warning_Title';
   type: 'error' | 'warning';
   errorDefault:
+    | 'Error.Conflict_Label'
     | 'Error.Badrequest_Label'
     | 'Error.Unauthorized_Label'
     | 'Error.Forbidden_Label'

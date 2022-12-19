@@ -15,7 +15,8 @@
     "Price": "Selling price",
     "Threshold": "Threshold",
     "Ingredients": "Ingredients",
-    "ProductSuppliers": "Suppliers"
+    "ProductSuppliers": "Suppliers",
+    "Product": "Product"
   },
     "Dashboard": {
       "Modal": {
@@ -46,6 +47,7 @@
   "Error": {
     "Error_Title": "Error",
     "Warning_Title": "Warning",
+    "Conflict_Label": "{{name}} exists",
     "Badrequest_Label": "Wrong data",
     "Unauthorized_Label": "Please login",
     "Forbidden_Label": "Insufficient permissions",
@@ -98,13 +100,15 @@
         "Price": "Selling price",
         "UnitPackaging": "Unit packaging",
         "Threshold": "Alert threshold",
+        "InStock": "Initial stock",
         "Ingredients": "Ingredients",
         "Aisle": "Aisle",
         "Categories": "Categories",
         "Suppliers": "Suppliers",
         "PurchasePrice": "Purchasing price",
         "Actions": "Actions",
-        "Success": "Product created successfully"
+        "Success": "Product created successfully",
+        "Success_Title": "Creation successful"
       }
     },
     "Columns": {

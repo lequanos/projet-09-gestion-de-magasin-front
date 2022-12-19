@@ -184,6 +184,13 @@ export abstract class ApiService {
           };
           break;
         }
+        case 409: {
+          returnedError = {
+            ...returnedError,
+            errorDefault: 'Error.Conflict_Label',
+          };
+          break;
+        }
         default:
           returnedError = {
             ...returnedError,

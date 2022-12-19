@@ -24,6 +24,7 @@ export enum ProductNutriScore {
   D = 'D',
   E = 'E',
   'NOT-APPLICABLE' = 'NOT-APPLICABLE',
+  'UNKNOWN' = 'UNKNOWN',
 }
 
 export enum ProductEcoScore {
@@ -33,6 +34,7 @@ export enum ProductEcoScore {
   D = 'D',
   E = 'E',
   'NOT-APPLICABLE' = 'NOT-APPLICABLE',
+  'UNKNOWN' = 'UNKNOWN',
 }
 
 export type ProductSupplierDto = {

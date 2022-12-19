@@ -15,7 +15,8 @@
     "Price": "Prix de vente",
     "Threshold": "Seuil d'alerte",
     "Ingredients": "Ingrédients",
-    "ProductSuppliers": "Fournisseurs"
+    "ProductSuppliers": "Fournisseurs",
+    "Product": "Produit"
   },
   "Dashboard": {
     "Modal": {
@@ -47,6 +48,7 @@
     "Error_Title": "Erreur",
     "Warning_Title": "Avertissement",
     "Badrequest_Label": "Données incorrectes",
+    "Conflict_Label": "{{name}} existant",
     "Unauthorized_Label": "Veuillez vous authentifier",
     "Forbidden_Label": "Autorisations insuffisantes",
     "Notfound_Label": "Ressource non trouvée",
@@ -97,6 +99,7 @@
         "Code": "Code EAN",
         "Price": "Prix de vente",
         "UnitPackaging": "Conditionnement unitaire",
+        "InStock": "Stock initial",
         "Threshold": "Seuil d'alerte",
         "Ingredients": "Ingrédients",
         "Aisle": "Rayon",
@@ -104,7 +107,8 @@
         "Suppliers": "Fournisseurs",
         "PurchasePrice": "Prix d'achat",
         "Actions": "Actions",
-        "Success": "Produit créé avec succès"
+        "Success": "Produit créé avec succès",
+        "Success_Title": "Création réussie"
       }
     },
     "Columns": {
