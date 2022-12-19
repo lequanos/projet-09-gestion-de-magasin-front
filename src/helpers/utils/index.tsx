@@ -1,7 +1,16 @@
 import { EntityList } from '@/hooks';
-import { CheckCircleOutline, ReportGmailerrorred } from '@mui/icons-material';
+import { Permission } from '@/models/role';
+import {
+  CheckCircleOutline,
+  Visibility,
+  ReportGmailerrorred,
+} from '@mui/icons-material';
 import { Chip } from '@mui/material';
-import { GridColDef } from '@mui/x-data-grid';
+import {
+  GridActionsCellItem,
+  GridEnrichedColDef,
+  GridRowParams,
+} from '@mui/x-data-grid';
 import { t } from 'i18next';
 
 export function capitalize(string: string): string {
@@ -14,10 +23,12 @@ export function capitalize(string: string): string {
 export const getColumns = <T extends any[]>(
   tableData: T,
   entity: EntityList,
-): GridColDef[] => {
+  permissions?: Permission[],
+  onClick?: () => void,
+): GridEnrichedColDef[] => {
   if (!tableData.length) return [];
 
-  const columns = Object.keys(tableData[0])
+  const columns: (GridEnrichedColDef | undefined)[] = Object.keys(tableData[0])
     .map((key) => {
       if (key === 'id') return;
 
@@ -25,7 +36,7 @@ export const getColumns = <T extends any[]>(
         field: key,
         headerName: t(`${capitalize(entity)}.Columns.${capitalize(key)}`),
         flex: 1,
-      } as GridColDef;
+      } as GridEnrichedColDef;
     })
     .filter((value) => !!value);
 
@@ -62,6 +73,39 @@ export const getColumns = <T extends any[]>(
   if (salesField) {
     salesField.renderCell = (params) => params.value || 0;
   }
+  const indexOfManageEntity = Object.keys(Permission).indexOf(
+    `MANAGE_${entity.toUpperCase()}`,
+  );
+  const indexOfReadEntity = Object.keys(Permission).indexOf(
+    `READ_${entity.toUpperCase()}`,
+  );
 
-  return columns as GridColDef[];
+  if (
+    permissions &&
+    permissions.length &&
+    [
+      Permission.MANAGE_ALL,
+      Permission.READ_ALL,
+      Object.values(Permission)[indexOfManageEntity],
+      Object.values(Permission)[indexOfReadEntity],
+    ].some((p) => permissions.includes(p))
+  ) {
+    columns.push({
+      field: 'actions',
+      type: 'actions',
+      headerName: t('Product.Modal.AddProduct.Actions'),
+      getActions: (params: GridRowParams) => [
+        <GridActionsCellItem
+          icon={<Visibility />}
+          onClick={onClick}
+          label="Delete"
+          showInMenu={false}
+          onResize={undefined}
+          onResizeCapture={undefined}
+          color="primary"
+        />,
+      ],
+    });
+  }
+  return columns as GridEnrichedColDef[];
 };

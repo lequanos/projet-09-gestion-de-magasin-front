@@ -137,6 +137,7 @@ function ProductModalContent({
           showInMenu={false}
           onResize={undefined}
           onResizeCapture={undefined}
+          color="primary"
         />,
       ],
     },

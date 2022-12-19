@@ -1,15 +1,20 @@
-import { Container, Card, CardContent } from '@mui/material';
+import { Container, Card, CardContent, Drawer } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { DataGrid } from '@mui/x-data-grid';
 import { useState } from 'react';
 
 import './Product.scss';
 import ProductModal from './ProductModal';
-import { useAccessToken, useGetAllQuery, useToastContext } from '@/hooks';
+import {
+  useAccessToken,
+  useGetAllQuery,
+  useToastContext,
+  useUserContext,
+} from '@/hooks';
 import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { RSButton } from '@/components/RS';
 import { getColumns } from '@/helpers/utils';
-import { Permission } from '@/models/role';
+import { Permission, RoleDto } from '@/models/role';
 import { ProductDto } from '@/models/product';
 
 function Product() {
@@ -17,8 +22,12 @@ function Product() {
   const { t } = useTranslation('translation');
   const { toast } = useToastContext();
   const { accessToken } = useAccessToken();
+  const { user } = useUserContext();
+
+  // States
   const [tableData, setTableData] = useState<ProductDto[]>([]);
   const [open, setOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Queries
   const { isFetching } = useGetAllQuery<ProductDto[]>(
@@ -60,6 +69,13 @@ function Product() {
     setOpen(true);
   };
 
+  /**
+   * Open product detail drawer
+   */
+  const handleOpenProductDetail = () => {
+    setDrawerOpen(true);
+  };
+
   return (
     <>
       <Container className="product--container">
@@ -76,7 +92,12 @@ function Product() {
           <CardContent className="product--table">
             <DataGrid
               rows={tableData}
-              columns={getColumns(tableData, 'product')}
+              columns={getColumns(
+                tableData,
+                'product',
+                (user.role as RoleDto).permissions,
+                handleOpenProductDetail,
+              )}
               loading={isFetching}
               disableSelectionOnClick
               autoPageSize
@@ -85,6 +106,13 @@ function Product() {
         </Card>
       </Container>
       <ProductModal open={open} setOpen={setOpen} />
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      >
+        coucou
+      </Drawer>
     </>
   );
 }
