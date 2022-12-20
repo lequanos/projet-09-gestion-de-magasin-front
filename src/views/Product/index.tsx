@@ -113,7 +113,7 @@ function Product() {
           }
 
           if (!ok) {
-            const updateProductError = response as IErrorResponse<ProductDto>;
+            const updateProductError = response as IErrorResponse<void>;
             toast[updateProductError.formatted.type](
               t(updateProductError.formatted.errorDefault as string, {
                 name: t(`Common.Product`),
