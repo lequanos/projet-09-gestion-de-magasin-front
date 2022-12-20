@@ -38,6 +38,7 @@ type RSSelectProps<T extends BaseModel, U extends FieldValues> = {
   onChange?:
     | ((event: SelectChangeEvent<any>, child: ReactNode) => void)
     | undefined;
+  readOnly?: boolean;
   rules?: Exclude<
     RegisterOptions,
     'valueAsNumber' | 'valueAsDate' | 'setValueAs'
@@ -56,6 +57,7 @@ export function RSSelect<T extends BaseModel, U extends FieldValues>({
   label,
   multiple = false,
   name,
+  readOnly = false,
   rules,
   onChange,
   size = 'medium',
@@ -112,6 +114,7 @@ export function RSSelect<T extends BaseModel, U extends FieldValues>({
               {...field}
               onChange={onChange || field.onChange}
               renderValue={multiple ? onMultipleRenderValue : onRenderValue}
+              readOnly={readOnly}
             >
               {items.map((item) => (
                 <MenuItem key={item.id} value={item.id}>

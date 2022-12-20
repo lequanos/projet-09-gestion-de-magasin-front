@@ -36,8 +36,8 @@ function SelectSupplierEditCell(
       onChange={handleChange}
       value={value}
       id={id as string}
-      label={t('Product.Modal.AddProduct.Name')}
-      labelId={t('Product.Modal.AddProduct.Name')}
+      label={t('Product.Form.Name')}
+      labelId={t('Product.Form.Name')}
       sx={{ width: '100%' }}
     >
       {suppliers.map((supplier) => (

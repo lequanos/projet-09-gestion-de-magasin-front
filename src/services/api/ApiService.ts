@@ -84,21 +84,21 @@ export abstract class ApiService {
           (res: AxiosResponse<T>) => this.formatResponse(res),
           (error: AxiosError<T>) => this.formatError(error),
         ),
-      create: <T>(c: CreateType<T>) =>
+      create: <T, U>(c: CreateType<T>) =>
         this.postRequest(resourceURL, c.toCreate).then(
-          (res: AxiosResponse<T>) => this.formatResponse(res),
-          (error: AxiosError<T>) => this.formatError(error),
+          (res: AxiosResponse<U>) => this.formatResponse(res),
+          (error: AxiosError<U>) => this.formatError(error),
         ),
-      update: <T>(p: PutType<T>) => {
+      update: <T, U>(p: PutType<T>) => {
         return this.putRequest(resourceURL, p.toUpdate).then(
-          (res: AxiosResponse<T>) => this.formatResponse(res),
-          (error: AxiosError<T>) => this.formatError(error),
+          (res: AxiosResponse<U>) => this.formatResponse(res),
+          (error: AxiosError<U>) => this.formatError(error),
         );
       },
-      updatePartial: <T>(p: PutType<T>) => {
+      updatePartial: <T, U>(p: PutType<T>) => {
         return this.patchRequest(resourceURL, p.toUpdate).then(
-          (res: AxiosResponse<T>) => this.formatResponse(res),
-          (error: AxiosError<T>) => this.formatError(error),
+          (res: AxiosResponse<U>) => this.formatResponse(res),
+          (error: AxiosError<U>) => this.formatError(error),
         );
       },
       delete: <T>(del: DeleteType<T>) => {

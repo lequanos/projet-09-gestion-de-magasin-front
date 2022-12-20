@@ -1,10 +1,12 @@
 import { BrandDto } from '../brand';
+import { CategoryDto } from '../category';
 import { BaseModel } from '../interfaces/common.interface';
+import { StoreDto } from '../store';
+import { SupplierDto } from '../supplier';
 
-export type ProductDto = BaseModel & {
+type BaseProductDto = BaseModel & {
   code?: string;
   price?: number;
-  isActive?: boolean;
   pictureUrl?: string;
   nutriScore?: ProductNutriScore;
   ecoScore?: ProductEcoScore;
@@ -13,8 +15,22 @@ export type ProductDto = BaseModel & {
   ingredients?: string;
   inStock?: number;
   sales?: number;
-  brand?: BrandDto | string;
+};
+
+export type ProductDtoPayload = Omit<BaseProductDto, 'id'> & {
+  id?: string;
+  brand: BrandDto | string;
+  productSuppliers: ProductSupplierDtoPayload[];
+  categories: number[];
+};
+
+export type ProductDto = BaseProductDto & {
+  brand?: BrandDto;
   productSuppliers: ProductSupplierDto[];
+  categories: CategoryDto[];
+  store: Pick<StoreDto, 'id'>;
+  suppliers: Pick<SupplierDto, 'id'>[];
+  isActive: boolean;
 };
 
 export enum ProductNutriScore {
@@ -37,9 +53,17 @@ export enum ProductEcoScore {
   'UNKNOWN' = 'UNKNOWN',
 }
 
-export type ProductSupplierDto = {
+export type ProductSupplierDtoPayload = {
   supplier: number;
   purchasePrice: number;
 };
 
-export type ExtendedProductSupplierDto = ProductSupplierDto & { id?: string };
+export type ProductSupplierDto = {
+  supplier: Pick<SupplierDto, 'id'>;
+  product: number;
+  purchasePrice: number;
+};
+
+export type ExtendedProductSupplierDtoPayload = ProductSupplierDtoPayload & {
+  id?: string;
+};

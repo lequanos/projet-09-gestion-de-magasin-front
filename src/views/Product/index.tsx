@@ -1,10 +1,11 @@
-import { Container, Card, CardContent, Drawer } from '@mui/material';
+import { Container, Card, CardContent } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import { useState } from 'react';
 
 import './Product.scss';
 import ProductModal from './ProductModal';
+import ProductDrawer from './ProductDrawer';
 import {
   useAccessToken,
   useGetAllQuery,
@@ -28,6 +29,7 @@ function Product() {
   const [tableData, setTableData] = useState<ProductDto[]>([]);
   const [open, setOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [productId, setProductId] = useState(0);
 
   // Queries
   const { isFetching } = useGetAllQuery<ProductDto[]>(
@@ -72,7 +74,8 @@ function Product() {
   /**
    * Open product detail drawer
    */
-  const handleOpenProductDetail = () => {
+  const handleOpenProductDetail = (params: GridRowParams) => {
+    setProductId(params.row.id);
     setDrawerOpen(true);
   };
 
@@ -106,13 +109,11 @@ function Product() {
         </Card>
       </Container>
       <ProductModal open={open} setOpen={setOpen} />
-      <Drawer
-        anchor="right"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      >
-        coucou
-      </Drawer>
+      <ProductDrawer
+        drawerOpen={drawerOpen}
+        setDrawerOpen={setDrawerOpen}
+        id={productId}
+      />
     </>
   );
 }

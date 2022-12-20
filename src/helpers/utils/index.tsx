@@ -2,7 +2,7 @@ import { EntityList } from '@/hooks';
 import { Permission } from '@/models/role';
 import {
   CheckCircleOutline,
-  Visibility,
+  Edit,
   ReportGmailerrorred,
 } from '@mui/icons-material';
 import { Chip } from '@mui/material';
@@ -24,7 +24,7 @@ export const getColumns = <T extends any[]>(
   tableData: T,
   entity: EntityList,
   permissions?: Permission[],
-  onClick?: () => void,
+  onClick?: (params: GridRowParams) => void,
 ): GridEnrichedColDef[] => {
   if (!tableData.length) return [];
 
@@ -93,11 +93,13 @@ export const getColumns = <T extends any[]>(
     columns.push({
       field: 'actions',
       type: 'actions',
-      headerName: t('Product.Modal.AddProduct.Actions'),
+      headerName: t('Product.Form.Actions'),
       getActions: (params: GridRowParams) => [
         <GridActionsCellItem
-          icon={<Visibility />}
-          onClick={onClick}
+          icon={<Edit />}
+          onClick={() => {
+            if (onClick) onClick(params);
+          }}
           label="Delete"
           showInMenu={false}
           onResize={undefined}

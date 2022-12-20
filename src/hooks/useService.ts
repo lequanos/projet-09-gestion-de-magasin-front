@@ -20,7 +20,7 @@ import { GetDashboardInfosResponse } from '@/services/dashboard/interfaces/dashb
 import { ProductService } from '@/services/product/ProductService';
 import { SupplierService } from '@/services/supplier/SupplierService';
 import { AisleService } from '@/services/aisle/AisleService';
-import { ProductDto } from '@/models/product';
+import { ProductDtoPayload } from '@/models/product';
 import { StoreDto } from '@/models/store';
 
 const serviceDictionary = {
@@ -57,15 +57,28 @@ export const useGetAllQuery = <T>(
       enabled,
       onSuccess,
       onError,
+      refetchOnWindowFocus: false,
     },
   );
 };
 
-export const useGetOneQuery = (entity: EntityList, accessToken?: string) => {
+export const useGetOneQuery = <T>(
+  entity: EntityList,
+  id?: string,
+  accessToken?: string,
+  query?: IParam<string>,
+  enabled = true,
+  onSuccess?:
+    | ((data: ISuccessResponse<T> | IErrorResponse<T | undefined>) => void)
+    | undefined,
+) => {
   const service = getService(entity, accessToken);
   return useQuery({
     queryKey: [entity],
-    queryFn: () => service.crud.getOne,
+    queryFn: () => service.crud.getOne(id || '', query),
+    enabled,
+    onSuccess,
+    refetchOnWindowFocus: false,
   });
 };
 
@@ -85,7 +98,7 @@ export const useGetSubscriptionMail = (
   });
 };
 
-export const useCreateMutation = <T>(
+export const useCreateMutation = <T, U>(
   payload: CreateType<T>,
   entity: EntityList,
   accessToken?: string,
@@ -93,14 +106,14 @@ export const useCreateMutation = <T>(
   const queryClient = useQueryClient();
   const service = getService(entity, accessToken);
   return useMutation({
-    mutationFn: () => service.crud.create(payload),
+    mutationFn: () => service.crud.create<T, U>(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`${entity}s`] });
     },
   });
 };
 
-export const useUpdateMutation = <T>(
+export const useUpdateMutation = <T, U>(
   payload: PutType<T>,
   entity: EntityList,
   accessToken?: string,
@@ -108,7 +121,7 @@ export const useUpdateMutation = <T>(
   const queryClient = useQueryClient();
   const service = getService(entity, accessToken);
   return useMutation({
-    mutationFn: () => service.crud.update(payload),
+    mutationFn: () => service.crud.update<T, U>(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`${entity}s`] });
     },
@@ -250,14 +263,14 @@ export const useSearchProduct = (
   onSuccess?:
     | ((
         data:
-          | ISuccessResponse<ProductDto>
-          | IErrorResponse<ProductDto | undefined>,
+          | ISuccessResponse<ProductDtoPayload>
+          | IErrorResponse<ProductDtoPayload | undefined>,
       ) => void)
     | undefined,
 ) => {
   const service = new ProductService(accessToken);
   return useQuery({
-    queryKey: ['product'],
+    queryKey: ['searchedProduct'],
     queryFn: () => service.crud.searchProduct(searchValue),
     enabled,
     onSuccess,

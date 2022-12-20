@@ -21,14 +21,14 @@ import {
 } from '@/hooks';
 import { RSButton, RSInput, RSForm } from '@/components/RS';
 import { IErrorResponse } from '@/services/api/interfaces';
-import ProductModalContent, {
-  AddProductFormValues,
-} from './ProductModalContent';
+import ProductModalContent from './ProductModalContent';
 import {
   ProductDto,
+  ProductDtoPayload,
   ProductEcoScore,
   ProductNutriScore,
 } from '@/models/product';
+import { ProductFormValues } from '../ProductForm';
 
 type ProductModalProps = {
   open: boolean;
@@ -55,7 +55,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
       searchedProduct: '',
     },
   });
-  const addProductFormMethods = useForm<AddProductFormValues>({
+  const addProductFormMethods = useForm<ProductFormValues>({
     defaultValues: {
       brand: '',
       name: '',
@@ -77,7 +77,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
   const [activeStep, setActiveStep] = useState(0);
   const [enableSearchProduct, setEnableSearchProduct] = useState(false);
   const [notFound, setNotFound] = useState(false);
-  const [product, setProduct] = useState<ProductDto>();
+  const [product, setProduct] = useState<ProductDtoPayload>();
 
   // Queries
   const { isFetching } = useSearchProduct(
@@ -97,7 +97,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
       }
 
       if (!ok) {
-        const error = response as IErrorResponse<ProductDto>;
+        const error = response as IErrorResponse<ProductDtoPayload>;
         toast[error.formatted.type](
           t(error.formatted.errorDefault as string, {
             name: t(`Common.Product`),
@@ -111,7 +111,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
     },
   );
 
-  const addProductMutation = useCreateMutation<ProductDto>(
+  const addProductMutation = useCreateMutation<ProductDtoPayload, ProductDto>(
     {
       toCreate: {
         body: {
@@ -130,6 +130,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
             supplier: ps.supplier,
             purchasePrice: ps.purchasePrice,
           })),
+          pictureUrl: product?.pictureUrl,
         },
       },
     },
@@ -187,9 +188,12 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
    */
   const handleInputChange = (e: SyntheticEvent) => {
     setNotFound(false);
-    setValue('searchedProduct', (e.target as HTMLInputElement).value);
+    setValue('searchedProduct', (e.target as HTMLInputElement).value.trim());
   };
 
+  /**
+   * Post product to backend API
+   */
   const handleAddProduct = () => {
     addProductMutation.mutate(undefined, {
       onSuccess: (response) => {
@@ -209,10 +213,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
           );
           return;
         }
-        toast.success(
-          'Product.Modal.AddProduct.Success',
-          'Product.Modal.AddProduct.Success_Title',
-        );
+        toast.success('Product.Form.Success', 'Product.Form.Success_Title');
         addProductFormMethods.reset();
         handleClose();
         setProduct(undefined);
@@ -259,6 +260,9 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
                     errors={errors}
                     endIcon="search"
                     onChange={handleInputChange}
+                    inputProps={{
+                      maxlength: 13,
+                    }}
                   />
                 </RSForm>
               )}
@@ -286,7 +290,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
                 onClick={handleNext}
               >
                 {activeStep === steps.length - 1
-                  ? t('Product.Modal.Save')
+                  ? t('Product.Form.Save')
                   : t('Product.Modal.Next')}
               </RSButton>
             </div>

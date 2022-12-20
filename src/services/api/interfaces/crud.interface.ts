@@ -31,15 +31,15 @@ export interface CRUD {
     id: string,
     query?: IParam<U>,
   ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
-  create<T>(
+  create<T, U>(
     c: CreateType<T>,
-  ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
-  update<T>(
+  ): Promise<ISuccessResponse<U> | IErrorResponse<U | undefined>>;
+  update<T, U>(
     p: PutType<T>,
-  ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
-  updatePartial<T>(
+  ): Promise<ISuccessResponse<U> | IErrorResponse<U | undefined>>;
+  updatePartial<T, U>(
     tp: PutType<T>,
-  ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
+  ): Promise<ISuccessResponse<U> | IErrorResponse<U | undefined>>;
   delete<T>(
     del: DeleteType<T>,
   ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
