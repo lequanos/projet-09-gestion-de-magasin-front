@@ -108,9 +108,11 @@
       "Suppliers": "Fournisseurs",
       "PurchasePrice": "Prix d'achat",
       "Actions": "Actions",
-      "Success": "Produit créé avec succès",
       "Save": "Enregistrer",
-      "Success_Title": "Création réussie"
+      "Success_Add": "Produit créé avec succès",
+      "Success_Add_Title": "Création réussie",
+      "Success_Update": "Produit mis à jour avec succès",
+      "Success_Update_Title": "Mise à jour réussie"
     },
     "Columns": {
       "Name": "Nom",

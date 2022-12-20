@@ -213,7 +213,10 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
           );
           return;
         }
-        toast.success('Product.Form.Success', 'Product.Form.Success_Title');
+        toast.success(
+          'Product.Form.Success_Add',
+          'Product.Form.Success_Add_Title',
+        );
         addProductFormMethods.reset();
         handleClose();
         setProduct(undefined);

@@ -143,15 +143,39 @@ export const useUpdatePartialMutation = <T>(
   });
 };
 
-export const useDeleteMutation = <T>(
-  payload: DeleteType<T>,
+export const useDeleteMutation = (entity: EntityList, accessToken?: string) => {
+  const queryClient = useQueryClient();
+  const service = getService(entity, accessToken);
+  return useMutation({
+    mutationFn: (payload: DeleteType) => service.crud.delete(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`${entity}s`] });
+    },
+  });
+};
+
+export const useDeactivateMutation = <T>(
   entity: EntityList,
   accessToken?: string,
 ) => {
   const queryClient = useQueryClient();
   const service = getService(entity, accessToken);
   return useMutation({
-    mutationFn: () => service.crud.delete(payload),
+    mutationFn: (payload: DeleteType) => service.crud.deactivate<T>(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`${entity}s`] });
+    },
+  });
+};
+
+export const useReactivateMutation = <T>(
+  entity: EntityList,
+  accessToken?: string,
+) => {
+  const queryClient = useQueryClient();
+  const service = getService(entity, accessToken);
+  return useMutation({
+    mutationFn: (payload: PutType<T>) => service.crud.reactivate<T>(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`${entity}s`] });
     },

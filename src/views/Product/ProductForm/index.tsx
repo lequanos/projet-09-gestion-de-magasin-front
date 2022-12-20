@@ -126,7 +126,6 @@ function ProductForm({
           showInMenu={false}
           onResize={undefined}
           onResizeCapture={undefined}
-          color="primary"
         />,
       ],
     },

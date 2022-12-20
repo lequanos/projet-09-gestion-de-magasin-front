@@ -109,8 +109,10 @@
       "PurchasePrice": "Purchasing price",
       "Actions": "Actions",
       "Save": "Save",
-      "Success": "Product created successfully",
-      "Success_Title": "Creation successful"
+      "Success_Add": "Product created successfully",
+      "Success_Add_Title": "Creation successful",
+      "Success_Update": "Product updated successfully",
+      "Success_Update_Title": "Update successful"
     },
     "Columns": {
       "Name": "Name",

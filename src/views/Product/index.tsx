@@ -1,6 +1,10 @@
 import { Container, Card, CardContent } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { DataGrid, GridRowParams } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridRowParams,
+  GridRenderCellParams,
+} from '@mui/x-data-grid';
 import { useState } from 'react';
 
 import './Product.scss';
@@ -11,6 +15,9 @@ import {
   useGetAllQuery,
   useToastContext,
   useUserContext,
+  useDeactivateMutation,
+  useReactivateMutation,
+  useDeleteMutation,
 } from '@/hooks';
 import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { RSButton } from '@/components/RS';
@@ -32,7 +39,7 @@ function Product() {
   const [productId, setProductId] = useState(0);
 
   // Queries
-  const { isFetching } = useGetAllQuery<ProductDto[]>(
+  const { isFetching, refetch } = useGetAllQuery<ProductDto[]>(
     'product',
     accessToken,
     {
@@ -63,6 +70,18 @@ function Product() {
     },
   );
 
+  const deleteMutation = useDeleteMutation('product', accessToken);
+
+  const deactivateMutation = useDeactivateMutation<ProductDto>(
+    'product',
+    accessToken,
+  );
+
+  const reactivateMutation = useReactivateMutation<ProductDto>(
+    'product',
+    accessToken,
+  );
+
   // Methods
   /**
    * Open modal to add a product
@@ -77,6 +96,100 @@ function Product() {
   const handleOpenProductDetail = (params: GridRowParams) => {
     setProductId(params.row.id);
     setDrawerOpen(true);
+  };
+
+  /**
+   * Delete product
+   */
+  const handleDeleteProduct = ({ id }: GridRowParams) => {
+    deleteMutation.mutate(
+      { id: id as string },
+      {
+        onSuccess: (response) => {
+          const { ok, status } = response;
+
+          if ([401, 403].includes(status)) {
+            throw new Response('', { status });
+          }
+
+          if (!ok) {
+            const updateProductError = response as IErrorResponse<ProductDto>;
+            toast[updateProductError.formatted.type](
+              t(updateProductError.formatted.errorDefault as string, {
+                name: t(`Common.Product`),
+              }),
+              updateProductError.formatted.title,
+            );
+            return;
+          }
+          refetch();
+        },
+      },
+    );
+  };
+
+  /**
+   * Toggle active status of product
+   */
+  const handleToggleProductActiveStatus = ({
+    id,
+    row,
+  }: GridRenderCellParams) => {
+    if (row.isActive) {
+      deactivateMutation.mutate(
+        {
+          id: id as string,
+        },
+        {
+          onSuccess: (response) => {
+            const { ok, status } = response;
+
+            if ([401, 403].includes(status)) {
+              throw new Response('', { status });
+            }
+
+            if (!ok) {
+              const updateProductError = response as IErrorResponse<ProductDto>;
+              toast[updateProductError.formatted.type](
+                t(updateProductError.formatted.errorDefault as string, {
+                  name: t(`Common.Product`),
+                }),
+                updateProductError.formatted.title,
+              );
+              return;
+            }
+            refetch();
+          },
+        },
+      );
+    } else {
+      reactivateMutation.mutate(
+        {
+          id: id as string,
+        },
+        {
+          onSuccess: (response) => {
+            const { ok, status } = response;
+
+            if ([401, 403].includes(status)) {
+              throw new Response('', { status });
+            }
+
+            if (!ok) {
+              const updateProductError = response as IErrorResponse<ProductDto>;
+              toast[updateProductError.formatted.type](
+                t(updateProductError.formatted.errorDefault as string, {
+                  name: t(`Common.Product`),
+                }),
+                updateProductError.formatted.title,
+              );
+              return;
+            }
+            refetch();
+          },
+        },
+      );
+    }
   };
 
   return (
@@ -100,6 +213,8 @@ function Product() {
                 'product',
                 (user.role as RoleDto).permissions,
                 handleOpenProductDetail,
+                handleDeleteProduct,
+                handleToggleProductActiveStatus,
               )}
               loading={isFetching}
               disableSelectionOnClick

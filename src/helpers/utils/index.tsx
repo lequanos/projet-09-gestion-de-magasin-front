@@ -1,15 +1,12 @@
 import { EntityList } from '@/hooks';
 import { Permission } from '@/models/role';
-import {
-  CheckCircleOutline,
-  Edit,
-  ReportGmailerrorred,
-} from '@mui/icons-material';
-import { Chip } from '@mui/material';
+import { Edit, Delete } from '@mui/icons-material';
+import { Chip, ToggleButton } from '@mui/material';
 import {
   GridActionsCellItem,
   GridEnrichedColDef,
   GridRowParams,
+  GridRenderCellParams,
 } from '@mui/x-data-grid';
 import { t } from 'i18next';
 
@@ -24,9 +21,17 @@ export const getColumns = <T extends any[]>(
   tableData: T,
   entity: EntityList,
   permissions?: Permission[],
-  onClick?: (params: GridRowParams) => void,
+  onClickEdit?: (params: GridRowParams) => void,
+  onClickDelete?: (params: GridRowParams) => void,
+  onClickToggleActivateStatus?: (params: GridRenderCellParams) => void,
 ): GridEnrichedColDef[] => {
   if (!tableData.length) return [];
+  const indexOfManageEntity = Object.keys(Permission).indexOf(
+    `MANAGE_${entity.toUpperCase()}`,
+  );
+  const indexOfReadEntity = Object.keys(Permission).indexOf(
+    `READ_${entity.toUpperCase()}`,
+  );
 
   const columns: (GridEnrichedColDef | undefined)[] = Object.keys(tableData[0])
     .map((key) => {
@@ -60,12 +65,34 @@ export const getColumns = <T extends any[]>(
   const isActiveField = columns?.find((col) => col?.field === 'isActive');
 
   if (isActiveField) {
-    isActiveField.renderCell = (params) =>
-      params.value ? (
-        <CheckCircleOutline color="success" />
-      ) : (
-        <ReportGmailerrorred color="error" />
-      );
+    isActiveField.align = 'center';
+    isActiveField.renderCell = (params) => (
+      <ToggleButton
+        value={params.value}
+        selected={true}
+        onChange={() => {
+          if (onClickToggleActivateStatus) onClickToggleActivateStatus(params);
+        }}
+        color={params.value ? 'success' : 'error'}
+        size="small"
+        sx={{
+          border: 'none',
+          width: '50%',
+        }}
+        disabled={
+          !(
+            permissions &&
+            permissions.length &&
+            [
+              Permission.MANAGE_ALL,
+              Object.values(Permission)[indexOfManageEntity],
+            ].some((p) => permissions.includes(p))
+          )
+        }
+      >
+        {params.value ? 'Actif' : 'Inactif'}
+      </ToggleButton>
+    );
   }
 
   const salesField = columns?.find((col) => col?.field === 'sales');
@@ -73,12 +100,6 @@ export const getColumns = <T extends any[]>(
   if (salesField) {
     salesField.renderCell = (params) => params.value || 0;
   }
-  const indexOfManageEntity = Object.keys(Permission).indexOf(
-    `MANAGE_${entity.toUpperCase()}`,
-  );
-  const indexOfReadEntity = Object.keys(Permission).indexOf(
-    `READ_${entity.toUpperCase()}`,
-  );
 
   if (
     permissions &&
@@ -98,14 +119,33 @@ export const getColumns = <T extends any[]>(
         <GridActionsCellItem
           icon={<Edit />}
           onClick={() => {
-            if (onClick) onClick(params);
+            if (onClickEdit) onClickEdit(params);
           }}
-          label="Delete"
+          label="Edit"
           showInMenu={false}
           onResize={undefined}
           onResizeCapture={undefined}
           color="primary"
         />,
+        permissions &&
+        permissions.length &&
+        [
+          Permission.MANAGE_ALL,
+          Object.values(Permission)[indexOfManageEntity],
+        ].some((p) => permissions.includes(p)) ? (
+          <GridActionsCellItem
+            icon={<Delete />}
+            onClick={() => {
+              if (onClickDelete) onClickDelete(params);
+            }}
+            label="Delete"
+            showInMenu={false}
+            onResize={undefined}
+            onResizeCapture={undefined}
+          />
+        ) : (
+          <></>
+        ),
       ],
     });
   }

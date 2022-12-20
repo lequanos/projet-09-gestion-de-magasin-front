@@ -81,7 +81,7 @@ function ProductDrawer({ drawerOpen, setDrawerOpen, id }: ProductDrawerProps) {
           getProductError.formatted.errorDefault,
           getProductError.formatted.title,
         );
-        return;
+        return handleCloseDrawer();
       }
 
       const getProductResponse = response as ISuccessResponse<ProductDto>;
@@ -213,7 +213,10 @@ function ProductDrawer({ drawerOpen, setDrawerOpen, id }: ProductDrawerProps) {
           );
           return;
         }
-        toast.success('Product.Form.Success', 'Product.Form.Success_Title');
+        toast.success(
+          'Product.Form.Success_Update',
+          'Product.Form.Success_Update_Title',
+        );
         methods.reset();
         handleCloseDrawer();
       },
@@ -230,6 +233,19 @@ function ProductDrawer({ drawerOpen, setDrawerOpen, id }: ProductDrawerProps) {
     methods.setValue('price', product?.price || 0);
     methods.setValue('inStock', product?.inStock || 0);
     methods.setValue('threshold', product?.threshold || 0);
+    methods.setValue(
+      'categories',
+      product?.categories
+        .map((category) => {
+          if (category.id) return category.id;
+          return -1;
+        })
+        .filter((x) => x >= 0) || [],
+    );
+    methods.setValue(
+      'aisle',
+      product?.categories[0]?.aisle || aisles[0]?.id || 0,
+    );
     methods.setValue(
       'productSuppliers',
       product?.productSuppliers.map((ps) => ({
