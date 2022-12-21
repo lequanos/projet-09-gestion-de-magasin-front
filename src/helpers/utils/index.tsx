@@ -1,5 +1,6 @@
-import { EntityList } from '@/hooks';
+import { EntityList, ToastFunction } from '@/hooks';
 import { Permission } from '@/models/role';
+import { ISuccessResponse, IErrorResponse } from '@/services/api/interfaces';
 import { Edit, Delete } from '@mui/icons-material';
 import { Chip, ToggleButton } from '@mui/material';
 import {
@@ -150,4 +151,28 @@ export const getColumns = <T extends any[]>(
     });
   }
   return columns as GridEnrichedColDef[];
+};
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const onSuccess = <T,>(fn: Function, toast: ToastFunction) => {
+  return (response: ISuccessResponse<T> | IErrorResponse<T | undefined>) => {
+    const { ok, status } = response;
+
+    if ([401, 403].includes(status)) {
+      throw new Response('', { status });
+    }
+
+    if (!ok) {
+      const error = response as IErrorResponse<T>;
+      toast[error.formatted.type](
+        t(error.formatted.errorDefault as string, {
+          name: t(`Common.Product`),
+        }),
+        error.formatted.title,
+      );
+      return;
+    }
+    const result = response as ISuccessResponse<T>;
+    fn(result);
+  };
 };

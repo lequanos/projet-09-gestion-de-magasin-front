@@ -19,9 +19,9 @@ import {
   useReactivateMutation,
   useDeleteMutation,
 } from '@/hooks';
-import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
+import { ISuccessResponse } from '@/services/api/interfaces';
 import { RSButton } from '@/components/RS';
-import { getColumns } from '@/helpers/utils';
+import { getColumns, onSuccess } from '@/helpers/utils';
 import { Permission, RoleDto } from '@/models/role';
 import { ProductDto } from '@/models/product';
 
@@ -48,26 +48,10 @@ function Product() {
       },
     },
     true,
-    (response) => {
-      const { ok, status } = response;
-
-      if ([401, 403].includes(status)) {
-        throw new Response('', { status });
-      }
-
-      if (!ok) {
-        const getProductsError = response as IErrorResponse<ProductDto[]>;
-
-        toast[getProductsError.formatted.type](
-          getProductsError.formatted.errorDefault,
-          getProductsError.formatted.title,
-        );
-        return;
-      }
-
-      const getProductsResponse = response as ISuccessResponse<ProductDto[]>;
-      setTableData(getProductsResponse.data);
-    },
+    onSuccess<ProductDto[]>(
+      (response: ISuccessResponse<ProductDto[]>) => setTableData(response.data),
+      toast,
+    ),
   );
 
   const deleteMutation = useDeleteMutation('product', accessToken);
@@ -105,25 +89,7 @@ function Product() {
     deleteMutation.mutate(
       { id: id as string },
       {
-        onSuccess: (response) => {
-          const { ok, status } = response;
-
-          if ([401, 403].includes(status)) {
-            throw new Response('', { status });
-          }
-
-          if (!ok) {
-            const updateProductError = response as IErrorResponse<void>;
-            toast[updateProductError.formatted.type](
-              t(updateProductError.formatted.errorDefault as string, {
-                name: t(`Common.Product`),
-              }),
-              updateProductError.formatted.title,
-            );
-            return;
-          }
-          refetch();
-        },
+        onSuccess: onSuccess<void>(refetch, toast),
       },
     );
   };
@@ -135,60 +101,16 @@ function Product() {
     id,
     row,
   }: GridRenderCellParams) => {
+    const variables = {
+      id: id as string,
+    };
+    const options = {
+      onSuccess: onSuccess<ProductDto>(refetch, toast),
+    };
     if (row.isActive) {
-      deactivateMutation.mutate(
-        {
-          id: id as string,
-        },
-        {
-          onSuccess: (response) => {
-            const { ok, status } = response;
-
-            if ([401, 403].includes(status)) {
-              throw new Response('', { status });
-            }
-
-            if (!ok) {
-              const updateProductError = response as IErrorResponse<ProductDto>;
-              toast[updateProductError.formatted.type](
-                t(updateProductError.formatted.errorDefault as string, {
-                  name: t(`Common.Product`),
-                }),
-                updateProductError.formatted.title,
-              );
-              return;
-            }
-            refetch();
-          },
-        },
-      );
+      deactivateMutation.mutate(variables, options);
     } else {
-      reactivateMutation.mutate(
-        {
-          id: id as string,
-        },
-        {
-          onSuccess: (response) => {
-            const { ok, status } = response;
-
-            if ([401, 403].includes(status)) {
-              throw new Response('', { status });
-            }
-
-            if (!ok) {
-              const updateProductError = response as IErrorResponse<ProductDto>;
-              toast[updateProductError.formatted.type](
-                t(updateProductError.formatted.errorDefault as string, {
-                  name: t(`Common.Product`),
-                }),
-                updateProductError.formatted.title,
-              );
-              return;
-            }
-            refetch();
-          },
-        },
-      );
+      reactivateMutation.mutate(variables, options);
     }
   };
 
