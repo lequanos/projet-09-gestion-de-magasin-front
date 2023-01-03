@@ -153,8 +153,12 @@ export const getColumns = <T extends any[]>(
   return columns as GridEnrichedColDef[];
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const onSuccess = <T,>(fn: Function, toast: ToastFunction) => {
+export const onSuccess = <T,>(
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  fn: Function,
+  toast: ToastFunction,
+  entity: string,
+) => {
   return (response: ISuccessResponse<T> | IErrorResponse<T | undefined>) => {
     const { ok, status } = response;
 
@@ -166,7 +170,7 @@ export const onSuccess = <T,>(fn: Function, toast: ToastFunction) => {
       const error = response as IErrorResponse<T>;
       toast[error.formatted.type](
         t(error.formatted.errorDefault as string, {
-          name: t(`Common.Product`),
+          name: t(`Common.${entity}`),
         }),
         error.formatted.title,
       );

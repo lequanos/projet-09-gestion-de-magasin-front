@@ -51,6 +51,7 @@ function Product() {
     onSuccess<ProductDto[]>(
       (response: ISuccessResponse<ProductDto[]>) => setTableData(response.data),
       toast,
+      'Product',
     ),
   );
 
@@ -89,7 +90,7 @@ function Product() {
     deleteMutation.mutate(
       { id: id as string },
       {
-        onSuccess: onSuccess<void>(refetch, toast),
+        onSuccess: onSuccess<void>(refetch, toast, 'Product'),
       },
     );
   };
@@ -105,7 +106,7 @@ function Product() {
       id: id as string,
     };
     const options = {
-      onSuccess: onSuccess<ProductDto>(refetch, toast),
+      onSuccess: onSuccess<ProductDto>(refetch, toast, 'Product'),
     };
     if (row.isActive) {
       deactivateMutation.mutate(variables, options);
