@@ -48,7 +48,8 @@
     "Error_Title": "Erreur",
     "Warning_Title": "Avertissement",
     "Badrequest_Label": "Données incorrectes",
-    "Conflict_Label": "{{name}} existant",
+    "Existing_Label": "{{name}} existant",
+    "Deactivated_Label": "{{name}} désactivé",
     "Unauthorized_Label": "Veuillez vous authentifier",
     "Forbidden_Label": "Autorisations insuffisantes",
     "Notfound_Label": "Ressource non trouvée",
@@ -91,6 +92,11 @@
       "Back": "Retour",
       "Next": "Suivant",
       "Add": "Ajouter",
+      "Cancel": "Annuler"
+    },
+    "DeleteModal": {
+      "Text": "Toute suppression sera définitive",
+      "Confirm": "Confirmer",
       "Cancel": "Annuler"
     },
     "Form": {

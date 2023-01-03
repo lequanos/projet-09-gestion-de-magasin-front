@@ -192,10 +192,17 @@ export abstract class ApiService {
           break;
         }
         case 409: {
-          returnedError = {
-            ...returnedError,
-            errorDefault: 'Error.Conflict_Label',
-          };
+          if ((data as any).message.includes('deactivated')) {
+            returnedError = {
+              ...returnedError,
+              errorDefault: 'Error.Deactivated_Label',
+            };
+          } else {
+            returnedError = {
+              ...returnedError,
+              errorDefault: 'Error.Existing_Label',
+            };
+          }
           break;
         }
         default:

@@ -47,7 +47,8 @@
   "Error": {
     "Error_Title": "Error",
     "Warning_Title": "Warning",
-    "Conflict_Label": "{{name}} exists",
+    "Existing_Label": "{{name}} exists",
+    "Deactivated_Label": "{{name}} deactivated",
     "Badrequest_Label": "Wrong data",
     "Unauthorized_Label": "Please login",
     "Forbidden_Label": "Insufficient permissions",
@@ -91,6 +92,11 @@
       "Back": "Back",
       "Next": "Next",
       "Add": "Add",
+      "Cancel": "Cancel"
+    },
+    "DeleteModal": {
+      "Text": "Any deletion will be permanent",
+      "Confirm": "Confirm",
       "Cancel": "Cancel"
     },
     "Form": {

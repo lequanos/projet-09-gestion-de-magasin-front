@@ -127,6 +127,7 @@ export const getColumns = <T extends any[]>(
           onResize={undefined}
           onResizeCapture={undefined}
           color="primary"
+          disabled={!params.row.isActive}
         />,
         permissions &&
         permissions.length &&

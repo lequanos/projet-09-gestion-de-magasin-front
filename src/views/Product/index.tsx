@@ -9,6 +9,7 @@ import { useState } from 'react';
 
 import './Product.scss';
 import ProductModal from './ProductModal';
+import DeleteProductModal from './DeleteProductModal';
 import ProductDrawer from './ProductDrawer';
 import {
   useAccessToken,
@@ -17,7 +18,6 @@ import {
   useUserContext,
   useDeactivateMutation,
   useReactivateMutation,
-  useDeleteMutation,
 } from '@/hooks';
 import { ISuccessResponse } from '@/services/api/interfaces';
 import { RSButton } from '@/components/RS';
@@ -35,6 +35,7 @@ function Product() {
   // States
   const [tableData, setTableData] = useState<ProductDto[]>([]);
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [productId, setProductId] = useState(0);
 
@@ -54,8 +55,6 @@ function Product() {
       'Product',
     ),
   );
-
-  const deleteMutation = useDeleteMutation('product', accessToken);
 
   const deactivateMutation = useDeactivateMutation<ProductDto>(
     'product',
@@ -84,15 +83,11 @@ function Product() {
   };
 
   /**
-   * Delete product
+   * Open delete product modal
    */
   const handleDeleteProduct = ({ id }: GridRowParams) => {
-    deleteMutation.mutate(
-      { id: id as string },
-      {
-        onSuccess: onSuccess<void>(refetch, toast, 'Product'),
-      },
-    );
+    setOpenDelete(true);
+    setProductId(Number(id));
   };
 
   /**
@@ -151,6 +146,12 @@ function Product() {
         drawerOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}
         id={productId}
+      />
+      <DeleteProductModal
+        open={openDelete}
+        setOpen={setOpenDelete}
+        id={productId}
+        refetch={refetch}
       />
     </>
   );
