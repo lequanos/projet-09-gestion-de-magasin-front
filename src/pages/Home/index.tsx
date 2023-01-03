@@ -19,6 +19,13 @@ import {
   useAccessToken,
 } from '@/hooks';
 
+export type LoginFormValues = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+};
+
 function Home() {
   // Hooks
   const {
@@ -27,7 +34,14 @@ function Home() {
     formState: { errors },
     setValue,
     watch,
-  } = useForm();
+  } = useForm<LoginFormValues>({
+    defaultValues: {
+      firstname: '',
+      lastname: '',
+      email: '',
+      password: '',
+    },
+  });
   const { toast } = useToastContext();
   const { setAccessToken } = useAccessToken();
   const { user, setUser } = useUserContext();

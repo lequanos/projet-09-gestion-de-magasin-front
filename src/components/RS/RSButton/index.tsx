@@ -1,74 +1,137 @@
+import { useUserContext } from '@/hooks';
+import { Permission, RoleDto } from '@/models/role';
+import { AddCircleOutline } from '@mui/icons-material';
 import { Button, SxProps, Theme } from '@mui/material';
 import { DefaultTFuncReturn } from 'i18next';
 import { useRef } from 'react';
 
 type RSButtonProps = {
-  variant?: 'contained' | 'text' | 'outlined' | undefined;
   className?: string;
   children: string | string[] | DefaultTFuncReturn;
   color?:
     | 'inherit'
     | 'primary'
+    | 'primaryDark'
     | 'secondary'
     | 'success'
     | 'error'
     | 'info'
-    | 'warning'
-    | undefined;
-  onClick?: () => void;
+    | 'warning';
+  disabled?: boolean;
+  disableRipple?: boolean;
+  startIcon?: 'add';
+  permissions?: Permission[];
+  size?: 'small' | 'medium' | 'large';
   sx?: SxProps<Theme>;
-  type?: 'button' | 'submit' | 'reset' | undefined;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'contained' | 'text' | 'outlined';
+  onClick?: () => void;
 };
 
 export function RSButton({
-  variant = 'contained',
   className,
   children,
-  onClick,
-  sx,
   color = 'primary',
+  disabled = false,
+  disableRipple = true,
+  startIcon,
+  permissions,
+  size = 'medium',
+  sx,
   type = 'button',
+  variant = 'contained',
+  onClick,
 }: RSButtonProps) {
   // Hooks
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const { user } = useUserContext();
 
-  let sxProps: SxProps<Theme> & { [key: string]: any } = {
-    marginTop: '2.5rem',
-    borderRadius: 0,
+  /**
+   * Get colorProps for Mui button from custom button props
+   */
+  const getColor = () => {
+    return color.split(/(?=[A-Z])/)[0] as
+      | 'inherit'
+      | 'primary'
+      | 'secondary'
+      | 'success'
+      | 'error'
+      | 'info'
+      | 'warning'
+      | undefined;
   };
 
-  if (sx) {
-    sxProps = {
-      ...sxProps,
-      ...sx,
+  /**
+   * Get sx props for button
+   */
+  const getSxProps = () => {
+    let sxProps: SxProps<Theme> & { [key: string]: any } = {
+      marginTop: '2.5rem',
+      borderRadius: 0,
     };
-  }
 
-  if (variant === 'contained' && buttonRef && buttonRef.current) {
-    sxProps.backgroundImage =
-      'linear-gradient(to bottom left, #7CA2CB, #4578AD, #345A83)';
-    sxProps.backgroundSize = `${buttonRef.current.offsetWidth * 2}px ${
-      buttonRef.current.offsetHeight * 2
-    }px`;
-    sxProps.backgroundPosition = 'top right';
-    sxProps.transition = 'background 0.5s ease-in-out';
-    sxProps['&:hover'] = {
-      backgroundPosition: 'bottom left',
-      color: 'secondary.main',
+    if (sx) {
+      sxProps = {
+        ...sxProps,
+        ...sx,
+      };
+    }
+
+    if (
+      variant === 'contained' &&
+      color === 'primary' &&
+      buttonRef &&
+      buttonRef.current
+    ) {
+      sxProps.backgroundImage =
+        'linear-gradient(to bottom left, #7CA2CB, #4578AD, #345A83)';
+      sxProps.backgroundSize = `${buttonRef.current.offsetWidth * 2}px ${
+        buttonRef.current.offsetHeight * 2
+      }px`;
+      sxProps.backgroundPosition = 'top right';
+      sxProps.transition = 'background 0.5s ease-in-out';
+      sxProps['&:hover'] = {
+        backgroundPosition: 'bottom left',
+        color: 'secondary.main',
+      };
+    }
+
+    return sxProps;
+  };
+
+  /**
+   * Get icon for button
+   */
+  const getStartIcon = () => {
+    const iconDictionary = {
+      add: <AddCircleOutline />,
     };
-  }
+
+    return startIcon ? iconDictionary[startIcon] : undefined;
+  };
 
   return (
-    <Button
-      variant={variant}
-      sx={sxProps}
-      onClick={onClick}
-      className={className}
-      type={type}
-      color={color}
-      ref={buttonRef}
-    >
-      {children}
-    </Button>
+    <>
+      {(!permissions ||
+        (user.role as RoleDto).permissions.some((perm) =>
+          permissions?.includes(perm),
+        )) && (
+        <Button
+          startIcon={getStartIcon()}
+          variant={variant}
+          size={size}
+          sx={getSxProps()}
+          onClick={onClick}
+          className={className}
+          type={type}
+          color={getColor()}
+          ref={buttonRef}
+          disableRipple={disableRipple}
+          disabled={disabled}
+        >
+          {children}
+        </Button>
+      )}
+    </>
   );
 }

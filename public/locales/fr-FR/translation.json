@@ -4,7 +4,19 @@
     "Password": "Mot de passe",
     "Firstname": "Prénom",
     "Lastname": "Nom",
-    "SelectedStore": "Magasin"
+    "SelectedStore": "Magasin",
+    "SearchedProduct": "Code EAN",
+    "Aisle": "Rayon",
+    "Categories": "Catégories",
+    "Code": "Code EAN",
+    "Brand": "Marque",
+    "Name": "Nom",
+    "UnitPackaging": "Conditionnement unitaire",
+    "Price": "Prix de vente",
+    "Threshold": "Seuil d'alerte",
+    "Ingredients": "Ingrédients",
+    "ProductSuppliers": "Fournisseurs",
+    "Product": "Produit"
   },
   "Dashboard": {
     "Modal": {
@@ -36,13 +48,21 @@
     "Error_Title": "Erreur",
     "Warning_Title": "Avertissement",
     "Badrequest_Label": "Données incorrectes",
+    "Existing_Label": "{{name}} existant",
+    "Deactivated_Label": "{{name}} désactivé",
     "Unauthorized_Label": "Veuillez vous authentifier",
     "Forbidden_Label": "Autorisations insuffisantes",
     "Notfound_Label": "Ressource non trouvée",
     "General_Label": "Une erreur est survenue",
     "Required_Input": "{{name}} requis",
     "Required_Select": "{{name}} requis",
-    "Format_Email": "Format d'email incorrect"
+    "Format_Email": "Format d'email incorrect",
+    "Format_EAN": "Format de code EAN incorrect",
+    "Min_Price": "Minimum requis {{price}}",
+    "Threshold": "Minimum requis {{threshold}}",
+    "Same_Aisle": "Veuillez sélectionner des catégories appartenant au même rayon",
+    "Empty_Supplier": "Veuillez sélectionner un fournisseur pour chaque entrée",
+    "Empty_PurchasePrice": "Veuillez définir un prix d'achat pour chaque entrée"
   },
   "Header": {
     "Logout": "Se déconnecter"
@@ -62,6 +82,54 @@
     "Success_Login_Title": "Réussite",
     "Success_Mail": "Votre demande a bien été envoyée",
     "Success_Mail_Title": "Email envoyé"
+  },
+  "Product": {
+    "Modal": {
+      "Step1": "Recherche du produit",
+      "Step2": "Edition du produit",
+      "SearchProduct": "Recherche produit par code EAN",
+      "NotFoundProduct": "Aucun produit trouvé pour le code EAN {{searchedProduct}}",
+      "Back": "Retour",
+      "Next": "Suivant",
+      "Add": "Ajouter",
+      "Cancel": "Annuler"
+    },
+    "DeleteModal": {
+      "Text": "Toute suppression sera définitive",
+      "Confirm": "Confirmer",
+      "Cancel": "Annuler"
+    },
+    "Form": {
+      "Brand": "Marque",
+      "Name": "Nom",
+      "Code": "Code EAN",
+      "Price": "Prix de vente",
+      "UnitPackaging": "Conditionnement unitaire",
+      "InStock_Add": "Stock initial",
+      "InStock_Update": "Stock actuel",
+      "Threshold": "Seuil d'alerte",
+      "Ingredients": "Ingrédients",
+      "Aisle": "Rayon",
+      "Categories": "Catégories",
+      "Suppliers": "Fournisseurs",
+      "PurchasePrice": "Prix d'achat",
+      "Actions": "Actions",
+      "Save": "Enregistrer",
+      "Success_Add": "Produit créé avec succès",
+      "Success_Add_Title": "Création réussie",
+      "Success_Update": "Produit mis à jour avec succès",
+      "Success_Update_Title": "Mise à jour réussie"
+    },
+    "Columns": {
+      "Name": "Nom",
+      "Code": "Code EAN",
+      "Price": "Prix de vente",
+      "Threshold": "Alerte",
+      "IsActive": "Actif",
+      "InStock": "Stock actuel"
+    },
+    "MustOrder": "à commander",
+    "AddProduct": "Ajouter un produit"
   },
   "Routes": {
     "Dashboard": "Tableau de bord",

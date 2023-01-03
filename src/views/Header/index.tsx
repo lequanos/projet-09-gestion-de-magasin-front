@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Tabs } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 
 import './Header.scss';
 import logo from '@/assets/logo.svg';
@@ -53,6 +53,11 @@ function Header() {
   ) => {
     setIndex(newIndex);
   };
+
+  // useEffect
+  useEffect(() => {
+    setIndex(pathnameDictionary[location.pathname.substring(1)]);
+  }, [location.pathname]);
 
   return (
     <AppBar className="header" component="header" position="static">

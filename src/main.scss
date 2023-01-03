@@ -1,0 +1,24 @@
+@import './styles/variables';
+
+#root {
+  & .header--tabs a.MuiButtonBase-root.Mui-disabled {
+    opacity: 0.5;
+    color: $primaryDark;
+  }
+
+  & button {
+    text-transform: capitalize;
+    font-weight: 400;
+  }
+}
+
+div[role="presentation"] {
+  & button {
+    text-transform: capitalize;
+    font-weight: 400;
+  }
+}
+
+.MuiDrawer-paperAnchorRight {
+  width: 40%;
+}

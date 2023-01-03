@@ -1,6 +1,6 @@
 import { Container, Box, Card, CardContent, CardHeader } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import { useState } from 'react';
 
 import './Dashboard.scss';
@@ -13,7 +13,7 @@ import {
   StatsResponse,
   TableDataResponse,
 } from '@/services/dashboard/interfaces/dashboardResponse.interface';
-import { capitalize } from '@/helpers/utils';
+import { capitalize, getColumns } from '@/helpers/utils';
 
 function Dashboard() {
   // Hooks
@@ -50,25 +50,6 @@ function Dashboard() {
 
   // Methods
   /**
-   * Get columns depending on tableData
-   */
-  const getColumns = (): GridColDef[] => {
-    if (!tableData.length) return [];
-
-    return Object.keys(tableData[0])
-      .map((key) => {
-        if (key === 'id') return;
-
-        return {
-          field: key,
-          headerName: t(`Dashboard.Columns.${capitalize(key)}`),
-          flex: 1,
-        };
-      })
-      .filter((value) => !!value) as GridColDef[];
-  };
-
-  /**
    * Get table title depending on tableData
    */
   const getTableTitle = (): string => {
@@ -100,7 +81,7 @@ function Dashboard() {
           <CardContent className="dashboard--active-stores-table">
             <DataGrid
               rows={tableData}
-              columns={getColumns()}
+              columns={getColumns(tableData, 'dashboard')}
               loading={isLoading}
               disableSelectionOnClick
               autoPageSize

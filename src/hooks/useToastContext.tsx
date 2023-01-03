@@ -2,10 +2,12 @@ import { Severity, ToastValues } from '@/components/RS';
 import { createContext, useContext } from 'react';
 import { useToast } from './useToast';
 
+export type ToastFunction = {
+  [key in Severity]: (message: string, title?: string) => void;
+} & { close: () => void };
+
 export type ToastContextType = ToastValues & {
-  toast: {
-    [key in Severity]: (message: string, title?: string) => void;
-  } & { close: () => void };
+  toast: ToastFunction;
 };
 
 export const defaultToastValues: ToastValues = {

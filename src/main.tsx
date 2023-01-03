@@ -9,6 +9,7 @@ import { CssBaseline } from '@mui/material';
 import './i18n';
 import { UserContextProvider, ToastContextProvider } from './hooks';
 
+import './main.scss';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -24,6 +25,7 @@ import Supplier from './views/Supplier';
 import Store from './views/Store';
 import Aisle from './views/Aisle';
 import User from './views/User';
+import RequireStore from './components/RequireStore';
 
 const theme = createTheme({
   palette: {
@@ -33,9 +35,14 @@ const theme = createTheme({
       light: '#7CA2CB',
     },
     secondary: {
-      main: '#FAE398',
-      dark: '#F6CB3C',
-      light: '#FCEFC5',
+      main: '#FCF0C5',
+      dark: '#FAE69E',
+      light: '#FEFAEC',
+    },
+    error: {
+      main: '#F05442',
+      dark: '#ED311D',
+      light: '#F37668',
     },
   },
 });
@@ -55,10 +62,12 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 <Route path="/" element={<App />}>
                   <Route path="dashboard" element={<Dashboard />} />
                   <Route path="store" element={<Store />} />
-                  <Route path="product" element={<Product />} />
-                  <Route path="supplier" element={<Supplier />} />
-                  <Route path="aisle" element={<Aisle />} />
-                  <Route path="user" element={<User />} />
+                  <Route path="" element={<RequireStore />}>
+                    <Route path="product" element={<Product />} />
+                    <Route path="supplier" element={<Supplier />} />
+                    <Route path="aisle" element={<Aisle />} />
+                    <Route path="user" element={<User />} />
+                  </Route>
                 </Route>
                 <Route path="/401" element={<Unauthorized />} />
                 <Route path="/403" element={<Forbidden />} />

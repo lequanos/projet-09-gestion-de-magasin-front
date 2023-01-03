@@ -84,30 +84,27 @@ export abstract class ApiService {
           (res: AxiosResponse<T>) => this.formatResponse(res),
           (error: AxiosError<T>) => this.formatError(error),
         ),
-      create: <T>(c: CreateType<T>) =>
+      create: <T, U>(c: CreateType<T>) =>
         this.postRequest(resourceURL, c.toCreate).then(
-          (res: AxiosResponse<T>) => this.formatResponse(res),
-          (error: AxiosError<T>) => this.formatError(error),
+          (res: AxiosResponse<U>) => this.formatResponse(res),
+          (error: AxiosError<U>) => this.formatError(error),
         ),
-      update: <T>(p: PutType<T>) => {
+      update: <T, U>(p: PutType<T>) => {
         return this.putRequest(resourceURL, p.toUpdate).then(
-          (res: AxiosResponse<T>) => this.formatResponse(res),
-          (error: AxiosError<T>) => this.formatError(error),
+          (res: AxiosResponse<U>) => this.formatResponse(res),
+          (error: AxiosError<U>) => this.formatError(error),
         );
       },
-      updatePartial: <T>(p: PutType<T>) => {
+      updatePartial: <T, U>(p: PutType<T>) => {
         return this.patchRequest(resourceURL, p.toUpdate).then(
-          (res: AxiosResponse<T>) => this.formatResponse(res),
-          (error: AxiosError<T>) => this.formatError(error),
+          (res: AxiosResponse<U>) => this.formatResponse(res),
+          (error: AxiosError<U>) => this.formatError(error),
         );
       },
-      delete: <T>(del: DeleteType<T>) => {
-        return this.deleteRequest(
-          `${resourceURL}/delete/${del.id}`,
-          del.body,
-        ).then(
-          (res: AxiosResponse<T>) => this.formatResponse(res),
-          (error: AxiosError<T | undefined>) => this.formatError(error),
+      delete: (del: DeleteType) => {
+        return this.deleteRequest(`${resourceURL}/delete/${del.id}`).then(
+          (res: AxiosResponse<void>) => this.formatResponse(res),
+          (error: AxiosError<void | undefined>) => this.formatError(error),
         );
       },
       post: <T, U>(post: PostType<T>) =>
@@ -127,6 +124,16 @@ export abstract class ApiService {
             : `${resourceURL}`,
           get.query,
         ).then(
+          (res: AxiosResponse<T>) => this.formatResponse(res),
+          (error: AxiosError<T | undefined>) => this.formatError(error),
+        ),
+      deactivate: <T>(del: DeleteType) =>
+        this.deleteRequest(`${resourceURL}/${del.id}`).then(
+          (res: AxiosResponse<T>) => this.formatResponse(res),
+          (error: AxiosError<T | undefined>) => this.formatError(error),
+        ),
+      reactivate: <T>(tp: PutType<T>) =>
+        this.patchRequest(`${resourceURL}/${tp.id}`).then(
           (res: AxiosResponse<T>) => this.formatResponse(res),
           (error: AxiosError<T | undefined>) => this.formatError(error),
         ),
@@ -182,6 +189,20 @@ export abstract class ApiService {
             errorDefault: 'Error.Notfound_Label',
             type: this.ERRORS_TYPE.WARNING.type,
           };
+          break;
+        }
+        case 409: {
+          if ((data as any).message.includes('deactivated')) {
+            returnedError = {
+              ...returnedError,
+              errorDefault: 'Error.Deactivated_Label',
+            };
+          } else {
+            returnedError = {
+              ...returnedError,
+              errorDefault: 'Error.Existing_Label',
+            };
+          }
           break;
         }
         default:
@@ -253,10 +274,10 @@ export abstract class ApiService {
    */
   private putRequest = <T = any>(
     url: string,
-    body: IBody<T>,
+    body: IBody<T> = {},
     config: AxiosRequestConfig = {},
   ) => {
-    return this.httpClient.put(url, body.body, config);
+    return this.httpClient.put(url, body?.body, config);
   };
 
   /**
@@ -267,10 +288,10 @@ export abstract class ApiService {
    */
   private patchRequest = <T = any>(
     url: string,
-    body: IBody<T>,
+    body: IBody<T> = {},
     config: AxiosRequestConfig = {},
   ) => {
-    return this.httpClient.patch(url, body.body, config);
+    return this.httpClient.patch(url, body?.body, config);
   };
 
   /**
@@ -279,13 +300,8 @@ export abstract class ApiService {
    * @param {IBody<T>} body
    * @returns
    */
-  private deleteRequest = <T = any>(
-    url: string,
-    body: IBody<T> = {},
-    config: AxiosRequestConfig = {},
-  ) => {
+  private deleteRequest = (url: string, config: AxiosRequestConfig = {}) => {
     return this.httpClient.delete(url, {
-      data: body.body,
       ...config,
     });
   };

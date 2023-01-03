@@ -26,7 +26,8 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.39.1",
     "react-i18next": "^12.0.0",
-    "react-router-dom": "^6.4.3"
+    "react-router-dom": "^6.4.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@import-meta-env/cli": "^0.2.2",
@@ -35,6 +36,7 @@
     "@types/node": "^18.11.8",
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
+    "@types/uuid": "^9.0.0",
     "@vitejs/plugin-react": "^2.2.0",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",

@@ -4,7 +4,7 @@ import { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
 type RSFormProps = {
   children: JSX.Element | JSX.Element[];
   className?: string;
-  onSubmit: ReturnType<UseFormHandleSubmit<FieldValues>>;
+  onSubmit?: ReturnType<UseFormHandleSubmit<FieldValues>>;
 };
 
 export function RSForm({ children, className, onSubmit }: RSFormProps) {

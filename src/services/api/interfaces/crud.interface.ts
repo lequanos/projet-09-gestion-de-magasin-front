@@ -1,12 +1,12 @@
 import type { IBody, ISuccessResponse, IErrorResponse, IParam } from '.';
 
-export interface DeleteType<T> {
+export interface DeleteType {
   id?: string;
-  body?: IBody<T>;
 }
 
 export interface PutType<T> {
-  toUpdate: IBody<T>;
+  id?: string;
+  toUpdate?: IBody<T>;
 }
 
 export interface CreateType<T> {
@@ -31,22 +31,28 @@ export interface CRUD {
     id: string,
     query?: IParam<U>,
   ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
-  create<T>(
+  create<T, U>(
     c: CreateType<T>,
-  ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
-  update<T>(
+  ): Promise<ISuccessResponse<U> | IErrorResponse<U | undefined>>;
+  update<T, U>(
     p: PutType<T>,
-  ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
-  updatePartial<T>(
+  ): Promise<ISuccessResponse<U> | IErrorResponse<U | undefined>>;
+  updatePartial<T, U>(
     tp: PutType<T>,
-  ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
-  delete<T>(
-    del: DeleteType<T>,
-  ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
+  ): Promise<ISuccessResponse<U> | IErrorResponse<U | undefined>>;
+  delete(
+    del: DeleteType,
+  ): Promise<ISuccessResponse<void> | IErrorResponse<void | undefined>>;
   post<T, U>(
     p: PostType<T>,
   ): Promise<ISuccessResponse<U> | IErrorResponse<U | undefined>>;
   get<T>(
     g: GetType<T>,
+  ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
+  deactivate<T>(
+    del: DeleteType,
+  ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
+  reactivate<T>(
+    tp: PutType<T>,
   ): Promise<ISuccessResponse<T> | IErrorResponse<T | undefined>>;
 }

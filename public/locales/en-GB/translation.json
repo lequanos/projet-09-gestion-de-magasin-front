@@ -4,7 +4,19 @@
     "Password": "Password",
     "Firstname": "Firstname",
     "Lastname": "Lastname",
-    "SelectedStore": "Magasin"
+    "SelectedStore": "Store",
+    "SearchedProduct": "EAN Code",
+    "Aisle": "Aisle",
+    "Categories": "Categories",
+    "Code": "EAN Code",
+    "Brand": "Brand",
+    "Name": "Name",
+    "UnitPackaging": "Unit packaging",
+    "Price": "Selling price",
+    "Threshold": "Threshold",
+    "Ingredients": "Ingredients",
+    "ProductSuppliers": "Suppliers",
+    "Product": "Product"
   },
     "Dashboard": {
       "Modal": {
@@ -35,6 +47,8 @@
   "Error": {
     "Error_Title": "Error",
     "Warning_Title": "Warning",
+    "Existing_Label": "{{name}} exists",
+    "Deactivated_Label": "{{name}} deactivated",
     "Badrequest_Label": "Wrong data",
     "Unauthorized_Label": "Please login",
     "Forbidden_Label": "Insufficient permissions",
@@ -42,7 +56,13 @@
     "General_Label": "An error has occurred",
     "Required_Input": "{{name}} required",
     "Required_Select": "{{name}} required",
-    "Format_Email": "Wrong email format"
+    "Format_Email": "Wrong email format",
+    "Format_EAN": "Wrong EAN code format",
+    "Min_Price": "Minimum required {{price}}",
+    "Threshold": "Minimum required {{threshold}}",
+    "Same_Aisle": "Please select categories belonging to the same aisle",
+    "Empty_Supplier": "Please select a supplier for every entry",
+    "Empty_PurchasePrice": "Please set a purchasing price for every entry"
   },
   "Header": {
     "Logout": "Logout"
@@ -62,6 +82,54 @@
     "Success_Login_Title": "Success",
     "Success_Mail": "Your request has been sent successfully",
     "Success_Mail_Title": "Email sent"
+  },
+  "Product": {
+    "Modal": {
+      "Step1": "Search product",
+      "Step2": "Edit product",
+      "SearchProduct": "Search product by EAN code",
+      "NotFoundProduct": "No product found for the EAN code {{searchedProduct}}",
+      "Back": "Back",
+      "Next": "Next",
+      "Add": "Add",
+      "Cancel": "Cancel"
+    },
+    "DeleteModal": {
+      "Text": "Any deletion will be permanent",
+      "Confirm": "Confirm",
+      "Cancel": "Cancel"
+    },
+    "Form": {
+      "Brand": "Brand",
+      "Name": "Name",
+      "Code": "EAN Code",
+      "Price": "Selling price",
+      "UnitPackaging": "Unit packaging",
+      "Threshold": "Alert threshold",
+      "InStock_Add": "Initial stock",
+      "InStock_Update": "Current stock",
+      "Ingredients": "Ingredients",
+      "Aisle": "Aisle",
+      "Categories": "Categories",
+      "Suppliers": "Suppliers",
+      "PurchasePrice": "Purchasing price",
+      "Actions": "Actions",
+      "Save": "Save",
+      "Success_Add": "Product created successfully",
+      "Success_Add_Title": "Creation successful",
+      "Success_Update": "Product updated successfully",
+      "Success_Update_Title": "Update successful"
+    },
+    "Columns": {
+      "Name": "Name",
+      "Code": "EAN Code",
+      "Price": "Selling price",
+      "Threshold": "Alert",
+      "IsActive": "Active",
+      "InStock": "Current stock"
+    },
+    "MustOrder": "must order",
+    "AddProduct": "Add product"
   },
   "Routes": {
     "Dashboard": "Dashboard",
