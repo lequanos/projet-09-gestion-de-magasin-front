@@ -70,6 +70,21 @@ export const rulesValidationDictionary: {
   inStock: {
     required: 'Error.Required_Input',
   },
+  address: {
+    required: 'Error.Required_Input',
+  },
+  postcode: {
+    required: 'Error.Required_Input',
+  },
+  city: {
+    required: 'Error.Required_Input',
+  },
+  siren: {
+    required: 'Error.Required_Input',
+  },
+  siret: {
+    required: 'Error.Required_Input',
+  },
   categories: {
     validate: {
       notEmpty: (v: CategoryDto[]) => !!v.length || 'Error.Required_Input',

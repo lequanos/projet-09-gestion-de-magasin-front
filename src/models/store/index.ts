@@ -10,3 +10,7 @@ export type StoreDto = BaseModel & {
   siret?: string;
   movement?: number;
 };
+
+export type StoreDtoPayload = Omit<StoreDto, 'id'> & {
+  id?: string;
+};

@@ -16,7 +16,12 @@
     "Threshold": "Threshold",
     "Ingredients": "Ingredients",
     "ProductSuppliers": "Suppliers",
-    "Product": "Product"
+    "Product": "Product",
+    "Address": "Address",
+    "City": "City",
+    "Postcode": "Postcode",
+    "Siren": "Siren",
+    "Siret": "Siret"
   },
     "Dashboard": {
       "Modal": {
@@ -130,6 +135,44 @@
     },
     "MustOrder": "must order",
     "AddProduct": "Add product"
+  },
+  "Store": {
+    "Modal": {
+      "Step1": "Search store",
+      "Step2": "Edit store",
+      "SearchStore": "Search store by SIRET",
+      "NotFoundStore": "No store found for the SIRET {{searchedStore}}",
+      "Back": "Back",
+      "Next": "Next",
+      "Add": "Add",
+      "Cancel": "Cancel"
+    },
+    "DeleteModal": {
+      "Text": "Any deletion will be permanent",
+      "Confirm": "Confirm",
+      "Cancel": "Cancel"
+    },
+    "Form": {
+      "Name": "Name",
+      "Address": "Address",
+      "Postcode": "Postcode",
+      "City": "City",
+      "Siren": "Siren",
+      "Siret": "Siret",
+      "Actions": "Actions",
+      "Save": "Save",
+      "Success_Add": "Store created successfully",
+      "Success_Add_Title": "Creation successful",
+      "Success_Update": "Store updated successfully",
+      "Success_Update_Title": "Update successful"
+    },
+    "Columns": {
+      "Name": "Name",
+      "City": "City",
+      "Siret": "Siret",
+      "IsActive": "Active"
+    },
+    "AddStore": "Add store"
   },
   "Routes": {
     "Dashboard": "Dashboard",
