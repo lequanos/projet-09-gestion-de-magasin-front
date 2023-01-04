@@ -17,7 +17,7 @@ import {
   useAccessToken,
   useToastContext,
   useCreateMutation,
-  useSearchSuppliersSiret,
+  useSearchSuppliers,
 } from '@/hooks';
 import { RSButton, RSInput, RSForm } from '@/components/RS';
 import { IErrorResponse } from '@/services/api/interfaces';
@@ -53,11 +53,13 @@ function SupplierModal({ open, setOpen }: SupplierModalProps) {
   const addSupplierFormMethods = useForm<SupplierFormValues>({
     defaultValues: {
       name: '',
+      phoneNumber: '',
       address: '',
       postcode: '',
       city: '',
       siren: '',
       siret: '',
+      contact: '',
     },
   });
   const { searchedSupplier } = watch();
@@ -70,7 +72,7 @@ function SupplierModal({ open, setOpen }: SupplierModalProps) {
   const [supplier, setSupplier] = useState<SupplierDto>();
 
   // Queries
-  const { isFetching } = useSearchSuppliersSiret(
+  const { isFetching } = useSearchSuppliers(
     searchedSupplier,
     enableSearchSupplier,
     accessToken,

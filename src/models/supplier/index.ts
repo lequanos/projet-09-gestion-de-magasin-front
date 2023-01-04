@@ -1,6 +1,6 @@
-export type SupplierDto = {
-  id: number;
-  name: string;
+import { BaseModel } from '../interfaces/common.interface';
+
+export type SupplierDto = BaseModel & {
   phoneNumber?: string;
   address?: string;
   postcode?: string;
@@ -10,4 +10,8 @@ export type SupplierDto = {
   contact?: string;
   isActive?: false;
   pictureUrl?: string;
+};
+
+export type SupplierDtoPayload = Omit<SupplierDto, 'id'> & {
+  id?: string;
 };

@@ -56,7 +56,9 @@ function SupplierModalContent({
           </CardContent>
         </Card>
       )}
-      {activeStep === 1 && <SupplierForm supplier={supplier} readOnly={false} />}
+      {activeStep === 1 && (
+        <SupplierForm supplier={supplier} readOnly={false} />
+      )}
     </>
   );
 }

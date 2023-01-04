@@ -22,7 +22,8 @@ type DeleteSupplierModalProps = {
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
   ) => Promise<
     QueryObserverResult<
-      ISuccessResponse<SupplierDto[]> | IErrorResponse<SupplierDto[] | undefined>,
+      | ISuccessResponse<SupplierDto[]>
+      | IErrorResponse<SupplierDto[] | undefined>,
       unknown
     >
   >;

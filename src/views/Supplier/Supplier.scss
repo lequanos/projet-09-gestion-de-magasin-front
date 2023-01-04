@@ -1,6 +1,6 @@
 @import '../../styles/variables';
 
-#root .store {
+#root .supplier {
   &--container {
     padding: $gutter;
     display: flex !important;
@@ -26,7 +26,7 @@
   }
 }
 
-.store {
+.supplier {
   &--modal {
     &-container {
       display: flex;
@@ -142,11 +142,11 @@
       align-items: center;
       padding: $gutter;
 
-      & .store--form-picture {
+      & .supplier--form-picture {
         height: 50%;
       }
 
-      & .store--form {
+      & .supplier--form {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -188,7 +188,7 @@
       display: flex;
     }
 
-    &-storeSuppliers {
+    &-supplierSuppliers {
       margin-top: calc($gutter / 2);
       display: flex;
       flex-direction: column;

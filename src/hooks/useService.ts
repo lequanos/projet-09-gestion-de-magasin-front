@@ -22,6 +22,7 @@ import { SupplierService } from '@/services/supplier/SupplierService';
 import { AisleService } from '@/services/aisle/AisleService';
 import { ProductDtoPayload } from '@/models/product';
 import { StoreDto } from '@/models/store';
+import { SupplierDto } from '@/models/supplier';
 
 const serviceDictionary = {
   auth: (accessToken?: string) => new AuthService(accessToken),
@@ -259,6 +260,27 @@ export const useSearchStoresSiret = (
   return useQuery({
     queryKey: ['store'],
     queryFn: () => service.crud.searchStoresSiret(searchValue),
+    enabled,
+    onSuccess,
+  });
+};
+
+export const useSearchSuppliers = (
+  searchValue: string,
+  enabled: boolean,
+  accessToken?: string,
+  onSuccess?:
+    | ((
+        data:
+          | ISuccessResponse<SupplierDto>
+          | IErrorResponse<SupplierDto | undefined>,
+      ) => void)
+    | undefined,
+) => {
+  const service = new SupplierService(accessToken);
+  return useQuery({
+    queryKey: ['supplier'],
+    queryFn: () => service.crud.searchSuppliers(searchValue),
     enabled,
     onSuccess,
   });

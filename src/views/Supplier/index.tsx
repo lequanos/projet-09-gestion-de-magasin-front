@@ -18,29 +18,25 @@ import {
   useUserContext,
   useDeactivateMutation,
   useReactivateMutation,
-  useSelectSupplierMutation,
 } from '@/hooks';
-import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
+import { ISuccessResponse } from '@/services/api/interfaces';
 import { RSButton } from '@/components/RS';
 import { getColumns, onSuccess } from '@/helpers/utils';
 import { Permission, RoleDto } from '@/models/role';
 import { SupplierDto } from '@/models/supplier';
-import { SelectSupplierResponse } from '@/services/auth/interfaces/authResponse.interface';
-import jwtDecode from 'jwt-decode';
 
 function Supplier() {
   // Hooks
   const { t } = useTranslation('translation');
   const { toast } = useToastContext();
-  const { accessToken, setAccessToken } = useAccessToken();
-  const { user, setUser } = useUserContext();
+  const { accessToken } = useAccessToken();
+  const { user } = useUserContext();
 
   // States
   const [tableData, setTableData] = useState<SupplierDto[]>([]);
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [supplierSiret, setSupplierSiret] = useState('');
   const [supplierId, setSupplierId] = useState(0);
 
   // Queries
@@ -71,11 +67,6 @@ function Supplier() {
     accessToken,
   );
 
-  const selectSupplierMutation = useSelectSupplierMutation(
-    { supplier: 0 },
-    accessToken || '',
-  );
-
   // Methods
   /**
    * Open modal to add a supplier
@@ -88,7 +79,6 @@ function Supplier() {
    * Open supplier detail drawer
    */
   const handleOpenSupplierDetail = (params: GridRowParams) => {
-    setSupplierSiret(params.row.siret);
     setSupplierId(params.row.id);
     setDrawerOpen(true);
   };
@@ -121,48 +111,6 @@ function Supplier() {
     }
   };
 
-  /**
-   * Change the selected supplier
-   */
-  const handleChangeSupplier = ({ id }: GridRowParams) => {
-    selectSupplierMutation.mutate(
-      { supplier: id as number },
-      {
-        onSuccess: (response) => {
-          const { ok, status } = response;
-
-          if ([401, 403].includes(status)) {
-            throw new Response('', { status });
-          }
-
-          if (!ok) {
-            const selectSupplierError =
-              response as IErrorResponse<SelectSupplierResponse>;
-
-            toast[selectSupplierError.formatted.type](
-              selectSupplierError.formatted.errorDefault,
-              selectSupplierError.formatted.title,
-            );
-            return;
-          }
-
-          const selectSupplierResponse =
-            response as ISuccessResponse<SelectSupplierResponse>;
-          setAccessToken(selectSupplierResponse.data.access_token);
-          setUser({
-            ...user,
-            ...jwtDecode(selectSupplierResponse.data.access_token),
-          });
-          sessionStorage.setItem('accessDashboard', JSON.stringify(true));
-          toast.success(
-            'Supplier.Success_Change_Supplier',
-            'Supplier.Success_Change_Supplier_Title',
-          );
-        },
-      },
-    );
-  };
-
   return (
     <>
       <Container className="supplier--container">
@@ -186,7 +134,6 @@ function Supplier() {
                 handleOpenSupplierDetail,
                 handleDeleteSupplier,
                 handleToggleSupplierActiveStatus,
-                handleChangeSupplier,
               )}
               loading={isFetching}
               disableSelectionOnClick
@@ -199,7 +146,6 @@ function Supplier() {
       <SupplierDrawer
         drawerOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}
-        siret={supplierSiret}
         id={supplierId}
       />
       <DeleteSupplierModal

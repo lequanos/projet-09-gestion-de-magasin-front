@@ -23,7 +23,8 @@
     "Postcode": "Code postal",
     "Siren": "Siren",
     "Siret": "Siret",
-    "Store": "Magasin"
+    "Store": "Magasin",
+    "Supplier": "Fournisseur"
   },
   "Dashboard": {
     "Modal": {
@@ -180,6 +181,44 @@
     "AddStore": "Ajouter un magasin",
     "Success_Change_Store": "Changement de magasin réussi",
     "Success_Change_Store_Title": "Réussite"
+  },
+  "Supplier": {
+    "Modal": {
+      "Step1": "Recherche du fournisseur",
+      "Step2": "Edition du fournisseur",
+      "SearchSupplier": "Recherche fournisseur par SIRET",
+      "NotFoundSupplier": "Aucun fournisseur trouvé pour le SIRET {{searchedSupplier}}",
+      "Back": "Retour",
+      "Next": "Suivant",
+      "Add": "Ajouter",
+      "Cancel": "Annuler"
+    },
+    "DeleteModal": {
+      "Text": "Toute suppression sera définitive",
+      "Confirm": "Confirmer",
+      "Cancel": "Annuler"
+    },
+    "Form": {
+      "Name": "Nom",
+      "Address": "Adresse",
+      "Postcode": "Code postal",
+      "City": "Ville",
+      "Siren": "Siren",
+      "Siret": "Siret",
+      "Actions": "Actions",
+      "Save": "Enregistrer",
+      "Success_Add": "Fournisseur créé avec succès",
+      "Success_Add_Title": "Création réussie",
+      "Success_Update": "Fournisseur mis à jour avec succès",
+      "Success_Update_Title": "Mise à jour réussie"
+    },
+    "Columns": {
+      "Name": "Nom",
+      "City": "Ville",
+      "Siret": "Siret",
+      "IsActive": "Actif"
+    },
+    "AddSupplier": "Ajouter un fournisseur"
   },
   "Routes": {
     "Dashboard": "Tableau de bord",

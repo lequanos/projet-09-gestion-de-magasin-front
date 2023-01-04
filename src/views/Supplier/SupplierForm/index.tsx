@@ -13,11 +13,13 @@ type SupplierFormProps = {
 
 export type SupplierFormValues = {
   name: string;
+  phoneNumber: string;
   address: string;
   postcode: string;
   city: string;
   siren: string;
   siret: string;
+  contact: string;
 };
 
 function SupplierForm({ supplier, readOnly = true }: SupplierFormProps) {

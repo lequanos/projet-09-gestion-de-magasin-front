@@ -23,7 +23,8 @@
     "Postcode": "Postcode",
     "Siren": "Siren",
     "Siret": "Siret",
-    "Store": "Store"
+    "Store": "Store",
+    "Supplier": "Supplier"
   },
     "Dashboard": {
       "Modal": {

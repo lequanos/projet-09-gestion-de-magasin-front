@@ -20,14 +20,12 @@ import { RSButton } from '@/components/RS';
 type SupplierDrawerProps = {
   drawerOpen: boolean;
   setDrawerOpen: Dispatch<SetStateAction<boolean>>;
-  siret: string;
   id: number;
 };
 
 function SupplierDrawer({
   drawerOpen,
   setDrawerOpen,
-  siret,
   id,
 }: SupplierDrawerProps) {
   // Hooks
@@ -38,11 +36,13 @@ function SupplierDrawer({
   const methods = useForm<SupplierFormValues>({
     defaultValues: {
       name: '',
+      phoneNumber: '',
       address: '',
       postcode: '',
       city: '',
       siren: '',
       siret: '',
+      contact: '',
     },
   });
   const updateSupplierPayload = methods.watch();
@@ -53,7 +53,7 @@ function SupplierDrawer({
   // Queries
   const { isFetching } = useGetOneQuery<SupplierDto>(
     'supplier',
-    siret,
+    id.toString(),
     accessToken,
     undefined,
     drawerOpen,
@@ -79,7 +79,10 @@ function SupplierDrawer({
     },
   );
 
-  const updateSupplierMutation = useUpdateMutation<SupplierDtoPayload, SupplierDto>(
+  const updateSupplierMutation = useUpdateMutation<
+    SupplierDtoPayload,
+    SupplierDto
+  >(
     {
       toUpdate: {
         body: {
@@ -163,15 +166,19 @@ function SupplierDrawer({
                 supplier={supplier}
                 readOnly={
                   !(user.role as RoleDto).permissions.some((p) =>
-                    [Permission.MANAGE_ALL, Permission.MANAGE_SUPPLIER].includes(
-                      p,
-                    ),
+                    [
+                      Permission.MANAGE_ALL,
+                      Permission.MANAGE_SUPPLIER,
+                    ].includes(p),
                   )
                 }
               />
               <RSButton
                 type="submit"
-                permissions={[Permission.MANAGE_ALL, Permission.MANAGE_SUPPLIER]}
+                permissions={[
+                  Permission.MANAGE_ALL,
+                  Permission.MANAGE_SUPPLIER,
+                ]}
                 onClick={handleSubmitForm}
               >
                 {t('Supplier.Form.Save')}
