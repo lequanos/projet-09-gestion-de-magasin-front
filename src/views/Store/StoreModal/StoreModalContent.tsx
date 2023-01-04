@@ -1,22 +1,16 @@
-import {
-  Typography,
-  Card,
-  CardMedia,
-  CardContent,
-  CircularProgress,
-} from '@mui/material';
+import { Typography, Card, CardContent, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { StoreDtoPayload } from '@/models/store';
+import { StoreDto } from '@/models/store';
 import StoreForm, { StoreFormValues } from '../StoreForm';
 
 type StoreModalContentProps = {
   activeStep: number;
   notFound: boolean;
   searchedStore: string;
-  store?: StoreDtoPayload;
+  store?: StoreDto;
   isFetching: boolean;
 };
 
@@ -55,10 +49,6 @@ function StoreModalContent({
       )}
       {activeStep === 0 && store && (
         <Card className="store--modal-card">
-          <CardMedia
-            className="store--modal-card-picture"
-            image={store.pictureUrl}
-          />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {store?.name || ''}

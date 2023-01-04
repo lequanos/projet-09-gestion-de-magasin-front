@@ -195,7 +195,8 @@ export const useSelectStoreMutation = (
 ) => {
   const service = new AuthService(accessToken);
   return useMutation({
-    mutationFn: () => service.crud.selectStore(payload),
+    mutationFn: (variables: SelectStoreDto | undefined) =>
+      service.crud.selectStore(variables || payload),
   });
 };
 
@@ -239,6 +240,25 @@ export const useSearchStores = (
   return useQuery({
     queryKey: ['stores'],
     queryFn: () => service.crud.searchStores(searchValue),
+    enabled,
+    onSuccess,
+  });
+};
+
+export const useSearchStoresSiret = (
+  searchValue: string,
+  enabled: boolean,
+  accessToken?: string,
+  onSuccess?:
+    | ((
+        data: ISuccessResponse<StoreDto> | IErrorResponse<StoreDto | undefined>,
+      ) => void)
+    | undefined,
+) => {
+  const service = new StoreService(accessToken);
+  return useQuery({
+    queryKey: ['store'],
+    queryFn: () => service.crud.searchStoresSiret(searchValue),
     enabled,
     onSuccess,
   });

@@ -13,7 +13,12 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { SyntheticEvent } from 'react';
 
 import '../Store.scss';
-import { useAccessToken, useToastContext, useCreateMutation } from '@/hooks';
+import {
+  useAccessToken,
+  useToastContext,
+  useCreateMutation,
+  useSearchStoresSiret,
+} from '@/hooks';
 import { RSButton, RSInput, RSForm } from '@/components/RS';
 import { IErrorResponse } from '@/services/api/interfaces';
 import StoreModalContent from './StoreModalContent';
@@ -62,39 +67,39 @@ function StoreModal({ open, setOpen }: StoreModalProps) {
   const [activeStep, setActiveStep] = useState(0);
   const [enableSearchStore, setEnableSearchStore] = useState(false);
   const [notFound, setNotFound] = useState(false);
-  const [store, setStore] = useState<StoreDtoPayload>();
+  const [store, setStore] = useState<StoreDto>();
 
   // Queries
-  // const { isFetching } = useSearchStore(
-  //   searchedStore,
-  //   enableSearchStore,
-  //   accessToken,
-  //   (response) => {
-  //     const { ok, status, data } = response;
-  //     setEnableSearchStore(false);
+  const { isFetching } = useSearchStoresSiret(
+    searchedStore,
+    enableSearchStore,
+    accessToken,
+    (response) => {
+      const { ok, status, data } = response;
+      setEnableSearchStore(false);
 
-  //     if ([401, 403].includes(status)) {
-  //       throw new Response('', { status });
-  //     }
+      if ([401, 403].includes(status)) {
+        throw new Response('', { status });
+      }
 
-  //     if (status === 404) {
-  //       return setNotFound(true);
-  //     }
+      if (status === 404) {
+        return setNotFound(true);
+      }
 
-  //     if (!ok) {
-  //       const error = response as IErrorResponse<StoreDtoPayload>;
-  //       toast[error.formatted.type](
-  //         t(error.formatted.errorDefault as string, {
-  //           name: t(`Common.Store`),
-  //         }),
-  //         error.formatted.title,
-  //       );
-  //       return;
-  //     }
+      if (!ok) {
+        const error = response as IErrorResponse<StoreDto>;
+        toast[error.formatted.type](
+          t(error.formatted.errorDefault as string, {
+            name: t(`Common.Store`),
+          }),
+          error.formatted.title,
+        );
+        return;
+      }
 
-  //     setStore(data);
-  //   },
-  // );
+      setStore(data);
+    },
+  );
 
   const addStoreMutation = useCreateMutation<StoreDtoPayload, StoreDto>(
     {
@@ -231,7 +236,7 @@ function StoreModal({ open, setOpen }: StoreModalProps) {
                     endIcon="search"
                     onChange={handleInputChange}
                     inputProps={{
-                      maxlength: 13,
+                      maxLength: 14,
                     }}
                   />
                 </RSForm>
@@ -243,7 +248,7 @@ function StoreModal({ open, setOpen }: StoreModalProps) {
                     notFound={notFound}
                     searchedStore={searchedStore}
                     store={store}
-                    isFetching={true}
+                    isFetching={isFetching}
                   />
                 </FormProvider>
               </Box>

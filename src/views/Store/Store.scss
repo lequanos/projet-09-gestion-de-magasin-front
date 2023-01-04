@@ -50,15 +50,17 @@
     }
 
     &-card {
-      height: 80%;
       width: 40%;
       display: flex;
       align-items: center;
+      justify-content: center;
 
-      &-picture[role='img'] {
-        width: 50%;
-        background-size: contain;
-        height: 100%;
+      & .MuiCardContent-root:last-child {
+        padding-bottom: $gutter;
+      }
+
+      & .MuiTypography-root {
+        margin: 0;
       }
     }
 
@@ -184,8 +186,6 @@
     &-input {
       width: 80%;
       display: flex;
-      justify-content: space-between;
-      gap: 5%;
     }
 
     &-storeSuppliers {

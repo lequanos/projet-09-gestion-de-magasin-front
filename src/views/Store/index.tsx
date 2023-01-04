@@ -18,19 +18,22 @@ import {
   useUserContext,
   useDeactivateMutation,
   useReactivateMutation,
+  useSelectStoreMutation,
 } from '@/hooks';
-import { ISuccessResponse } from '@/services/api/interfaces';
+import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { RSButton } from '@/components/RS';
 import { getColumns, onSuccess } from '@/helpers/utils';
 import { Permission, RoleDto } from '@/models/role';
 import { StoreDto } from '@/models/store';
+import { SelectStoreResponse } from '@/services/auth/interfaces/authResponse.interface';
+import jwtDecode from 'jwt-decode';
 
 function Store() {
   // Hooks
   const { t } = useTranslation('translation');
   const { toast } = useToastContext();
-  const { accessToken } = useAccessToken();
-  const { user } = useUserContext();
+  const { accessToken, setAccessToken } = useAccessToken();
+  const { user, setUser } = useUserContext();
 
   // States
   const [tableData, setTableData] = useState<StoreDto[]>([]);
@@ -65,6 +68,11 @@ function Store() {
   const reactivateMutation = useReactivateMutation<StoreDto>(
     'store',
     accessToken,
+  );
+
+  const selectStoreMutation = useSelectStoreMutation(
+    { store: 0 },
+    accessToken || '',
   );
 
   // Methods
@@ -109,6 +117,48 @@ function Store() {
     }
   };
 
+  /**
+   * Change the selected store
+   */
+  const handleChangeStore = ({ id }: GridRowParams) => {
+    selectStoreMutation.mutate(
+      { store: id as number },
+      {
+        onSuccess: (response) => {
+          const { ok, status } = response;
+
+          if ([401, 403].includes(status)) {
+            throw new Response('', { status });
+          }
+
+          if (!ok) {
+            const selectStoreError =
+              response as IErrorResponse<SelectStoreResponse>;
+
+            toast[selectStoreError.formatted.type](
+              selectStoreError.formatted.errorDefault,
+              selectStoreError.formatted.title,
+            );
+            return;
+          }
+
+          const selectStoreResponse =
+            response as ISuccessResponse<SelectStoreResponse>;
+          setAccessToken(selectStoreResponse.data.access_token);
+          setUser({
+            ...user,
+            ...jwtDecode(selectStoreResponse.data.access_token),
+          });
+          sessionStorage.setItem('accessDashboard', JSON.stringify(true));
+          toast.success(
+            'Store.Success_Change_Store',
+            'Store.Success_Change_Store_Title',
+          );
+        },
+      },
+    );
+  };
+
   return (
     <>
       <Container className="store--container">
@@ -132,6 +182,7 @@ function Store() {
                 handleOpenStoreDetail,
                 handleDeleteStore,
                 handleToggleStoreActiveStatus,
+                handleChangeStore,
               )}
               loading={isFetching}
               disableSelectionOnClick

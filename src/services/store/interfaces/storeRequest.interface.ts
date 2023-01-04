@@ -11,4 +11,8 @@ export interface StoreRequest extends CRUD {
   ): Promise<
     ISuccessResponse<StoreDto[]> | IErrorResponse<StoreDto[] | undefined>
   >;
+
+  searchStoresSiret(
+    searchValue: string,
+  ): Promise<ISuccessResponse<StoreDto> | IErrorResponse<StoreDto | undefined>>;
 }

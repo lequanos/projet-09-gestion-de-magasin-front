@@ -35,6 +35,13 @@ export const rulesValidationDictionary: {
       message: 'Error.Format_EAN',
     },
   },
+  searchedStore: {
+    required: 'Error.Required_Input',
+    pattern: {
+      value: /^[0-9]{14}$/i,
+      message: 'Error.Format_SIRET',
+    },
+  },
   name: {
     required: 'Error.Required_Input',
   },
@@ -75,15 +82,27 @@ export const rulesValidationDictionary: {
   },
   postcode: {
     required: 'Error.Required_Input',
+    pattern: {
+      value: /^[0-9]{5}$/i,
+      message: 'Error.Format_Postcode',
+    },
   },
   city: {
     required: 'Error.Required_Input',
   },
   siren: {
     required: 'Error.Required_Input',
+    pattern: {
+      value: /^[0-9]{9}$/i,
+      message: 'Error.Format_SIREN',
+    },
   },
   siret: {
     required: 'Error.Required_Input',
+    pattern: {
+      value: /^[0-9]{14}$/i,
+      message: 'Error.Format_SIRET',
+    },
   },
   categories: {
     validate: {

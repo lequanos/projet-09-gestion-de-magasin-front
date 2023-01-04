@@ -61,6 +61,9 @@ function StoreForm({ store, readOnly = true }: StoreFormProps) {
           errors={errors}
           size="small"
           readOnly={readOnly}
+          inputProps={{
+            maxLength: 5,
+          }}
         />
         <RSInput
           className="store--form-input"
@@ -78,7 +81,7 @@ function StoreForm({ store, readOnly = true }: StoreFormProps) {
           control={control}
           errors={errors}
           size="small"
-          readOnly={readOnly}
+          readOnly={true}
         />
         <RSInput
           className="store--form-input"
@@ -87,7 +90,7 @@ function StoreForm({ store, readOnly = true }: StoreFormProps) {
           control={control}
           errors={errors}
           size="small"
-          readOnly={readOnly}
+          readOnly={true}
         />
       </RSForm>
     </Box>

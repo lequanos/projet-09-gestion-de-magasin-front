@@ -6,6 +6,7 @@
     "Lastname": "Lastname",
     "SelectedStore": "Store",
     "SearchedProduct": "EAN Code",
+    "SearchedStore": "Store",
     "Aisle": "Aisle",
     "Categories": "Categories",
     "Code": "EAN Code",
@@ -21,13 +22,14 @@
     "City": "City",
     "Postcode": "Postcode",
     "Siren": "Siren",
-    "Siret": "Siret"
+    "Siret": "Siret",
+    "Store": "Store"
   },
     "Dashboard": {
       "Modal": {
         "SelectStore": "Please select a store",
         "Store": "Store",
-        "SearchStores": "Search stores by name or siret/siren",
+        "SearchStores": "Search stores by name",
         "Or": "Or",
         "Submit": "Submit",
         "AccessDashboard": "Access the dashboard"
@@ -63,6 +65,9 @@
     "Required_Select": "{{name}} required",
     "Format_Email": "Wrong email format",
     "Format_EAN": "Wrong EAN code format",
+    "Format_SIRET": "Wrong SIRET format",
+    "Format_SIREN": "Wrong SIREN format",
+    "Format_Postcode": "Wrong postcode format",
     "Min_Price": "Minimum required {{price}}",
     "Threshold": "Minimum required {{threshold}}",
     "Same_Aisle": "Please select categories belonging to the same aisle",
@@ -172,7 +177,9 @@
       "Siret": "Siret",
       "IsActive": "Active"
     },
-    "AddStore": "Add store"
+    "AddStore": "Add store",
+    "Success_Change_Store": "Store changed successfully",
+    "Success_Change_Store_Title": "Success"
   },
   "Routes": {
     "Dashboard": "Dashboard",

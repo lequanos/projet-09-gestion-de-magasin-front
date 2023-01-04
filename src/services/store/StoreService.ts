@@ -26,6 +26,18 @@ export class StoreService extends ApiService {
       return response;
     };
 
+    baseCrud.searchStoresSiret = async (
+      searchValue: string,
+    ): Promise<
+      ISuccessResponse<StoreDto> | IErrorResponse<StoreDto | undefined>
+    > => {
+      const response = await baseCrud.get<StoreDto>({
+        complementURL: `search-siret?search=${searchValue}`,
+      });
+
+      return response;
+    };
+
     return baseCrud;
   }
 }
