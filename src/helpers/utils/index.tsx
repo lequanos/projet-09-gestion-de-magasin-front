@@ -1,7 +1,7 @@
 import { EntityList, ToastFunction } from '@/hooks';
 import { Permission } from '@/models/role';
 import { ISuccessResponse, IErrorResponse } from '@/services/api/interfaces';
-import { Edit, Delete } from '@mui/icons-material';
+import { Edit, Delete, ChangeCircleOutlined } from '@mui/icons-material';
 import { Chip, ToggleButton } from '@mui/material';
 import {
   GridActionsCellItem,
@@ -25,6 +25,7 @@ export const getColumns = <T extends any[]>(
   onClickEdit?: (params: GridRowParams) => void,
   onClickDelete?: (params: GridRowParams) => void,
   onClickToggleActivateStatus?: (params: GridRenderCellParams) => void,
+  onClickChange?: (params: GridRowParams) => void,
 ): GridEnrichedColDef[] => {
   if (!tableData.length) return [];
   const indexOfManageEntity = Object.keys(Permission).indexOf(
@@ -148,9 +149,26 @@ export const getColumns = <T extends any[]>(
         ) : (
           <></>
         ),
+        entity === 'store' ? (
+          <GridActionsCellItem
+            icon={<ChangeCircleOutlined />}
+            onClick={() => {
+              if (onClickChange) onClickChange(params);
+            }}
+            label="ChangeStore"
+            showInMenu={false}
+            onResize={undefined}
+            onResizeCapture={undefined}
+            color="primary"
+            disabled={!params.row.isActive}
+          />
+        ) : (
+          <></>
+        ),
       ],
     });
   }
+
   return columns as GridEnrichedColDef[];
 };
 

@@ -6,6 +6,7 @@
     "Lastname": "Nom",
     "SelectedStore": "Magasin",
     "SearchedProduct": "Code EAN",
+    "SearchedStore": "Magasin",
     "Aisle": "Rayon",
     "Categories": "Catégories",
     "Code": "Code EAN",
@@ -16,13 +17,19 @@
     "Threshold": "Seuil d'alerte",
     "Ingredients": "Ingrédients",
     "ProductSuppliers": "Fournisseurs",
-    "Product": "Produit"
+    "Product": "Produit",
+    "Address": "Adresse",
+    "City": "Ville",
+    "Postcode": "Code postal",
+    "Siren": "Siren",
+    "Siret": "Siret",
+    "Store": "Magasin"
   },
   "Dashboard": {
     "Modal": {
       "SelectStore": "Veuillez sélectionner un magasin",
       "Store": "Magasin",
-      "SearchStores": "Recherche magasin par nom ou siret/siren",
+      "SearchStores": "Recherche magasin par nom",
       "Or": "Ou",
       "Submit": "Soumettre",
       "AccessDashboard": "Accéder au tableau de bord"
@@ -58,6 +65,9 @@
     "Required_Select": "{{name}} requis",
     "Format_Email": "Format d'email incorrect",
     "Format_EAN": "Format de code EAN incorrect",
+    "Format_SIRET": "Format de SIRET incorrect",
+    "Format_SIREN": "Format de SIREN incorrect",
+    "Format_Postcode": "Format de code postal incorrect",
     "Min_Price": "Minimum requis {{price}}",
     "Threshold": "Minimum requis {{threshold}}",
     "Same_Aisle": "Veuillez sélectionner des catégories appartenant au même rayon",
@@ -130,6 +140,46 @@
     },
     "MustOrder": "à commander",
     "AddProduct": "Ajouter un produit"
+  },
+  "Store": {
+    "Modal": {
+      "Step1": "Recherche du magasin",
+      "Step2": "Edition du magasin",
+      "SearchStore": "Recherche magasin par SIRET",
+      "NotFoundStore": "Aucun magasin trouvé pour le SIRET {{searchedStore}}",
+      "Back": "Retour",
+      "Next": "Suivant",
+      "Add": "Ajouter",
+      "Cancel": "Annuler"
+    },
+    "DeleteModal": {
+      "Text": "Toute suppression sera définitive",
+      "Confirm": "Confirmer",
+      "Cancel": "Annuler"
+    },
+    "Form": {
+      "Name": "Nom",
+      "Address": "Adresse",
+      "Postcode": "Code postal",
+      "City": "Ville",
+      "Siren": "Siren",
+      "Siret": "Siret",
+      "Actions": "Actions",
+      "Save": "Enregistrer",
+      "Success_Add": "Magasin créé avec succès",
+      "Success_Add_Title": "Création réussie",
+      "Success_Update": "Magasin mis à jour avec succès",
+      "Success_Update_Title": "Mise à jour réussie"
+    },
+    "Columns": {
+      "Name": "Nom",
+      "City": "Ville",
+      "Siret": "Siret",
+      "IsActive": "Actif"
+    },
+    "AddStore": "Ajouter un magasin",
+    "Success_Change_Store": "Changement de magasin réussi",
+    "Success_Change_Store_Title": "Réussite"
   },
   "Routes": {
     "Dashboard": "Tableau de bord",
