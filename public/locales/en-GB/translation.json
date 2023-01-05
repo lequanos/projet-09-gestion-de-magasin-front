@@ -226,6 +226,31 @@
     },
     "AddSupplier": "Add supplier"
   },
+  "User": {
+    "Modal": {
+      "Cancel": "Cancel"
+    },
+    "DeleteModal": {
+      "Text": "Any deletion will be permanent",
+      "Confirm": "Confirm",
+      "Cancel": "Cancel"
+    },
+    "Form": {
+      "Firstname": "Firstname",
+      "Lastname": "Lastname",
+      "Email": "Email",
+      "Password":"Password",
+      "Save": "Save"
+    },
+    "Columns": {
+      "Firstname": "Firstname",
+      "Lastname": "Lastname",
+      "Email": "Email",
+      "Role": "Role",
+      "IsActive": "Active"
+    },
+    "AddUser": "Add user"
+  },
   "Routes": {
     "Dashboard": "Dashboard",
     "Stores": "Stores",

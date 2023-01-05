@@ -226,6 +226,31 @@
     },
     "AddSupplier": "Ajouter un fournisseur"
   },
+  "User": {
+    "Modal": {
+      "Cancel": "Annuler"
+    },
+    "DeleteModal": {
+      "Text": "Toute suppression sera définitive",
+      "Confirm": "Confirmer",
+      "Cancel": "Annuler"
+    },
+    "Form": {
+      "Firstname": "Prénom",
+      "Lastname": "Nom",
+      "Email": "Adresse Email",
+      "Password":"Mot de passe",
+      "Save": "Enregistrer"
+    },
+    "Columns": {
+      "Firstname": "Prénom",
+      "Lastname": "Nom",
+      "Email": "Adresse Email",
+      "Role": "Rôle",
+      "IsActive": "Actif"
+    },
+    "AddUser": "Ajouter un utilisateur"
+  },
   "Routes": {
     "Dashboard": "Tableau de bord",
     "Stores": "Magasins",
