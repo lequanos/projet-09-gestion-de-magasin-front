@@ -42,6 +42,13 @@ export const rulesValidationDictionary: {
       message: 'Error.Format_SIRET',
     },
   },
+  searchedSupplier: {
+    required: 'Error.Required_Input',
+    pattern: {
+      value: /^[0-9]{14}$/i,
+      message: 'Error.Format_SIRET',
+    },
+  },
   name: {
     required: 'Error.Required_Input',
   },
@@ -103,6 +110,16 @@ export const rulesValidationDictionary: {
       value: /^[0-9]{14}$/i,
       message: 'Error.Format_SIRET',
     },
+  },
+  phoneNumber: {
+    required: 'Error.Required_Input',
+    pattern: {
+      value: /^[0-9]{10}$/i,
+      message: 'Error.Format_PhoneNumber',
+    },
+  },
+  contact: {
+    required: 'Error.Required_Input',
   },
   categories: {
     validate: {

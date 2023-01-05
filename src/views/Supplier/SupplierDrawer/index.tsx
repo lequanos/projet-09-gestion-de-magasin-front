@@ -152,6 +152,8 @@ function SupplierDrawer({
     methods.setValue('postcode', supplier?.postcode || '');
     methods.setValue('siren', supplier?.siren || '');
     methods.setValue('siret', supplier?.siret || '');
+    methods.setValue('phoneNumber', supplier?.phoneNumber || '');
+    methods.setValue('contact', supplier?.contact || '');
   }, [supplier]);
 
   return (

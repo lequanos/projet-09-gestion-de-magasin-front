@@ -1,6 +1,6 @@
 import { SupplierDto } from '@/models/supplier';
 import { ApiService } from '../api/ApiService';
-import { CRUD, IErrorResponse, ISuccessResponse } from '../api/interfaces';
+import { IErrorResponse, ISuccessResponse } from '../api/interfaces';
 import { SupplierRequest } from './interfaces/supplierRequest.interface';
 
 export class SupplierService extends ApiService {

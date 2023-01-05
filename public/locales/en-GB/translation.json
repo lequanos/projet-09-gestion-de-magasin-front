@@ -6,7 +6,8 @@
     "Lastname": "Lastname",
     "SelectedStore": "Store",
     "SearchedProduct": "EAN Code",
-    "SearchedStore": "Store",
+    "SearchedStore": "SIRET",
+    "SearchedSupplier": "SIRET",
     "Aisle": "Aisle",
     "Categories": "Categories",
     "Code": "EAN Code",
@@ -24,7 +25,9 @@
     "Siren": "Siren",
     "Siret": "Siret",
     "Store": "Store",
-    "Supplier": "Supplier"
+    "Supplier": "Supplier",
+    "PhoneNumber": "PhoneNumber",
+    "Contact": "Contact's name"
   },
     "Dashboard": {
       "Modal": {
@@ -69,6 +72,7 @@
     "Format_SIRET": "Wrong SIRET format",
     "Format_SIREN": "Wrong SIREN format",
     "Format_Postcode": "Wrong postcode format",
+    "Format_PhoneNumber": "Wrong phone format",
     "Min_Price": "Minimum required {{price}}",
     "Threshold": "Minimum required {{threshold}}",
     "Same_Aisle": "Please select categories belonging to the same aisle",
@@ -181,6 +185,46 @@
     "AddStore": "Add store",
     "Success_Change_Store": "Store changed successfully",
     "Success_Change_Store_Title": "Success"
+  },
+  "Supplier": {
+    "Modal": {
+      "Step1": "Search supplier",
+      "Step2": "Edit supplier",
+      "SearchSupplier": "Search supplier by SIRET",
+      "NotFoundSupplier": "No supplier found for the SIRET {{searchedSupplier}}",
+      "Back": "Back",
+      "Next": "Next",
+      "Add": "Add",
+      "Cancel": "Cancel"
+    },
+    "DeleteModal": {
+      "Text": "Any deletion will be permanent",
+      "Confirm": "Confirm",
+      "Cancel": "Cancel"
+    },
+    "Form": {
+      "Name": "Name",
+      "Address": "Address",
+      "Postcode": "Postcode",
+      "City": "City",
+      "PhoneNumber": "Phone number",
+      "Contact": "Contact's name",
+      "Siren": "Siren",
+      "Siret": "Siret",
+      "Actions": "Actions",
+      "Save": "Save",
+      "Success_Add": "Supplier created successfully",
+      "Success_Add_Title": "Creation successful",
+      "Success_Update": "Supplier updated successfully",
+      "Success_Update_Title": "Update successful"
+    },
+    "Columns": {
+      "Name": "Name",
+      "City": "City",
+      "Siret": "Siret",
+      "IsActive": "Active"
+    },
+    "AddSupplier": "Add supplier"
   },
   "Routes": {
     "Dashboard": "Dashboard",

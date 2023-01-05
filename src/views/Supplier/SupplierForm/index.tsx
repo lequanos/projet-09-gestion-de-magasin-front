@@ -78,6 +78,27 @@ function SupplierForm({ supplier, readOnly = true }: SupplierFormProps) {
         />
         <RSInput
           className="supplier--form-input"
+          label={t('Supplier.Form.Contact')}
+          name="contact"
+          control={control}
+          errors={errors}
+          size="small"
+          readOnly={readOnly}
+        />
+        <RSInput
+          className="supplier--form-input"
+          label={t('Supplier.Form.PhoneNumber')}
+          name="phoneNumber"
+          control={control}
+          errors={errors}
+          size="small"
+          readOnly={readOnly}
+          inputProps={{
+            maxLength: 10,
+          }}
+        />
+        <RSInput
+          className="supplier--form-input"
           label={t('Supplier.Form.Siren')}
           name="siren"
           control={control}

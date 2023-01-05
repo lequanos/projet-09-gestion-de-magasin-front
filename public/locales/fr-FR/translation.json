@@ -6,7 +6,8 @@
     "Lastname": "Nom",
     "SelectedStore": "Magasin",
     "SearchedProduct": "Code EAN",
-    "SearchedStore": "Magasin",
+    "SearchedStore": "SIRET",
+    "SearchedSupplier": "SIRET",
     "Aisle": "Rayon",
     "Categories": "Catégories",
     "Code": "Code EAN",
@@ -24,7 +25,9 @@
     "Siren": "Siren",
     "Siret": "Siret",
     "Store": "Magasin",
-    "Supplier": "Fournisseur"
+    "Supplier": "Fournisseur",
+    "PhoneNumber": "Numéro de téléphone",
+    "Contact": "Nom du contact"
   },
   "Dashboard": {
     "Modal": {
@@ -69,6 +72,7 @@
     "Format_SIRET": "Format de SIRET incorrect",
     "Format_SIREN": "Format de SIREN incorrect",
     "Format_Postcode": "Format de code postal incorrect",
+    "Format_PhoneNumber": "Format de numéro de téléphone incorrect",
     "Min_Price": "Minimum requis {{price}}",
     "Threshold": "Minimum requis {{threshold}}",
     "Same_Aisle": "Veuillez sélectionner des catégories appartenant au même rayon",
@@ -205,6 +209,8 @@
       "City": "Ville",
       "Siren": "Siren",
       "Siret": "Siret",
+      "PhoneNumber": "Numéro de téléphone",
+      "Contact": "Nom du contact",
       "Actions": "Actions",
       "Save": "Enregistrer",
       "Success_Add": "Fournisseur créé avec succès",
