@@ -1,3 +1,4 @@
+import { AisleDto } from '../aisle';
 import { BaseModel } from '../interfaces/common.interface';
 import { RoleDto } from '../role';
 
@@ -11,12 +12,13 @@ export type UserDto = Omit<BaseModel, 'name'> & {
   refreshToken: string;
   role?: number | RoleDto;
   store: number | null;
-  aisles: number[];
+  aisles: AisleDto[];
 };
 
 export type UserDtoPayload = Omit<
   UserDto,
-  'id' | 'store' | 'logged' | 'refreshToken'
+  'id' | 'store' | 'logged' | 'refreshToken' | 'aisles'
 > & {
   id?: string;
+  aisles: number[];
 };

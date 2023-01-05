@@ -27,7 +27,8 @@
     "Store": "Magasin",
     "Supplier": "Fournisseur",
     "PhoneNumber": "Numéro de téléphone",
-    "Contact": "Nom du contact"
+    "Contact": "Nom du contact",
+    "User": "Utilisateur"
   },
   "Dashboard": {
     "Modal": {
@@ -240,7 +241,13 @@
       "Lastname": "Nom",
       "Email": "Adresse Email",
       "Password":"Mot de passe",
-      "Save": "Enregistrer"
+      "Role": "Rôle",
+      "Aisles": "Rayons",
+      "Save": "Enregistrer",
+      "Success_Add": "Utilisateur créé avec succès",
+      "Success_Add_Title": "Création réussie",
+      "Success_Update": "Utilisateur mis à jour avec succès",
+      "Success_Update_Title": "Mise à jour réussie"
     },
     "Columns": {
       "Firstname": "Prénom",

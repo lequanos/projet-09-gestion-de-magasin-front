@@ -242,15 +242,17 @@ function ProductDrawer({ drawerOpen, setDrawerOpen, id }: ProductDrawerProps) {
         })
         .filter((x) => x >= 0) || [],
     );
-    methods.setValue(
-      'aisle',
-      product?.categories[0]?.aisle || aisles[0]?.id || 0,
-    );
+    if (aisles.length) {
+      methods.setValue(
+        'aisle',
+        product?.categories[0]?.aisle || aisles[0]?.id || 0,
+      );
+    }
     methods.setValue(
       'productSuppliers',
       product?.productSuppliers.map((ps) => ({
         id: uuidv4(),
-        supplier: ps.supplier.id,
+        supplier: ps.supplier.id || 0,
         purchasePrice: ps.purchasePrice,
       })) || [],
     );

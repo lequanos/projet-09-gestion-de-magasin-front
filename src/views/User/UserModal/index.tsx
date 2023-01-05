@@ -4,11 +4,18 @@ import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import '../User.scss';
-import { useAccessToken, useToastContext, useCreateMutation } from '@/hooks';
+import {
+  useAccessToken,
+  useToastContext,
+  useCreateMutation,
+  useGetAllQuery,
+} from '@/hooks';
 import { RSButton } from '@/components/RS';
 import { IErrorResponse } from '@/services/api/interfaces';
 import { UserDto, UserDtoPayload } from '@/models/user';
 import UserForm, { UserFormValues } from '../UserForm';
+import { AisleDto } from '@/models/aisle';
+import { RoleDto } from '@/models/role';
 
 type UserModalProps = {
   open: boolean;
@@ -27,14 +34,15 @@ function UserModal({ open, setOpen }: UserModalProps) {
       email: '',
       password: '',
       aisles: [],
-      role: undefined,
+      role: 1,
     },
   });
 
   const addUserPayload = methods.watch();
 
   // States
-  const [user, setUser] = useState<UserDto>();
+  const [roles, setRoles] = useState<RoleDto[]>([]);
+  const [aisles, setAisles] = useState<AisleDto[]>([]);
 
   // Queries
   const addUserMutation = useCreateMutation<UserDtoPayload, UserDto>(
@@ -42,12 +50,70 @@ function UserModal({ open, setOpen }: UserModalProps) {
       toCreate: {
         body: {
           ...addUserPayload,
-          pictureUrl: user?.pictureUrl || '',
+          pictureUrl: '',
         },
       },
     },
     'user',
     accessToken,
+  );
+
+  useGetAllQuery<RoleDto[]>(
+    'role',
+    accessToken,
+    {
+      params: { select: 'name' },
+    },
+    true,
+    (response) => {
+      const { ok, data, status } = response;
+
+      if ([401, 403].includes(status)) {
+        throw new Response('', { status });
+      }
+
+      if (!ok) {
+        const error = response as IErrorResponse<RoleDto[]>;
+        toast[error.formatted.type](
+          error.formatted.errorDefault,
+          error.formatted.title,
+        );
+        return;
+      }
+
+      if (data) {
+        setRoles(data.filter((role) => role.name !== 'super admin'));
+      }
+    },
+  );
+
+  useGetAllQuery<AisleDto[]>(
+    'aisle',
+    accessToken,
+    {
+      params: { select: 'name' },
+    },
+    true,
+    (response) => {
+      const { ok, data, status } = response;
+
+      if ([401, 403].includes(status)) {
+        throw new Response('', { status });
+      }
+
+      if (!ok) {
+        const error = response as IErrorResponse<AisleDto[]>;
+        toast[error.formatted.type](
+          error.formatted.errorDefault,
+          error.formatted.title,
+        );
+        return;
+      }
+
+      if (data) {
+        setAisles(data);
+      }
+    },
   );
 
   // Methods
@@ -56,7 +122,7 @@ function UserModal({ open, setOpen }: UserModalProps) {
    */
   const handleClose = () => {
     setOpen(false);
-    setUser(undefined);
+    methods.reset();
   };
 
   /**
@@ -84,7 +150,6 @@ function UserModal({ open, setOpen }: UserModalProps) {
         toast.success('User.Form.Success_Add', 'User.Form.Success_Add_Title');
         methods.reset();
         handleClose();
-        setUser(undefined);
       },
     });
   };
@@ -115,7 +180,7 @@ function UserModal({ open, setOpen }: UserModalProps) {
             <Box className="user--modal-main">
               <Box className="user--modal-content">
                 <FormProvider {...methods}>
-                  <UserForm user={user} readOnly={false} />
+                  <UserForm readOnly={false} roles={roles} aisles={aisles} />
                 </FormProvider>
               </Box>
             </Box>
@@ -123,11 +188,7 @@ function UserModal({ open, setOpen }: UserModalProps) {
               <RSButton color="inherit" onClick={handleClose}>
                 {t('User.Modal.Cancel')}
               </RSButton>
-              <RSButton
-                color={user ? 'primary' : 'inherit'}
-                disabled={!user}
-                onClick={handleSave}
-              >
+              <RSButton color="primary" onClick={handleSave}>
                 {t('User.Form.Save')}
               </RSButton>
             </div>

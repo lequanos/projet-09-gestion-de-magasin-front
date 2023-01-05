@@ -14,9 +14,11 @@ import {
   useUserContext,
   useToastContext,
   useUpdateMutation,
+  useGetAllQuery,
 } from '@/hooks';
 import { RSButton } from '@/components/RS';
 import { isRoleDto } from '@/helpers/typeguards';
+import { AisleDto } from '@/models/aisle';
 
 type UserDrawerProps = {
   drawerOpen: boolean;
@@ -37,20 +39,26 @@ function UserDrawer({ drawerOpen, setDrawerOpen, id }: UserDrawerProps) {
       email: '',
       password: '',
       aisles: [],
-      role: undefined,
+      role: 1,
     },
   });
   const updateUserPayload = methods.watch();
 
   // States
   const [user, setUser] = useState<UserDto>();
-
+  const [roles, setRoles] = useState<RoleDto[]>([]);
+  const [aisles, setAisles] = useState<AisleDto[]>([]);
   // Queries
   const { isFetching } = useGetOneQuery<UserDto>(
     'user',
     id.toString(),
     accessToken,
-    undefined,
+    {
+      params: {
+        select: 'firstname,lastname,email,password,pictureUrl,role,aisles',
+        nested: 'aisles.id,role.id',
+      },
+    },
     drawerOpen,
     (response) => {
       const { ok, status } = response;
@@ -71,6 +79,64 @@ function UserDrawer({ drawerOpen, setDrawerOpen, id }: UserDrawerProps) {
 
       const getUserResponse = response as ISuccessResponse<UserDto>;
       setUser(getUserResponse.data);
+    },
+  );
+
+  useGetAllQuery<RoleDto[]>(
+    'role',
+    accessToken,
+    {
+      params: { select: 'name' },
+    },
+    true,
+    (response) => {
+      const { ok, data, status } = response;
+
+      if ([401, 403].includes(status)) {
+        throw new Response('', { status });
+      }
+
+      if (!ok) {
+        const error = response as IErrorResponse<RoleDto[]>;
+        toast[error.formatted.type](
+          error.formatted.errorDefault,
+          error.formatted.title,
+        );
+        return;
+      }
+
+      if (data) {
+        setRoles(data.filter((role) => role.name !== 'super admin'));
+      }
+    },
+  );
+
+  useGetAllQuery<AisleDto[]>(
+    'aisle',
+    accessToken,
+    {
+      params: { select: 'name' },
+    },
+    true,
+    (response) => {
+      const { ok, data, status } = response;
+
+      if ([401, 403].includes(status)) {
+        throw new Response('', { status });
+      }
+
+      if (!ok) {
+        const error = response as IErrorResponse<AisleDto[]>;
+        toast[error.formatted.type](
+          error.formatted.errorDefault,
+          error.formatted.title,
+        );
+        return;
+      }
+
+      if (data) {
+        setAisles(data);
+      }
     },
   );
 
@@ -146,12 +212,23 @@ function UserDrawer({ drawerOpen, setDrawerOpen, id }: UserDrawerProps) {
     methods.setValue('lastname', user?.lastname || '');
     methods.setValue('email', user?.email || '');
     methods.setValue('password', user?.password || '');
-    methods.setValue('aisles', user?.aisles || []);
-    methods.setValue(
-      'role',
-      isRoleDto(user?.role) ? user?.role.id : user?.role,
-    );
-  }, [user]);
+    if (aisles.length) {
+      methods.setValue(
+        'aisles',
+        user?.aisles?.length
+          ? (user.aisles
+              .map((aisle) => aisle.id)
+              .filter((id) => !!id) as number[])
+          : [],
+      );
+    }
+    if (roles.length) {
+      methods.setValue(
+        'role',
+        isRoleDto(user?.role) ? user?.role.id || 1 : user?.role || 1,
+      );
+    }
+  }, [user, roles, aisles]);
 
   return (
     <Drawer anchor="right" open={drawerOpen} onClose={handleCloseDrawer}>
@@ -168,6 +245,8 @@ function UserDrawer({ drawerOpen, setDrawerOpen, id }: UserDrawerProps) {
                     [Permission.MANAGE_ALL, Permission.MANAGE_USER].includes(p),
                   )
                 }
+                roles={roles}
+                aisles={aisles}
                 update
               />
               <RSButton
