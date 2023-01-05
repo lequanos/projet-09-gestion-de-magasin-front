@@ -27,7 +27,8 @@
     "Store": "Store",
     "Supplier": "Supplier",
     "PhoneNumber": "PhoneNumber",
-    "Contact": "Contact's name"
+    "Contact": "Contact's name",
+    "User": "User"
   },
     "Dashboard": {
       "Modal": {
@@ -225,6 +226,37 @@
       "IsActive": "Active"
     },
     "AddSupplier": "Add supplier"
+  },
+  "User": {
+    "Modal": {
+      "Cancel": "Cancel"
+    },
+    "DeleteModal": {
+      "Text": "Any deletion will be permanent",
+      "Confirm": "Confirm",
+      "Cancel": "Cancel"
+    },
+    "Form": {
+      "Firstname": "Firstname",
+      "Lastname": "Lastname",
+      "Email": "Email",
+      "Password":"Password",
+      "Role": "Role",
+      "Aisles": "Aisles",
+      "Save": "Save",
+      "Success_Add": "User created successfully",
+      "Success_Add_Title": "Creation successful",
+      "Success_Update": "User updated successfully",
+      "Success_Update_Title": "Update successful"
+    },
+    "Columns": {
+      "Firstname": "Firstname",
+      "Lastname": "Lastname",
+      "Email": "Email",
+      "Role": "Role",
+      "IsActive": "Active"
+    },
+    "AddUser": "Add user"
   },
   "Routes": {
     "Dashboard": "Dashboard",

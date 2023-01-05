@@ -20,6 +20,8 @@ import { GetDashboardInfosResponse } from '@/services/dashboard/interfaces/dashb
 import { ProductService } from '@/services/product/ProductService';
 import { SupplierService } from '@/services/supplier/SupplierService';
 import { AisleService } from '@/services/aisle/AisleService';
+import { UserService } from '@/services/user/UserService';
+import { RoleService } from '@/services/role/RoleService';
 import { ProductDtoPayload } from '@/models/product';
 import { StoreDto } from '@/models/store';
 import { SupplierDto } from '@/models/supplier';
@@ -32,6 +34,8 @@ const serviceDictionary = {
   product: (accessToken?: string) => new ProductService(accessToken),
   store: (accessToken?: string) => new StoreService(accessToken),
   supplier: (accessToken?: string) => new SupplierService(accessToken),
+  user: (accessToken?: string) => new UserService(accessToken),
+  role: (accessToken?: string) => new RoleService(accessToken),
 };
 
 export type EntityList = keyof typeof serviceDictionary;

@@ -169,6 +169,12 @@ export const getColumns = <T extends any[]>(
     });
   }
 
+  const roleField = columns?.find((col) => col?.field === 'role');
+
+  if (roleField) {
+    roleField.renderCell = (params) => params.value.name || '-';
+  }
+
   return columns as GridEnrichedColDef[];
 };
 

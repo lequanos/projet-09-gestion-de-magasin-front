@@ -153,7 +153,7 @@ function ProductForm({
         ...productSuppliers,
         {
           id: uuidv4(),
-          supplier: foundSuppliers[0].id,
+          supplier: foundSuppliers[0].id || 0,
           purchasePrice: 0,
         },
       ]);

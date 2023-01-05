@@ -27,7 +27,8 @@
     "Store": "Magasin",
     "Supplier": "Fournisseur",
     "PhoneNumber": "Numéro de téléphone",
-    "Contact": "Nom du contact"
+    "Contact": "Nom du contact",
+    "User": "Utilisateur"
   },
   "Dashboard": {
     "Modal": {
@@ -225,6 +226,37 @@
       "IsActive": "Actif"
     },
     "AddSupplier": "Ajouter un fournisseur"
+  },
+  "User": {
+    "Modal": {
+      "Cancel": "Annuler"
+    },
+    "DeleteModal": {
+      "Text": "Toute suppression sera définitive",
+      "Confirm": "Confirmer",
+      "Cancel": "Annuler"
+    },
+    "Form": {
+      "Firstname": "Prénom",
+      "Lastname": "Nom",
+      "Email": "Adresse Email",
+      "Password":"Mot de passe",
+      "Role": "Rôle",
+      "Aisles": "Rayons",
+      "Save": "Enregistrer",
+      "Success_Add": "Utilisateur créé avec succès",
+      "Success_Add_Title": "Création réussie",
+      "Success_Update": "Utilisateur mis à jour avec succès",
+      "Success_Update_Title": "Mise à jour réussie"
+    },
+    "Columns": {
+      "Firstname": "Prénom",
+      "Lastname": "Nom",
+      "Email": "Adresse Email",
+      "Role": "Rôle",
+      "IsActive": "Actif"
+    },
+    "AddUser": "Ajouter un utilisateur"
   },
   "Routes": {
     "Dashboard": "Tableau de bord",
