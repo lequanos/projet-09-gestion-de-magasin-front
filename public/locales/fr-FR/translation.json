@@ -6,7 +6,8 @@
     "Lastname": "Nom",
     "SelectedStore": "Magasin",
     "SearchedProduct": "Code EAN",
-    "SearchedStore": "Magasin",
+    "SearchedStore": "SIRET",
+    "SearchedSupplier": "SIRET",
     "Aisle": "Rayon",
     "Categories": "Catégories",
     "Code": "Code EAN",
@@ -23,7 +24,10 @@
     "Postcode": "Code postal",
     "Siren": "Siren",
     "Siret": "Siret",
-    "Store": "Magasin"
+    "Store": "Magasin",
+    "Supplier": "Fournisseur",
+    "PhoneNumber": "Numéro de téléphone",
+    "Contact": "Nom du contact"
   },
   "Dashboard": {
     "Modal": {
@@ -68,6 +72,7 @@
     "Format_SIRET": "Format de SIRET incorrect",
     "Format_SIREN": "Format de SIREN incorrect",
     "Format_Postcode": "Format de code postal incorrect",
+    "Format_PhoneNumber": "Format de numéro de téléphone incorrect",
     "Min_Price": "Minimum requis {{price}}",
     "Threshold": "Minimum requis {{threshold}}",
     "Same_Aisle": "Veuillez sélectionner des catégories appartenant au même rayon",
@@ -180,6 +185,46 @@
     "AddStore": "Ajouter un magasin",
     "Success_Change_Store": "Changement de magasin réussi",
     "Success_Change_Store_Title": "Réussite"
+  },
+  "Supplier": {
+    "Modal": {
+      "Step1": "Recherche du fournisseur",
+      "Step2": "Edition du fournisseur",
+      "SearchSupplier": "Recherche fournisseur par SIRET",
+      "NotFoundSupplier": "Aucun fournisseur trouvé pour le SIRET {{searchedSupplier}}",
+      "Back": "Retour",
+      "Next": "Suivant",
+      "Add": "Ajouter",
+      "Cancel": "Annuler"
+    },
+    "DeleteModal": {
+      "Text": "Toute suppression sera définitive",
+      "Confirm": "Confirmer",
+      "Cancel": "Annuler"
+    },
+    "Form": {
+      "Name": "Nom",
+      "Address": "Adresse",
+      "Postcode": "Code postal",
+      "City": "Ville",
+      "Siren": "Siren",
+      "Siret": "Siret",
+      "PhoneNumber": "Numéro de téléphone",
+      "Contact": "Nom du contact",
+      "Actions": "Actions",
+      "Save": "Enregistrer",
+      "Success_Add": "Fournisseur créé avec succès",
+      "Success_Add_Title": "Création réussie",
+      "Success_Update": "Fournisseur mis à jour avec succès",
+      "Success_Update_Title": "Mise à jour réussie"
+    },
+    "Columns": {
+      "Name": "Nom",
+      "City": "Ville",
+      "Siret": "Siret",
+      "IsActive": "Actif"
+    },
+    "AddSupplier": "Ajouter un fournisseur"
   },
   "Routes": {
     "Dashboard": "Tableau de bord",
