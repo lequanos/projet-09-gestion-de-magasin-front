@@ -8,30 +8,35 @@ import {
   AccordionActions,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import {
-  RefetchOptions,
-  RefetchQueryFilters,
-  QueryObserverResult,
-} from '@tanstack/react-query';
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  MouseEvent,
+} from 'react';
+import { useForm } from 'react-hook-form';
 
 import { RSButton, RSForm, RSInput } from '@/components/RS';
 import { AisleDto, AisleDtoPayload } from '@/models/aisle';
 import { Permission } from '@/models/role';
-import { userHasPermission } from '@/helpers/utils';
+import { onSuccess, userHasPermission } from '@/helpers/utils';
 import {
   useUpdateMutation,
   useUserContext,
   useAccessToken,
   useToastContext,
+  useCreateMutation,
+  useDeleteMutation,
 } from '@/hooks';
 import { IErrorResponse } from '@/services/api/interfaces';
+import { CategoryDtoPayload, CategoryDto } from '@/models/category';
 
 type AisleItemProps = {
   aisleId: number;
   setAisleId: Dispatch<SetStateAction<number>>;
   aisle: AisleDto;
+  setOpenDelete: Dispatch<SetStateAction<boolean>>;
 };
 
 type AisleFormValues = {
@@ -43,7 +48,12 @@ type CategoryFormValues = {
   name: string;
 };
 
-function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
+function AisleItem({
+  aisleId,
+  setAisleId,
+  aisle,
+  setOpenDelete,
+}: AisleItemProps) {
   // Hooks
   const { t } = useTranslation('translation');
   const { user } = useUserContext();
@@ -66,11 +76,14 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
     handleSubmit: categoryHandleSubmit,
     control: categoryControl,
     formState: { errors: categoryErrors },
+    watch: categoryWatch,
+    setValue: setCategoryValue,
   } = useForm<CategoryFormValues>({
     defaultValues: {
       name: '',
     },
   });
+  const { name: categoryName } = categoryWatch();
 
   const updateAisleMutation = useUpdateMutation<AisleDtoPayload, AisleDto>(
     {
@@ -84,6 +97,24 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
     'aisle',
     accessToken,
   );
+
+  const addCategoryMutation = useCreateMutation<
+    CategoryDtoPayload,
+    CategoryDto
+  >(
+    {
+      toCreate: {
+        body: {
+          name: categoryName,
+          aisle: aisle.id || 0,
+        },
+      },
+    },
+    'category',
+    accessToken,
+  );
+
+  const deleteMutation = useDeleteMutation('category', accessToken);
 
   // States
   const [readOnly, setReadOnly] = useState(true);
@@ -134,6 +165,66 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
     setReadOnly(!readOnly);
   };
 
+  /**
+   * Add a new category and update the aisle with the new category
+   */
+  const handleAddCategory = () => {
+    addCategoryMutation.mutate(undefined, {
+      onSuccess: (response) => {
+        const { ok, status, data } = response;
+
+        if ([401, 403].includes(status)) {
+          throw new Response('', { status });
+        }
+
+        if (!ok) {
+          const addCategoryError = response as IErrorResponse<AisleDto>;
+          toast[addCategoryError.formatted.type](
+            t(addCategoryError.formatted.errorDefault as string, {
+              name: t(`Common.Category`),
+            }),
+            addCategoryError.formatted.title,
+          );
+          return;
+        }
+        aisle.categories?.push({
+          id: data?.id,
+          name: data?.name,
+        });
+        setCategoryValue('name', '');
+      },
+    });
+  };
+
+  /**
+   * Delete category
+   */
+  const handleDeleteCategory = (id: number) => {
+    deleteMutation.mutate(
+      { id: id.toString() },
+      {
+        onSuccess: onSuccess<void>(
+          () => {
+            aisle.categories = aisle.categories?.filter((cat) => cat.id !== id);
+          },
+          toast,
+          'Category',
+        ),
+      },
+    );
+  };
+
+  /**
+   * Open delete aisle modal
+   */
+  const handleOpenDeleteModal = (
+    e: MouseEvent<SVGSVGElement, globalThis.MouseEvent>,
+  ) => {
+    e.stopPropagation();
+    setOpenDelete(true);
+    setAisleId(aisle.id || 0);
+  };
+
   // useEffect
   useEffect(() => {
     setValue('name', aisle.name || '');
@@ -181,7 +272,7 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
           </Typography>
           <Delete
             className="aisle--accordion-delete-btn"
-            onClick={(e) => e.stopPropagation()}
+            onClick={handleOpenDeleteModal}
           />
         </div>
       </AccordionSummary>
@@ -192,7 +283,7 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
         ]) && (
           <AccordionActions className="aisle--accordion-actions">
             <RSForm
-              onSubmit={categoryHandleSubmit(() => console.log('hello'))}
+              onSubmit={categoryHandleSubmit(handleAddCategory)}
               onClick={(e) => e.stopPropagation()}
               className="aisle--form-category"
             >
@@ -211,10 +302,10 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
               />
               <RSButton
                 className="aisle--add-category"
-                onClick={() => console.log('Ouvert')}
                 permissions={[Permission.MANAGE_ALL, Permission.MANAGE_AISLE]}
                 startIcon="arrowDown"
                 size="small"
+                type="submit"
               >
                 {t('Aisle.AddCategory')}
               </RSButton>
@@ -232,7 +323,7 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
                   Permission.MANAGE_ALL,
                   Permission.MANAGE_AISLE,
                 ])
-                  ? () => console.log('delete')
+                  ? () => handleDeleteCategory(cat.id || 0)
                   : undefined
               }
             />

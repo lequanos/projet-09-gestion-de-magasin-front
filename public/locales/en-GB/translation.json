@@ -28,7 +28,8 @@
     "Supplier": "Supplier",
     "PhoneNumber": "PhoneNumber",
     "Contact": "Contact's name",
-    "User": "User"
+    "User": "User",
+    "Category": "Category"
   },
     "Dashboard": {
       "Modal": {

@@ -86,13 +86,6 @@ function Aisle() {
     });
   };
 
-  /**
-   * Open delete aisle modal
-   */
-  const handleDeleteAisle = () => {
-    setOpenDelete(true);
-  };
-
   return (
     <>
       <Container className="aisle--container">
@@ -118,6 +111,7 @@ function Aisle() {
                     aisleId={aisleId}
                     setAisleId={setAisleId}
                     aisle={datum}
+                    setOpenDelete={setOpenDelete}
                   />
                 ))}
             </CardContent>

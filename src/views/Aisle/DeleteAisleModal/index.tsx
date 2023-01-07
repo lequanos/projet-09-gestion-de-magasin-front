@@ -39,8 +39,6 @@ function DeleteAisleModal({
   const { accessToken } = useAccessToken();
   const { toast } = useToastContext();
 
-  // States
-
   // Queries
   const deleteMutation = useDeleteMutation('aisle', accessToken);
 

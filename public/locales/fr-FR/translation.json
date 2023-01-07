@@ -28,7 +28,8 @@
     "Supplier": "Fournisseur",
     "PhoneNumber": "Numéro de téléphone",
     "Contact": "Nom du contact",
-    "User": "Utilisateur"
+    "User": "Utilisateur",
+    "Category": "Catégorie"
   },
   "Dashboard": {
     "Modal": {
