@@ -258,6 +258,12 @@
     },
     "AddUser": "Ajouter un utilisateur"
   },
+  "Aisle": {
+    "Form": {
+      "Name": "Nom"
+    },
+    "AddAisle": "Ajouter un rayon"
+  },
   "Routes": {
     "Dashboard": "Tableau de bord",
     "Stores": "Magasins",

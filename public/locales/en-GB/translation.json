@@ -258,6 +258,12 @@
     },
     "AddUser": "Add user"
   },
+  "Aisle": {
+    "Form": {
+      "Name": "Name"
+    },
+    "AddAisle": "Add aisle"
+  },
   "Routes": {
     "Dashboard": "Dashboard",
     "Stores": "Stores",

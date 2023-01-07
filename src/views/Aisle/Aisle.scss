@@ -1,0 +1,89 @@
+@import '../../styles/variables';
+
+#root .aisle {
+  &--container {
+    padding: $gutter;
+    display: flex !important;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  &--add-btn {
+    align-self: flex-end;
+    min-width: 200px;
+    border-radius: 9999px;
+  }
+
+  &--accordion {
+    &-container {
+      margin-top: calc($gutter * 2);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background-color: #00000000;
+      box-shadow: none;
+    }
+
+    &-content {
+      flex: 1;
+
+      & .MuiAccordionSummary-content {
+        align-items: center;
+      }
+    }
+
+    &-summary {
+      background-color: #fff;
+    }
+
+    &-details {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+
+  &--form-input {
+    margin: 0;
+
+    & .MuiFilledInput-root {
+      background: #fff;
+    }
+    
+    & input {
+      background: #fff;
+      border: none !important;
+    }
+  }
+}
+
+.aisle {
+  &--delete-modal {
+    &-footer {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 90%;
+    }
+
+    &-container {
+      height: 100%;
+      justify-content: space-evenly;
+    }
+
+    & .MuiDialog-paper {
+      height: 30%;
+      min-width: 20%;
+      padding: $gutter;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & .MuiBox-root {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  }
+}
