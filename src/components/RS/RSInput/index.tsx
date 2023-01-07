@@ -94,6 +94,13 @@ export function RSInput<T extends FieldValues>({
     setShow(!show);
   };
 
+  const isEditButtonDisabled = () => {
+    return (
+      (!readOnly && userHasPermission(user, permissions)) ||
+      !userHasPermission(user, permissions)
+    );
+  };
+
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
@@ -158,10 +165,7 @@ export function RSInput<T extends FieldValues>({
           <InputAdornment position="start">
             <IconButton
               edge="start"
-              disabled={
-                (!readOnly && userHasPermission(user, permissions)) ||
-                !userHasPermission(user, permissions)
-              }
+              disabled={isEditButtonDisabled()}
               onClick={(e) => {
                 if (onStartIconClick) onStartIconClick(e);
                 if (inputRef.current && readOnly) {
@@ -171,7 +175,7 @@ export function RSInput<T extends FieldValues>({
                 }
               }}
             >
-              <Edit color="primary" />
+              <Edit color={isEditButtonDisabled() ? 'disabled' : 'primary'} />
             </IconButton>
           </InputAdornment>
         ),

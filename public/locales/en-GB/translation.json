@@ -270,7 +270,9 @@
     "AddAisle": "Add aisle",
     "AddCategory": "Add category",
     "Success_Add": "Aisle created successfully",
-    "Success_Add_Title": "Creation successful"
+    "Success_Add_Title": "Creation successful",
+    "Success_Update": "Aisle updated successfully",
+    "Success_Update_Title": "Update successful"
   },
   "Routes": {
     "Dashboard": "Dashboard",

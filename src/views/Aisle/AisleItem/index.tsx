@@ -8,14 +8,25 @@ import {
   AccordionActions,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import {
+  RefetchOptions,
+  RefetchQueryFilters,
+  QueryObserverResult,
+} from '@tanstack/react-query';
 
 import { RSButton, RSForm, RSInput } from '@/components/RS';
-import { AisleDto } from '@/models/aisle';
+import { AisleDto, AisleDtoPayload } from '@/models/aisle';
 import { Permission } from '@/models/role';
 import { userHasPermission } from '@/helpers/utils';
-import { useUserContext } from '@/hooks';
+import {
+  useUpdateMutation,
+  useUserContext,
+  useAccessToken,
+  useToastContext,
+} from '@/hooks';
+import { IErrorResponse } from '@/services/api/interfaces';
 
 type AisleItemProps = {
   aisleId: number;
@@ -36,18 +47,21 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
   // Hooks
   const { t } = useTranslation('translation');
   const { user } = useUserContext();
+  const { accessToken } = useAccessToken();
+  const { toast } = useToastContext();
   const {
     handleSubmit,
     control,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm<AisleFormValues>({
     defaultValues: {
-      name: aisle.name,
-      categories: aisle.categories
-        ?.map((cat) => cat.id)
-        .filter((value) => !!value),
+      name: '',
+      categories: [],
     },
   });
+  const { name: aisleName } = watch();
   const {
     handleSubmit: categoryHandleSubmit,
     control: categoryControl,
@@ -57,6 +71,19 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
       name: '',
     },
   });
+
+  const updateAisleMutation = useUpdateMutation<AisleDtoPayload, AisleDto>(
+    {
+      toUpdate: {
+        body: {
+          id: aisle.id?.toString() || '0',
+          name: aisleName,
+        },
+      },
+    },
+    'aisle',
+    accessToken,
+  );
 
   // States
   const [readOnly, setReadOnly] = useState(true);
@@ -75,6 +102,29 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
    */
   const handleUpdateAisle = () => {
     setReadOnly(!readOnly);
+    if (aisle.name !== aisleName) {
+      updateAisleMutation.mutate(undefined, {
+        onSuccess: (response) => {
+          const { ok, status } = response;
+
+          if ([401, 403].includes(status)) {
+            throw new Response('', { status });
+          }
+
+          if (!ok) {
+            const updateAisleError = response as IErrorResponse<AisleDto>;
+            toast[updateAisleError.formatted.type](
+              t(updateAisleError.formatted.errorDefault as string, {
+                name: t(`Common.Aisle`),
+              }),
+              updateAisleError.formatted.title,
+            );
+            return;
+          }
+          toast.success('Aisle.Success_Update', 'Aisle.Success_Update_Title');
+        },
+      });
+    }
   };
 
   /**
@@ -83,6 +133,17 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
   const handleEditButtonClick = () => {
     setReadOnly(!readOnly);
   };
+
+  // useEffect
+  useEffect(() => {
+    setValue('name', aisle.name || '');
+    setValue(
+      'categories',
+      aisle.categories
+        ?.map((cat) => cat.id)
+        .filter((value) => !!value) as number[],
+    );
+  }, [aisle]);
 
   return (
     <Accordion
@@ -125,36 +186,41 @@ function AisleItem({ aisleId, setAisleId, aisle }: AisleItemProps) {
         </div>
       </AccordionSummary>
       <AccordionDetails className="aisle--accordion-details">
-        <AccordionActions className="aisle--accordion-actions">
-          <RSForm
-            onSubmit={categoryHandleSubmit(() => console.log('hello'))}
-            onClick={(e) => e.stopPropagation()}
-            className="aisle--form-category"
-          >
-            <RSInput
-              className="aisle--form-input-category"
-              hiddenLabel
-              name="name"
-              control={categoryControl}
-              errors={categoryErrors}
-              size="small"
-              readOnly={false}
-              InputProps={{
-                disableUnderline: true,
-              }}
+        {userHasPermission(user, [
+          Permission.MANAGE_ALL,
+          Permission.MANAGE_AISLE,
+        ]) && (
+          <AccordionActions className="aisle--accordion-actions">
+            <RSForm
+              onSubmit={categoryHandleSubmit(() => console.log('hello'))}
               onClick={(e) => e.stopPropagation()}
-            />
-            <RSButton
-              className="aisle--add-category"
-              onClick={() => console.log('Ouvert')}
-              permissions={[Permission.MANAGE_ALL, Permission.MANAGE_AISLE]}
-              startIcon="arrowDown"
-              size="small"
+              className="aisle--form-category"
             >
-              {t('Aisle.AddCategory')}
-            </RSButton>
-          </RSForm>
-        </AccordionActions>
+              <RSInput
+                className="aisle--form-input-category"
+                hiddenLabel
+                name="name"
+                control={categoryControl}
+                errors={categoryErrors}
+                size="small"
+                readOnly={false}
+                InputProps={{
+                  disableUnderline: true,
+                }}
+                onClick={(e) => e.stopPropagation()}
+              />
+              <RSButton
+                className="aisle--add-category"
+                onClick={() => console.log('Ouvert')}
+                permissions={[Permission.MANAGE_ALL, Permission.MANAGE_AISLE]}
+                startIcon="arrowDown"
+                size="small"
+              >
+                {t('Aisle.AddCategory')}
+              </RSButton>
+            </RSForm>
+          </AccordionActions>
+        )}
         <div className="aisle--accordion-chips">
           {aisle.categories?.map((cat) => (
             <Chip

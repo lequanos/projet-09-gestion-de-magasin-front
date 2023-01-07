@@ -49,7 +49,7 @@ function Aisle() {
     {
       toCreate: {
         body: {
-          name: `${t('Common.Aisle')} ${data.length - 1}`,
+          name: `${t('Common.Aisle')} ${data.length}`,
         },
       },
     },
