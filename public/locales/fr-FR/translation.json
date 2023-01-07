@@ -268,7 +268,9 @@
       "Name": "Nom"
     },
     "AddAisle": "Ajouter un rayon",
-    "AddCategory": "Ajouter une catégorie"
+    "AddCategory": "Ajouter une catégorie",
+    "Success_Add": "Rayon créé avec succès",
+    "Success_Add_Title": "Création réussie"
   },
   "Routes": {
     "Dashboard": "Tableau de bord",

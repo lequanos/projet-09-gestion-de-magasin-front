@@ -1,4 +1,4 @@
-import { Container, Card, CardContent } from '@mui/material';
+import { Container, Card, CardContent, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
@@ -6,15 +6,16 @@ import './Aisle.scss';
 import DeleteAisleModal from './DeleteAisleModal';
 import {
   useAccessToken,
+  useCreateMutation,
   useGetAllQuery,
   useToastContext,
   useUserContext,
 } from '@/hooks';
-import { ISuccessResponse } from '@/services/api/interfaces';
+import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { RSButton } from '@/components/RS';
 import { onSuccess } from '@/helpers/utils';
 import { Permission } from '@/models/role';
-import { AisleDto } from '@/models/aisle';
+import { AisleDto, AisleDtoPayload } from '@/models/aisle';
 import AisleItem from './AisleItem';
 
 function Aisle() {
@@ -44,7 +45,47 @@ function Aisle() {
     ),
   );
 
+  const addAisleMutation = useCreateMutation<AisleDtoPayload, AisleDto>(
+    {
+      toCreate: {
+        body: {
+          name: `${t('Common.Aisle')} ${data.length - 1}`,
+        },
+      },
+    },
+    'aisle',
+    accessToken,
+  );
+
   // Methods
+  /**
+   * Add a new aisle
+   */
+  const handleAddAisle = () => {
+    addAisleMutation.mutate(undefined, {
+      onSuccess: (response) => {
+        const { ok, status } = response;
+
+        if ([401, 403].includes(status)) {
+          throw new Response('', { status });
+        }
+
+        if (!ok) {
+          const addAisleError = response as IErrorResponse<AisleDto>;
+          toast[addAisleError.formatted.type](
+            t(addAisleError.formatted.errorDefault as string, {
+              name: t(`Common.Aisle`),
+            }),
+            addAisleError.formatted.title,
+          );
+          return;
+        }
+        toast.success('Aisle.Success_Add', 'Aisle.Success_Add_Title');
+        refetch();
+      },
+    });
+  };
+
   /**
    * Open delete aisle modal
    */
@@ -58,25 +99,29 @@ function Aisle() {
         <RSButton
           className="aisle--add-btn"
           color="primary"
-          onClick={() => console.log('Ouvert')}
+          onClick={handleAddAisle}
           permissions={[Permission.MANAGE_ALL, Permission.MANAGE_AISLE]}
           startIcon="add"
         >
           {t('Aisle.AddAisle')}
         </RSButton>
         <Card className="aisle--accordion-container">
-          <CardContent className="aisle--accordion-content">
-            {data
-              .filter((aisle) => aisle.name !== 'All')
-              .map((datum) => (
-                <AisleItem
-                  key={datum.id}
-                  aisleId={aisleId}
-                  setAisleId={setAisleId}
-                  aisle={datum}
-                />
-              ))}
-          </CardContent>
+          {isFetching ? (
+            <CircularProgress />
+          ) : (
+            <CardContent className="aisle--accordion-content">
+              {data
+                .filter((aisle) => aisle.name !== 'All')
+                .map((datum) => (
+                  <AisleItem
+                    key={datum.id}
+                    aisleId={aisleId}
+                    setAisleId={setAisleId}
+                    aisle={datum}
+                  />
+                ))}
+            </CardContent>
+          )}
         </Card>
       </Container>
       <DeleteAisleModal

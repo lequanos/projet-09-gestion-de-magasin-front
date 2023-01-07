@@ -268,7 +268,9 @@
       "Name": "Name"
     },
     "AddAisle": "Add aisle",
-    "AddCategory": "Add category"
+    "AddCategory": "Add category",
+    "Success_Add": "Aisle created successfully",
+    "Success_Add_Title": "Creation successful"
   },
   "Routes": {
     "Dashboard": "Dashboard",
