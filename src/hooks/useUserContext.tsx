@@ -9,7 +9,7 @@ export type UserContextType = {
 };
 
 export const emptyUser: UserDto = {
-  id: '',
+  id: 0,
   firstname: '',
   lastname: '',
   email: '',
@@ -19,6 +19,7 @@ export const emptyUser: UserDto = {
   refreshToken: '',
   role: 0,
   store: 0,
+  aisles: [],
 };
 
 const initialContext: UserContextType = {

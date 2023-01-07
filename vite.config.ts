@@ -6,7 +6,7 @@ import ImportMetaEnvPlugin from '@import-meta-env/unplugin';
 
 // https://vitejs.dev/config/
 
-export default ({ mode }) => {
+export default ({ mode }: { mode: string }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
   return defineConfig({

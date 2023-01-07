@@ -9,7 +9,6 @@ import {
   useCreateMutation,
   useGetAllQuery,
   useToastContext,
-  useUserContext,
 } from '@/hooks';
 import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { RSButton } from '@/components/RS';
@@ -23,7 +22,6 @@ function Aisle() {
   const { t } = useTranslation('translation');
   const { toast } = useToastContext();
   const { accessToken } = useAccessToken();
-  const { user } = useUserContext();
 
   // States
   const [data, setData] = useState<AisleDto[]>([]);
