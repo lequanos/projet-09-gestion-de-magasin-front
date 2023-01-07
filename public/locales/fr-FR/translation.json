@@ -259,10 +259,16 @@
     "AddUser": "Ajouter un utilisateur"
   },
   "Aisle": {
+    "DeleteModal": {
+      "Text": "Toute suppression sera définitive",
+      "Confirm": "Confirmer",
+      "Cancel": "Annuler"
+    },
     "Form": {
       "Name": "Nom"
     },
-    "AddAisle": "Ajouter un rayon"
+    "AddAisle": "Ajouter un rayon",
+    "AddCategory": "Ajouter une catégorie"
   },
   "Routes": {
     "Dashboard": "Tableau de bord",

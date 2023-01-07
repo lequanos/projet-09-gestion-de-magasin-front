@@ -10,8 +10,11 @@ import {
   RegisterOptions,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
 import { rulesValidationDictionary } from '@/helpers/rulesValidationDictionary';
-import { capitalize } from '@/helpers/utils';
+import { capitalize, userHasPermission } from '@/helpers/utils';
+import { useUserContext } from '@/hooks';
+import { Permission } from '@/models/role';
 
 type RSInputProps<T extends FieldValues> = {
   className?: string;
@@ -29,6 +32,7 @@ type RSInputProps<T extends FieldValues> = {
   onChange?: (e: SyntheticEvent) => void;
   onClick?: (e: SyntheticEvent) => void;
   onStartIconClick?: (e: SyntheticEvent) => void;
+  permissions?: Permission[];
   readOnly?: boolean;
   rules?: Exclude<
     RegisterOptions,
@@ -56,6 +60,7 @@ export function RSInput<T extends FieldValues>({
   onChange,
   onClick,
   onStartIconClick,
+  permissions,
   readOnly = false,
   rules,
   variant = 'filled',
@@ -67,6 +72,7 @@ export function RSInput<T extends FieldValues>({
   const { t } = useTranslation('translation');
   const [show, setShow] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { user } = useUserContext();
 
   const getHelperText = () => {
     const message = errors[name]?.message;
@@ -152,7 +158,10 @@ export function RSInput<T extends FieldValues>({
           <InputAdornment position="start">
             <IconButton
               edge="start"
-              disabled={!readOnly}
+              disabled={
+                (!readOnly && userHasPermission(user, permissions)) ||
+                !userHasPermission(user, permissions)
+              }
               onClick={(e) => {
                 if (onStartIconClick) onStartIconClick(e);
                 if (inputRef.current && readOnly) {
@@ -162,7 +171,7 @@ export function RSInput<T extends FieldValues>({
                 }
               }}
             >
-              <Edit />
+              <Edit color="primary" />
             </IconButton>
           </InputAdornment>
         ),

@@ -1,9 +1,10 @@
-import { useUserContext } from '@/hooks';
 import { Permission, RoleDto } from '@/models/role';
-import { AddCircleOutline } from '@mui/icons-material';
+import { AddCircleOutline, ArrowCircleDown } from '@mui/icons-material';
 import { Button, SxProps, Theme } from '@mui/material';
 import { DefaultTFuncReturn } from 'i18next';
 import { useRef } from 'react';
+
+import { useUserContext } from '@/hooks';
 
 type RSButtonProps = {
   className?: string;
@@ -19,7 +20,7 @@ type RSButtonProps = {
     | 'warning';
   disabled?: boolean;
   disableRipple?: boolean;
-  startIcon?: 'add';
+  startIcon?: 'add' | 'arrowDown';
   permissions?: Permission[];
   size?: 'small' | 'medium' | 'large';
   sx?: SxProps<Theme>;
@@ -105,6 +106,7 @@ export function RSButton({
   const getStartIcon = () => {
     const iconDictionary = {
       add: <AddCircleOutline />,
+      arrowDown: <ArrowCircleDown />,
     };
 
     return startIcon ? iconDictionary[startIcon] : undefined;

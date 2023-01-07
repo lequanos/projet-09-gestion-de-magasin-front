@@ -259,10 +259,16 @@
     "AddUser": "Add user"
   },
   "Aisle": {
+    "DeleteModal": {
+      "Text": "Any deletion will be permanent",
+      "Confirm": "Confirm",
+      "Cancel": "Cancel"
+    },
     "Form": {
       "Name": "Name"
     },
-    "AddAisle": "Add aisle"
+    "AddAisle": "Add aisle",
+    "AddCategory": "Add category"
   },
   "Routes": {
     "Dashboard": "Dashboard",
