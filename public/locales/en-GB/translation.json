@@ -28,7 +28,8 @@
     "Supplier": "Supplier",
     "PhoneNumber": "PhoneNumber",
     "Contact": "Contact's name",
-    "User": "User"
+    "User": "User",
+    "Category": "Category"
   },
     "Dashboard": {
       "Modal": {
@@ -257,6 +258,22 @@
       "IsActive": "Active"
     },
     "AddUser": "Add user"
+  },
+  "Aisle": {
+    "DeleteModal": {
+      "Text": "Any deletion will be permanent",
+      "Confirm": "Confirm",
+      "Cancel": "Cancel"
+    },
+    "Form": {
+      "Name": "Name"
+    },
+    "AddAisle": "Add aisle",
+    "AddCategory": "Add category",
+    "Success_Add": "Aisle created successfully",
+    "Success_Add_Title": "Creation successful",
+    "Success_Update": "Aisle updated successfully",
+    "Success_Update_Title": "Update successful"
   },
   "Routes": {
     "Dashboard": "Dashboard",

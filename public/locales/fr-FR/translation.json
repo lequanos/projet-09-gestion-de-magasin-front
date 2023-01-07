@@ -28,7 +28,8 @@
     "Supplier": "Fournisseur",
     "PhoneNumber": "Numéro de téléphone",
     "Contact": "Nom du contact",
-    "User": "Utilisateur"
+    "User": "Utilisateur",
+    "Category": "Catégorie"
   },
   "Dashboard": {
     "Modal": {
@@ -257,6 +258,22 @@
       "IsActive": "Actif"
     },
     "AddUser": "Ajouter un utilisateur"
+  },
+  "Aisle": {
+    "DeleteModal": {
+      "Text": "Toute suppression sera définitive",
+      "Confirm": "Confirmer",
+      "Cancel": "Annuler"
+    },
+    "Form": {
+      "Name": "Nom"
+    },
+    "AddAisle": "Ajouter un rayon",
+    "AddCategory": "Ajouter une catégorie",
+    "Success_Add": "Rayon créé avec succès",
+    "Success_Add_Title": "Création réussie",
+    "Success_Update": "Rayon mis à jour avec succès",
+    "Success_Update_Title": "Mise à jour réussie"
   },
   "Routes": {
     "Dashboard": "Tableau de bord",

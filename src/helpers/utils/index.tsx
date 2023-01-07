@@ -1,5 +1,3 @@
-import { EntityList, ToastFunction } from '@/hooks';
-import { Permission } from '@/models/role';
 import { ISuccessResponse, IErrorResponse } from '@/services/api/interfaces';
 import { Edit, Delete, ChangeCircleOutlined } from '@mui/icons-material';
 import { Chip, ToggleButton } from '@mui/material';
@@ -10,6 +8,10 @@ import {
   GridRenderCellParams,
 } from '@mui/x-data-grid';
 import { t } from 'i18next';
+
+import { EntityList, ToastFunction } from '@/hooks';
+import { Permission, RoleDto } from '@/models/role';
+import { UserDto } from '@/models/user';
 
 export function capitalize(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -204,4 +206,13 @@ export const onSuccess = <T,>(
     const result = response as ISuccessResponse<T>;
     fn(result);
   };
+};
+
+export const userHasPermission = (
+  user: UserDto,
+  permissions?: Permission[],
+) => {
+  return (user.role as RoleDto).permissions.some((perm) =>
+    permissions?.includes(perm),
+  );
 };

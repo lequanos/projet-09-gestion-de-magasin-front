@@ -1,6 +1,6 @@
-import { VisibilityOff, Visibility, Search } from '@mui/icons-material';
+import { VisibilityOff, Visibility, Search, Edit } from '@mui/icons-material';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
-import { useState, SyntheticEvent } from 'react';
+import { useState, SyntheticEvent, useRef } from 'react';
 import {
   Control,
   Controller,
@@ -10,8 +10,11 @@ import {
   RegisterOptions,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
 import { rulesValidationDictionary } from '@/helpers/rulesValidationDictionary';
-import { capitalize } from '@/helpers/utils';
+import { capitalize, userHasPermission } from '@/helpers/utils';
+import { useUserContext } from '@/hooks';
+import { Permission } from '@/models/role';
 
 type RSInputProps<T extends FieldValues> = {
   className?: string;
@@ -19,12 +22,17 @@ type RSInputProps<T extends FieldValues> = {
   errors: Partial<FieldErrorsImpl<T>>;
   endIcon?: 'search';
   helperText?: string;
+  hiddenLabel?: boolean;
   id?: string;
   inputProps?: { [key: string]: any };
-  label: string;
+  InputProps?: { [key: string]: any };
+  label?: string;
   name: Path<T>;
   multiline?: boolean;
   onChange?: (e: SyntheticEvent) => void;
+  onClick?: (e: SyntheticEvent) => void;
+  onStartIconClick?: (e: SyntheticEvent) => void;
+  permissions?: Permission[];
   readOnly?: boolean;
   rules?: Exclude<
     RegisterOptions,
@@ -32,7 +40,7 @@ type RSInputProps<T extends FieldValues> = {
   >;
   variant?: 'standard' | 'filled' | 'outlined';
   size?: 'small' | 'medium';
-  startIcon?: 'monetary';
+  startIcon?: 'monetary' | 'edit';
   type?: 'text' | 'email' | 'password' | 'number';
 };
 
@@ -42,12 +50,17 @@ export function RSInput<T extends FieldValues>({
   errors,
   endIcon,
   helperText,
+  hiddenLabel = false,
   id,
   inputProps,
-  label,
+  InputProps,
+  label = '',
   name,
   multiline = false,
   onChange,
+  onClick,
+  onStartIconClick,
+  permissions,
   readOnly = false,
   rules,
   variant = 'filled',
@@ -58,6 +71,8 @@ export function RSInput<T extends FieldValues>({
   // Hooks
   const { t } = useTranslation('translation');
   const [show, setShow] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { user } = useUserContext();
 
   const getHelperText = () => {
     const message = errors[name]?.message;
@@ -79,6 +94,13 @@ export function RSInput<T extends FieldValues>({
     setShow(!show);
   };
 
+  const isEditButtonDisabled = () => {
+    return (
+      (!readOnly && userHasPermission(user, permissions)) ||
+      !userHasPermission(user, permissions)
+    );
+  };
+
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
@@ -86,13 +108,28 @@ export function RSInput<T extends FieldValues>({
   };
 
   const getInputProps = () => {
-    let inputPropsToReturn: { inputProps?: { [key: string]: any } } & {
+    let inputPropsToReturn: {
       [key: string]: any;
-    } = inputProps ? { inputProps } : {};
+    } = inputProps || {};
+
+    if (readOnly) {
+      inputPropsToReturn = {
+        ...inputProps,
+        readOnly,
+      };
+    }
+
+    return inputPropsToReturn;
+  };
+
+  const getFilledInputProps = () => {
+    let InputPropsToReturn: {
+      [key: string]: any;
+    } = InputProps || {};
 
     if (type === 'password') {
-      inputPropsToReturn = {
-        inputProps,
+      InputPropsToReturn = {
+        ...InputProps,
         endAdornment: (
           <InputAdornment position="end">
             <IconButton
@@ -109,8 +146,8 @@ export function RSInput<T extends FieldValues>({
     }
 
     if (endIcon === 'search') {
-      inputPropsToReturn = {
-        inputProps,
+      InputPropsToReturn = {
+        ...InputProps,
         endAdornment: (
           <InputAdornment position="end">
             <IconButton edge="end">
@@ -121,21 +158,38 @@ export function RSInput<T extends FieldValues>({
       };
     }
 
+    if (startIcon === 'edit') {
+      InputPropsToReturn = {
+        ...InputProps,
+        startAdornment: (
+          <InputAdornment position="start">
+            <IconButton
+              edge="start"
+              disabled={isEditButtonDisabled()}
+              onClick={(e) => {
+                if (onStartIconClick) onStartIconClick(e);
+                if (inputRef.current && readOnly) {
+                  (
+                    inputRef.current.children[0].children[1] as HTMLInputElement
+                  ).focus();
+                }
+              }}
+            >
+              <Edit color={isEditButtonDisabled() ? 'disabled' : 'primary'} />
+            </IconButton>
+          </InputAdornment>
+        ),
+      };
+    }
+
     if (startIcon === 'monetary') {
-      inputPropsToReturn = {
-        inputProps,
+      InputPropsToReturn = {
+        ...InputProps,
         startAdornment: <InputAdornment position="start">€</InputAdornment>,
       };
     }
 
-    if (readOnly) {
-      inputPropsToReturn = {
-        inputProps,
-        readOnly,
-      };
-    }
-
-    return inputPropsToReturn;
+    return InputPropsToReturn;
   };
 
   return (
@@ -149,9 +203,11 @@ export function RSInput<T extends FieldValues>({
           error={!!errors[name]}
           helperText={getHelperText()}
           id={id}
-          InputProps={getInputProps()}
+          inputProps={getInputProps()}
+          InputProps={getFilledInputProps()}
           multiline={multiline}
           label={label}
+          hiddenLabel={hiddenLabel}
           type={show && type === 'password' ? 'text' : type}
           variant={variant}
           size={size}
@@ -161,6 +217,11 @@ export function RSInput<T extends FieldValues>({
           {...field}
           rows={3}
           onChange={onChange || field.onChange}
+          onClick={onClick}
+          ref={(e) => {
+            field.ref(e);
+            (inputRef.current as any) = e;
+          }}
         />
       )}
     />

@@ -1,0 +1,146 @@
+@import '../../styles/variables';
+
+#root .aisle {
+  &--container {
+    padding: $gutter;
+    display: flex !important;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  &--add-btn {
+    align-self: flex-end;
+    min-width: 200px;
+    border-radius: 9999px;
+  }
+
+  &--add-category {
+    border-radius: 9999px;
+    margin: 0;
+  }
+
+  &--accordion {
+    &-container {
+      margin-top: calc($gutter * 2);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background-color: #00000000;
+      box-shadow: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-content {
+      width: 100%;
+      overflow-y: auto;
+
+      & .MuiAccordionSummary-content {
+        align-items: center;
+      }
+    }
+
+    &-summary {
+      background-color: #fff;
+
+      &-content {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-right: $gutter;
+      }
+    }
+
+    &-delete-btn {
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    &-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-actions {
+      justify-content: flex-start;
+      background-color: #C5D6E8;
+      border-radius: 99999px;
+      margin-bottom: $gutter;
+    }
+
+    &-chips {
+      gap: calc($gutter / 2);
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  &--form {
+    &-input {
+      margin: 0;
+
+      & .MuiFilledInput-root {
+        background: #fff;
+      }
+
+      & input {
+        background: #fff;
+        border: none !important;
+      }
+    }
+
+    &-input-category {
+      margin: 0;
+
+      & .MuiFilledInput-root {
+        background: #fff;
+        border-radius: 99999px;
+      }
+
+      & input {
+        background: #fff;
+        border: none !important;
+        border-radius: 99999px;
+        padding: 6px 0 6px 12px;
+        font-size: 13px;
+      }
+    }
+
+    &-category {
+      gap: calc($gutter / 2);
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+  }
+}
+
+.aisle {
+  &--delete-modal {
+    &-footer {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 90%;
+    }
+
+    &-container {
+      height: 100%;
+      justify-content: space-evenly;
+    }
+
+    & .MuiDialog-paper {
+      height: 30%;
+      min-width: 20%;
+      padding: $gutter;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & .MuiBox-root {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  }
+}
