@@ -196,10 +196,9 @@ export const onSuccess = <T,>(
     if (!ok) {
       const error = response as IErrorResponse<T>;
       toast[error.formatted.type](
-        t(error.formatted.errorDefault as string, {
-          name: t(`Common.${entity}`),
-        }),
+        error.formatted.errorDefault,
         error.formatted.title,
+        t(`Common.${entity}`),
       );
       return;
     }

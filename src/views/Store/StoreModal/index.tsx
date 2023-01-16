@@ -89,10 +89,9 @@ function StoreModal({ open, setOpen }: StoreModalProps) {
       if (!ok) {
         const error = response as IErrorResponse<StoreDto>;
         toast[error.formatted.type](
-          t(error.formatted.errorDefault as string, {
-            name: t(`Common.Store`),
-          }),
+          error.formatted.errorDefault as string,
           error.formatted.title,
+          t(`Common.Store`),
         );
         return;
       }
@@ -181,10 +180,9 @@ function StoreModal({ open, setOpen }: StoreModalProps) {
         if (!ok) {
           const addStoreError = response as IErrorResponse<StoreDto>;
           toast[addStoreError.formatted.type](
-            t(addStoreError.formatted.errorDefault as string, {
-              name: t(`Common.Store`),
-            }),
+            addStoreError.formatted.errorDefault,
             addStoreError.formatted.title,
+            t(`Common.Store`),
           );
           return;
         }

@@ -25,10 +25,6 @@ function StoreModalContent({
   const { t } = useTranslation('translation');
   const { setValue } = useFormContext<StoreFormValues>();
 
-  // States
-
-  // Queries
-
   // useEffect
   useEffect(() => {
     setValue('name', store?.name || '');

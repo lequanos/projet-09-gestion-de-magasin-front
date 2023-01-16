@@ -115,7 +115,7 @@ export const useCreateMutation = <T, U>(
   return useMutation({
     mutationFn: () => service.crud.create<T, U>(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${entity}s`] });
+      queryClient.invalidateQueries({ queryKey: [`${entity}Create`] });
     },
   });
 };
@@ -130,7 +130,7 @@ export const useUpdateMutation = <T, U>(
   return useMutation({
     mutationFn: () => service.crud.update<T, U>(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${entity}s`] });
+      queryClient.invalidateQueries({ queryKey: [`${entity}Update`] });
     },
   });
 };
@@ -145,7 +145,7 @@ export const useUpdatePartialMutation = <T>(
   return useMutation({
     mutationFn: () => service.crud.updatePartial(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${entity}s`] });
+      queryClient.invalidateQueries({ queryKey: [`${entity}UpdatePartial`] });
     },
   });
 };
@@ -156,7 +156,7 @@ export const useDeleteMutation = (entity: EntityList, accessToken?: string) => {
   return useMutation({
     mutationFn: (payload: DeleteType) => service.crud.delete(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${entity}s`] });
+      queryClient.invalidateQueries({ queryKey: [`${entity}Delete`] });
     },
   });
 };
@@ -170,7 +170,7 @@ export const useDeactivateMutation = <T>(
   return useMutation({
     mutationFn: (payload: DeleteType) => service.crud.deactivate<T>(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${entity}s`] });
+      queryClient.invalidateQueries({ queryKey: [`${entity}Deactivate`] });
     },
   });
 };
@@ -184,7 +184,7 @@ export const useReactivateMutation = <T>(
   return useMutation({
     mutationFn: (payload: PutType<T>) => service.crud.reactivate<T>(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${entity}s`] });
+      queryClient.invalidateQueries({ queryKey: [`${entity}Reactivate`] });
     },
   });
 };
@@ -219,7 +219,7 @@ export const useGetMostActive = <T>(
   const service = getService(entity, accessToken);
   return useQuery<ISuccessResponse<T> | IErrorResponse<T | undefined>, unknown>(
     {
-      queryKey: [`${entity}s`],
+      queryKey: [`${entity}sMostActive`],
       queryFn: () =>
         service.crud.get({
           complementURL: 'most-active',
@@ -245,7 +245,7 @@ export const useSearchStores = (
 ) => {
   const service = new StoreService(accessToken);
   return useQuery({
-    queryKey: ['stores'],
+    queryKey: ['searchedStores'],
     queryFn: () => service.crud.searchStores(searchValue),
     enabled,
     onSuccess,
@@ -264,7 +264,7 @@ export const useSearchStoresSiret = (
 ) => {
   const service = new StoreService(accessToken);
   return useQuery({
-    queryKey: ['store'],
+    queryKey: ['storesSiret'],
     queryFn: () => service.crud.searchStoresSiret(searchValue),
     enabled,
     onSuccess,
@@ -285,7 +285,7 @@ export const useSearchSuppliers = (
 ) => {
   const service = new SupplierService(accessToken);
   return useQuery({
-    queryKey: ['supplier'],
+    queryKey: ['searchSupplier'],
     queryFn: () => service.crud.searchSuppliers(searchValue),
     enabled,
     onSuccess,
@@ -301,7 +301,7 @@ export const useGetStatsQuery = <T>(
 ) => {
   const service = getService(entity, accessToken);
   return useQuery({
-    queryKey: [entity],
+    queryKey: [`${entity}Stats`],
     queryFn: () =>
       service.crud.get({
         complementURL: 'stats',

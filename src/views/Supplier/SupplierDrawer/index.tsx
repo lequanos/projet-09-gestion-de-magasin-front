@@ -127,10 +127,9 @@ function SupplierDrawer({
         if (!ok) {
           const updateSupplierError = response as IErrorResponse<SupplierDto>;
           toast[updateSupplierError.formatted.type](
-            t(updateSupplierError.formatted.errorDefault as string, {
-              name: t(`Common.Supplier`),
-            }),
+            updateSupplierError.formatted.errorDefault,
             updateSupplierError.formatted.title,
+            t(`Common.Supplier`),
           );
           return;
         }

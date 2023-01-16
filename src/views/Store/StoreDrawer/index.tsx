@@ -124,10 +124,9 @@ function StoreDrawer({
         if (!ok) {
           const updateStoreError = response as IErrorResponse<StoreDto>;
           toast[updateStoreError.formatted.type](
-            t(updateStoreError.formatted.errorDefault as string, {
-              name: t(`Common.Store`),
-            }),
+            updateStoreError.formatted.errorDefault,
             updateStoreError.formatted.title,
+            t(`Common.Store`),
           );
           return;
         }

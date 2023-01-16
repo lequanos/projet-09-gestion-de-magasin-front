@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react';
 import { useToast } from './useToast';
 
 export type ToastFunction = {
-  [key in Severity]: (message: string, title?: string) => void;
+  [key in Severity]: (message: string, title?: string, name?: string) => void;
 } & { close: () => void };
 
 export type ToastContextType = ToastValues & {
@@ -52,10 +52,11 @@ export function ToastContextProvider({
   );
 
   function callToast(severity: Severity) {
-    return (message: string, title?: string) => {
+    return (message: string, title?: string, name?: string) => {
       const values: Partial<ToastValues> = { message, severity };
 
       if (title) values.title = title;
+      if (name) values.name = name;
 
       setToastValues(values);
     };

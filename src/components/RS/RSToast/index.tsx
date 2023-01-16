@@ -8,13 +8,14 @@ export type ToastValues = {
   title: string;
   message: string;
   severity: Severity;
+  name?: string;
 };
 
 export type Severity = 'error' | 'warning' | 'info' | 'success';
 
 export function RSToast() {
   // Hooks
-  const { open, title, message, severity, toast } = useToastContext();
+  const { open, title, message, severity, toast, name } = useToastContext();
 
   const handleCloseSnackbar = (
     event?: SyntheticEvent | Event,
@@ -35,7 +36,9 @@ export function RSToast() {
     >
       <Alert onClose={handleCloseSnackbar} severity={severity}>
         <AlertTitle>{t(title)}</AlertTitle>
-        {t(message)}
+        {t(message, {
+          name,
+        })}
       </Alert>
     </Snackbar>
   );

@@ -71,10 +71,9 @@ function Aisle() {
         if (!ok) {
           const addAisleError = response as IErrorResponse<AisleDto>;
           toast[addAisleError.formatted.type](
-            t(addAisleError.formatted.errorDefault as string, {
-              name: t(`Common.Aisle`),
-            }),
+            addAisleError.formatted.errorDefault,
             addAisleError.formatted.title,
+            t(`Common.Aisle`),
           );
           return;
         }

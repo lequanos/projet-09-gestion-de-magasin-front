@@ -145,10 +145,9 @@ function AisleItem({
           if (!ok) {
             const updateAisleError = response as IErrorResponse<AisleDto>;
             toast[updateAisleError.formatted.type](
-              t(updateAisleError.formatted.errorDefault as string, {
-                name: t(`Common.Aisle`),
-              }),
+              updateAisleError.formatted.errorDefault,
               updateAisleError.formatted.title,
+              t(`Common.Aisle`),
             );
             return;
           }
@@ -180,10 +179,9 @@ function AisleItem({
         if (!ok) {
           const addCategoryError = response as IErrorResponse<AisleDto>;
           toast[addCategoryError.formatted.type](
-            t(addCategoryError.formatted.errorDefault as string, {
-              name: t(`Common.Category`),
-            }),
+            addCategoryError.formatted.errorDefault,
             addCategoryError.formatted.title,
+            t(`Common.Category`),
           );
           return;
         }

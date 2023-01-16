@@ -189,10 +189,9 @@ function UserDrawer({ drawerOpen, setDrawerOpen, id }: UserDrawerProps) {
         if (!ok) {
           const updateUserError = response as IErrorResponse<UserDto>;
           toast[updateUserError.formatted.type](
-            t(updateUserError.formatted.errorDefault as string, {
-              name: t(`Common.User`),
-            }),
+            updateUserError.formatted.errorDefault,
             updateUserError.formatted.title,
+            t(`Common.User`),
           );
           return;
         }

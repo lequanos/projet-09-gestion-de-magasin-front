@@ -99,10 +99,9 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
       if (!ok) {
         const error = response as IErrorResponse<ProductDtoPayload>;
         toast[error.formatted.type](
-          t(error.formatted.errorDefault as string, {
-            name: t(`Common.Product`),
-          }),
+          error.formatted.errorDefault,
           error.formatted.title,
+          t(`Common.Product`),
         );
         return;
       }
@@ -206,10 +205,9 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
         if (!ok) {
           const addProductError = response as IErrorResponse<ProductDto>;
           toast[addProductError.formatted.type](
-            t(addProductError.formatted.errorDefault as string, {
-              name: t(`Common.Product`),
-            }),
+            addProductError.formatted.errorDefault,
             addProductError.formatted.title,
+            t(`Common.Product`),
           );
           return;
         }
@@ -264,7 +262,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
                     endIcon="search"
                     onChange={handleInputChange}
                     inputProps={{
-                      maxlength: 13,
+                      maxLength: 13,
                     }}
                   />
                 </RSForm>

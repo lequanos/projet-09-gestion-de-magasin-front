@@ -91,10 +91,9 @@ function SupplierModal({ open, setOpen }: SupplierModalProps) {
       if (!ok) {
         const error = response as IErrorResponse<SupplierDto>;
         toast[error.formatted.type](
-          t(error.formatted.errorDefault as string, {
-            name: t(`Common.Supplier`),
-          }),
+          error.formatted.errorDefault,
           error.formatted.title,
+          t(`Common.Supplier`),
         );
         return;
       }
@@ -186,10 +185,9 @@ function SupplierModal({ open, setOpen }: SupplierModalProps) {
         if (!ok) {
           const addSupplierError = response as IErrorResponse<SupplierDto>;
           toast[addSupplierError.formatted.type](
-            t(addSupplierError.formatted.errorDefault as string, {
-              name: t(`Common.Supplier`),
-            }),
+            addSupplierError.formatted.errorDefault,
             addSupplierError.formatted.title,
+            t(`Common.Supplier`),
           );
           return;
         }

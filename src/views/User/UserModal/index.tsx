@@ -140,10 +140,9 @@ function UserModal({ open, setOpen }: UserModalProps) {
         if (!ok) {
           const addUserError = response as IErrorResponse<UserDto>;
           toast[addUserError.formatted.type](
-            t(addUserError.formatted.errorDefault as string, {
-              name: t(`Common.User`),
-            }),
+            addUserError.formatted.errorDefault,
             addUserError.formatted.title,
+            t(`Common.User`),
           );
           return;
         }

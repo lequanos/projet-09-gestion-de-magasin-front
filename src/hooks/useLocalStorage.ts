@@ -14,7 +14,7 @@ export function useLocalStorage<T>(
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
       if (errCallback) errCallback(error);
-      console.log(error);
+
       return initialValue;
     }
   });
@@ -29,7 +29,6 @@ export function useLocalStorage<T>(
       }
     } catch (error) {
       if (errCallback) errCallback(error);
-      console.log(error);
     }
   };
   return [storedValue, setValue] as const;

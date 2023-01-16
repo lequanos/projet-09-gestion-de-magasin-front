@@ -206,10 +206,9 @@ function ProductDrawer({ drawerOpen, setDrawerOpen, id }: ProductDrawerProps) {
         if (!ok) {
           const updateProductError = response as IErrorResponse<ProductDto>;
           toast[updateProductError.formatted.type](
-            t(updateProductError.formatted.errorDefault as string, {
-              name: t(`Common.Product`),
-            }),
+            updateProductError.formatted.errorDefault,
             updateProductError.formatted.title,
+            t(`Common.Product`),
           );
           return;
         }
