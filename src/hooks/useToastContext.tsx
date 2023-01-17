@@ -70,7 +70,7 @@ export function ToastContextProvider({
       warning: callToast('warning'),
       success: callToast('success'),
       close: () => {
-        setToastValues({ open: false });
+        setToastValues({ open: false, name: toastValues.name });
       },
     },
   };
