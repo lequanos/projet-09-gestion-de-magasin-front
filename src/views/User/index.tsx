@@ -144,6 +144,7 @@ function User() {
         drawerOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}
         id={userId}
+        refetch={refetch}
       />
       <DeleteUserModal
         open={openDelete}
