@@ -2,6 +2,11 @@ import { Drawer, CircularProgress, Box } from '@mui/material';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import {
+  RefetchOptions,
+  RefetchQueryFilters,
+  QueryObserverResult,
+} from '@tanstack/react-query';
 
 import '../User.scss';
 import UserForm, { UserFormValues } from '../UserForm';
@@ -24,9 +29,22 @@ type UserDrawerProps = {
   drawerOpen: boolean;
   setDrawerOpen: Dispatch<SetStateAction<boolean>>;
   id: number;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<
+    QueryObserverResult<
+      ISuccessResponse<UserDto[]> | IErrorResponse<UserDto[] | undefined>,
+      unknown
+    >
+  >;
 };
 
-function UserDrawer({ drawerOpen, setDrawerOpen, id }: UserDrawerProps) {
+function UserDrawer({
+  drawerOpen,
+  setDrawerOpen,
+  id,
+  refetch,
+}: UserDrawerProps) {
   // Hooks
   const { accessToken } = useAccessToken();
   const { t } = useTranslation('translation');
@@ -201,6 +219,7 @@ function UserDrawer({ drawerOpen, setDrawerOpen, id }: UserDrawerProps) {
         );
         methods.reset();
         handleCloseDrawer();
+        refetch();
       },
     });
   };

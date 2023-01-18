@@ -197,6 +197,7 @@ function Store() {
         setDrawerOpen={setDrawerOpen}
         siret={storeSiret}
         id={storeId}
+        refetch={refetch}
       />
       <DeleteStoreModal
         open={openDelete}

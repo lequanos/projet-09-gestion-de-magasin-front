@@ -147,6 +147,7 @@ function Supplier() {
         drawerOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}
         id={supplierId}
+        refetch={refetch}
       />
       <DeleteSupplierModal
         open={openDelete}

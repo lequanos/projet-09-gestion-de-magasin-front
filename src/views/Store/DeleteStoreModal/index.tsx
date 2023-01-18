@@ -39,8 +39,6 @@ function DeleteStoreModal({
   const { accessToken } = useAccessToken();
   const { toast } = useToastContext();
 
-  // States
-
   // Queries
   const deleteMutation = useDeleteMutation('store', accessToken);
 

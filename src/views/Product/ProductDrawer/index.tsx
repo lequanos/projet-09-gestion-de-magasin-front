@@ -3,6 +3,11 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
+import {
+  RefetchOptions,
+  RefetchQueryFilters,
+  QueryObserverResult,
+} from '@tanstack/react-query';
 
 import '../Product.scss';
 import ProductForm, { ProductFormValues } from '../ProductForm';
@@ -30,9 +35,22 @@ type ProductDrawerProps = {
   drawerOpen: boolean;
   setDrawerOpen: Dispatch<SetStateAction<boolean>>;
   id: number;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<
+    QueryObserverResult<
+      ISuccessResponse<ProductDto[]> | IErrorResponse<ProductDto[] | undefined>,
+      unknown
+    >
+  >;
 };
 
-function ProductDrawer({ drawerOpen, setDrawerOpen, id }: ProductDrawerProps) {
+function ProductDrawer({
+  drawerOpen,
+  setDrawerOpen,
+  id,
+  refetch,
+}: ProductDrawerProps) {
   // Hooks
   const { accessToken } = useAccessToken();
   const { t } = useTranslation('translation');
@@ -218,6 +236,7 @@ function ProductDrawer({ drawerOpen, setDrawerOpen, id }: ProductDrawerProps) {
         );
         methods.reset();
         handleCloseDrawer();
+        refetch();
       },
     });
   };

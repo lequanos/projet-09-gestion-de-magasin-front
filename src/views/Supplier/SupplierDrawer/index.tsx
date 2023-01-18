@@ -2,6 +2,11 @@ import { Drawer, CircularProgress, Box } from '@mui/material';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import {
+  RefetchOptions,
+  RefetchQueryFilters,
+  QueryObserverResult,
+} from '@tanstack/react-query';
 
 import '../Supplier.scss';
 import SupplierForm, { SupplierFormValues } from '../SupplierForm';
@@ -21,12 +26,22 @@ type SupplierDrawerProps = {
   drawerOpen: boolean;
   setDrawerOpen: Dispatch<SetStateAction<boolean>>;
   id: number;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<
+    QueryObserverResult<
+      | ISuccessResponse<SupplierDto[]>
+      | IErrorResponse<SupplierDto[] | undefined>,
+      unknown
+    >
+  >;
 };
 
 function SupplierDrawer({
   drawerOpen,
   setDrawerOpen,
   id,
+  refetch,
 }: SupplierDrawerProps) {
   // Hooks
   const { accessToken } = useAccessToken();
@@ -139,6 +154,7 @@ function SupplierDrawer({
         );
         methods.reset();
         handleCloseDrawer();
+        refetch();
       },
     });
   };

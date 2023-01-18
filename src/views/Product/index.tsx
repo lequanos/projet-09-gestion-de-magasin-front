@@ -146,6 +146,7 @@ function Product() {
         drawerOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}
         id={productId}
+        refetch={refetch}
       />
       <DeleteProductModal
         open={openDelete}
