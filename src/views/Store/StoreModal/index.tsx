@@ -11,6 +11,11 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { SyntheticEvent } from 'react';
+import {
+  RefetchOptions,
+  RefetchQueryFilters,
+  QueryObserverResult,
+} from '@tanstack/react-query';
 
 import '../Store.scss';
 import {
@@ -20,7 +25,7 @@ import {
   useSearchStoresSiret,
 } from '@/hooks';
 import { RSButton, RSInput, RSForm } from '@/components/RS';
-import { IErrorResponse } from '@/services/api/interfaces';
+import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import StoreModalContent from './StoreModalContent';
 import { StoreDto, StoreDtoPayload } from '@/models/store';
 import { StoreFormValues } from '../StoreForm';
