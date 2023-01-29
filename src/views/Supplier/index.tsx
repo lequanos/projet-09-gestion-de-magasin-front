@@ -142,7 +142,7 @@ function Supplier() {
           </CardContent>
         </Card>
       </Container>
-      <SupplierModal open={open} setOpen={setOpen} />
+      <SupplierModal open={open} setOpen={setOpen} refetch={refetch} />
       <SupplierDrawer
         drawerOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}

@@ -11,6 +11,11 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { SyntheticEvent } from 'react';
+import {
+  RefetchOptions,
+  RefetchQueryFilters,
+  QueryObserverResult,
+} from '@tanstack/react-query';
 
 import '../Supplier.scss';
 import {
@@ -20,7 +25,7 @@ import {
   useSearchSuppliers,
 } from '@/hooks';
 import { RSButton, RSInput, RSForm } from '@/components/RS';
-import { IErrorResponse } from '@/services/api/interfaces';
+import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import SupplierModalContent from './SupplierModalContent';
 import { SupplierDto, SupplierDtoPayload } from '@/models/supplier';
 import { SupplierFormValues } from '../SupplierForm';
@@ -28,13 +33,22 @@ import { SupplierFormValues } from '../SupplierForm';
 type SupplierModalProps = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<
+    QueryObserverResult<
+      | ISuccessResponse<SupplierDto[]>
+      | IErrorResponse<SupplierDto[] | undefined>,
+      unknown
+    >
+  >;
 };
 
 export type SearchSupplierFormValues = {
   searchedSupplier: string;
 };
 
-function SupplierModal({ open, setOpen }: SupplierModalProps) {
+function SupplierModal({ open, setOpen, refetch }: SupplierModalProps) {
   // Hooks
   const { accessToken } = useAccessToken();
   const { toast } = useToastContext();
@@ -200,6 +214,7 @@ function SupplierModal({ open, setOpen }: SupplierModalProps) {
         setSupplier(undefined);
         setValue('searchedSupplier', '');
         setActiveStep(0);
+        refetch();
       },
     });
   };

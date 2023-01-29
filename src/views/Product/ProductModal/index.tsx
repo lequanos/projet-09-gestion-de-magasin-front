@@ -11,6 +11,11 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
 import { SyntheticEvent } from 'react';
+import {
+  RefetchOptions,
+  RefetchQueryFilters,
+  QueryObserverResult,
+} from '@tanstack/react-query';
 
 import '../Product.scss';
 import {
@@ -20,7 +25,7 @@ import {
   useCreateMutation,
 } from '@/hooks';
 import { RSButton, RSInput, RSForm } from '@/components/RS';
-import { IErrorResponse } from '@/services/api/interfaces';
+import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import ProductModalContent from './ProductModalContent';
 import {
   ProductDto,
@@ -33,13 +38,21 @@ import { ProductFormValues } from '../ProductForm';
 type ProductModalProps = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<
+    QueryObserverResult<
+      ISuccessResponse<ProductDto[]> | IErrorResponse<ProductDto[] | undefined>,
+      unknown
+    >
+  >;
 };
 
 export type SearchProductFormValues = {
   searchedProduct: string;
 };
 
-function ProductModal({ open, setOpen }: ProductModalProps) {
+function ProductModal({ open, setOpen, refetch }: ProductModalProps) {
   // Hooks
   const { accessToken } = useAccessToken();
   const { toast } = useToastContext();
@@ -220,6 +233,7 @@ function ProductModal({ open, setOpen }: ProductModalProps) {
         setProduct(undefined);
         setValue('searchedProduct', '');
         setActiveStep(0);
+        refetch();
       },
     });
   };

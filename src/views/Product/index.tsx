@@ -141,7 +141,7 @@ function Product() {
           </CardContent>
         </Card>
       </Container>
-      <ProductModal open={open} setOpen={setOpen} />
+      <ProductModal open={open} setOpen={setOpen} refetch={refetch} />
       <ProductDrawer
         drawerOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}

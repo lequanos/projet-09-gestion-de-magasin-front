@@ -139,7 +139,7 @@ function User() {
           </CardContent>
         </Card>
       </Container>
-      <UserModal open={open} setOpen={setOpen} />
+      <UserModal open={open} setOpen={setOpen} refetch={refetch} />
       <UserDrawer
         drawerOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}

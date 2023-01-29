@@ -2,6 +2,11 @@ import { Backdrop, Fade, Box, Dialog } from '@mui/material';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider } from 'react-hook-form';
+import {
+  RefetchOptions,
+  RefetchQueryFilters,
+  QueryObserverResult,
+} from '@tanstack/react-query';
 
 import '../User.scss';
 import {
@@ -11,7 +16,7 @@ import {
   useGetAllQuery,
 } from '@/hooks';
 import { RSButton } from '@/components/RS';
-import { IErrorResponse } from '@/services/api/interfaces';
+import { IErrorResponse, ISuccessResponse } from '@/services/api/interfaces';
 import { UserDto, UserDtoPayload } from '@/models/user';
 import UserForm, { UserFormValues } from '../UserForm';
 import { AisleDto } from '@/models/aisle';
@@ -20,9 +25,17 @@ import { RoleDto } from '@/models/role';
 type UserModalProps = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<
+    QueryObserverResult<
+      ISuccessResponse<UserDto[]> | IErrorResponse<UserDto[] | undefined>,
+      unknown
+    >
+  >;
 };
 
-function UserModal({ open, setOpen }: UserModalProps) {
+function UserModal({ open, setOpen, refetch }: UserModalProps) {
   // Hooks
   const { accessToken } = useAccessToken();
   const { toast } = useToastContext();
@@ -149,6 +162,7 @@ function UserModal({ open, setOpen }: UserModalProps) {
         toast.success('User.Form.Success_Add', 'User.Form.Success_Add_Title');
         methods.reset();
         handleClose();
+        refetch();
       },
     });
   };
