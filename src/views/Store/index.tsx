@@ -191,7 +191,7 @@ function Store() {
           </CardContent>
         </Card>
       </Container>
-      <StoreModal open={open} setOpen={setOpen} />
+      <StoreModal open={open} setOpen={setOpen} refetch={refetch} />
       <StoreDrawer
         drawerOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}

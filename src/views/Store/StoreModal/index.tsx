@@ -28,13 +28,21 @@ import { StoreFormValues } from '../StoreForm';
 type StoreModalProps = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<
+    QueryObserverResult<
+      ISuccessResponse<StoreDto[]> | IErrorResponse<StoreDto[] | undefined>,
+      unknown
+    >
+  >;
 };
 
 export type SearchStoreFormValues = {
   searchedStore: string;
 };
 
-function StoreModal({ open, setOpen }: StoreModalProps) {
+function StoreModal({ open, setOpen, refetch }: StoreModalProps) {
   // Hooks
   const { accessToken } = useAccessToken();
   const { toast } = useToastContext();
@@ -192,6 +200,7 @@ function StoreModal({ open, setOpen }: StoreModalProps) {
         setStore(undefined);
         setValue('searchedStore', '');
         setActiveStep(0);
+        refetch();
       },
     });
   };
