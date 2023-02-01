@@ -9,7 +9,12 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { useAccessToken, useGetAllQuery, useToastContext } from '@/hooks';
+import {
+  useAccessToken,
+  useGetAllQuery,
+  useToastContext,
+  useUserContext,
+} from '@/hooks';
 import { ProductDtoPayload } from '@/models/product';
 import { AisleDto } from '@/models/aisle';
 import { IErrorResponse } from '@/services/api/interfaces';
@@ -36,6 +41,7 @@ function ProductModalContent({
   const { toast } = useToastContext();
   const { accessToken } = useAccessToken();
   const { setValue } = useFormContext<ProductFormValues>();
+  const { user } = useUserContext();
 
   // States
   const [aisles, setAisles] = useState<AisleDto[]>([]);
@@ -66,7 +72,13 @@ function ProductModalContent({
       }
 
       if (data) {
-        setAisles(data.filter((aisle) => aisle.name !== 'All'));
+        const aislesToSet = data.filter(
+          (aisle) =>
+            aisle.name !== 'All' &&
+            (user.aisles.some((ai) => ai.name === 'All') ||
+              user.aisles.map((a) => a.id).includes(aisle.id)),
+        );
+        setAisles(aislesToSet);
         setValue('aisle', data[0].id || 1);
       }
     },
