@@ -139,9 +139,16 @@ function Home() {
           className="home--login-form"
           onSubmit={handleSubmit(handleLogin)}
         >
-          <Typography align="center" className="home--login-title">
-            {t('Home.Login')}
-          </Typography>
+          <Collapse in={formStatus === 'login'}>
+            <Typography align="center" className="home--login-title">
+              {t('Home.Login')}
+            </Typography>
+          </Collapse>
+          <Collapse in={formStatus === 'becomeCustomer'}>
+            <Typography align="center" className="home--login-title">
+              {t('Home.BecomeCustomer')}
+            </Typography>
+          </Collapse>
           <RSInput
             label={t('Home.Email')}
             type="email"
