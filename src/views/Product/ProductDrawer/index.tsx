@@ -131,7 +131,13 @@ function ProductDrawer({
       }
 
       if (data) {
-        setAisles(data.filter((aisle) => aisle.name !== 'All'));
+        const aislesToSet = data.filter(
+          (aisle) =>
+            aisle.name !== 'All' &&
+            (user.aisles.some((ai) => ai.name === 'All') ||
+              user.aisles.map((a) => a.id).includes(aisle.id)),
+        );
+        setAisles(aislesToSet);
         methods.setValue('aisle', data[0].id || 1);
       }
     },
